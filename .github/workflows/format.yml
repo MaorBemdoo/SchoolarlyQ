@@ -1,0 +1,35 @@
+name: Format
+
+on:
+  schedule:
+    - cron: "1 1 * * *" # Daily at 1:01 UTC
+  workflow_dispatch:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+      - run: npm ci
+      - name: Prettier
+        run: npx prettier --write "**/*.{js,ts,jsx,tsx,json}"
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        id: format-files
+        with:
+          commit_message: "style: format files"
+          branch: "formatting-${{ github.sha }}"
+          create_branch: true
+      - name: Create PR with formatted files
+        if: steps.format-files.outputs.changes_detected == 'true'
+        run: git checkout formatting-${{ github.sha }} && gh pr create --base main --head formatting-${{ github.sha }} --title 'Merge formatting changes' --body 'Automated formatting changes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Merge PR with formatting changes
+        if: steps.format-files.outputs.changes_detected == 'true'
+        run: gh pr merge --admin --merge --subject 'Merge formatting changes' --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
