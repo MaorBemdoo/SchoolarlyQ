@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="text-secondary-light-400 dark:bg-secondary-dark-100 dark:text-white">
+      <body className="relative text-secondary-light-400 dark:bg-secondary-dark-100 dark:text-white">
         <Header />
         {children}
         <Footer />

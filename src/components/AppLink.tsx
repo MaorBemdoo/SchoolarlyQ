@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AppLinkProps } from "../types";
 
 const AppLink = ({ children, className, href }: AppLinkProps) => {
   const cn = !className ? "" : className;
