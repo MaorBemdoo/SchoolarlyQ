@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { baseUrl } from "@/constants";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "SchoolarlyQ - Overview",
@@ -36,11 +37,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="relative text-secondary-light-400 dark:bg-secondary-dark-100 dark:text-white">
-        <Header />
-        {children}
-        <Footer />
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

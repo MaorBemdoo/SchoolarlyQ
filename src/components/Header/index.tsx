@@ -5,31 +5,32 @@ import { FaGithub } from "react-icons/fa6";
 import AppLink from "../AppLink";
 import Button from "../Button";
 import MenuIcon from "./MenuIcon";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
+  AnimatePresence,
   motion,
-  useAnimationControls,
   useScroll,
   useTransform,
 } from "framer-motion";
-import useTheme from "@/hooks/useTheme";
+import { useTheme } from "next-themes";
+import Theme from "./Theme";
+import useEventOutside from "@/hooks/useEventOutside";
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const controls = useAnimationControls();
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const { scrollYProgress } = useScroll();
 
   const backgroundColor = useTransform(
     scrollYProgress,
     [0, 0.1],
-    ["transparent", theme == "dark" ? "#27284E" : "#fff"],
+    ["transparent", resolvedTheme == "dark" ? "#27284E" : "#fff"],
   );
 
   const textColor = useTransform(
     scrollYProgress,
     [0, 0.1],
-    ["#fff", theme == "dark" ? "#fff" : "#27284E"],
+    ["#fff", resolvedTheme == "dark" ? "#fff" : "#27284E"],
   );
 
   const boxShadow = useTransform(
@@ -41,34 +42,7 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node) &&
-        iconRef.current &&
-        !iconRef.current.contains(e.target as Node)
-      ) {
-        setIsVisible(false);
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isVisible) {
-      controls.start("show");
-      return;
-    }
-    controls.start("initialAside");
-  }, [controls, isVisible]);
+  useEventOutside([iconRef, menuRef], () => setIsVisible(false));
 
   return (
     <>
@@ -95,7 +69,7 @@ const Header = () => {
             <AppLink href="https://github.com/MaorBemdoo/ScoolarlyQ">
               <FaGithub className="text-2xl" />
             </AppLink>
-            <div>{/* Implement color theme */}</div>
+            <Theme screen="desktop" />
             <AppLink href="/auth/login">
               <Button variant="filled" color="orange">
                 Login
@@ -126,32 +100,37 @@ const Header = () => {
               iconRef={iconRef}
               onClick={() => setIsVisible(!isVisible)}
             />
-            <motion.aside
-              initial="initialAside"
-              variants={{
-                show: { y: 30, opacity: 1, pointerEvents: "all" },
-                initialAside: {
-                  y: 0,
-                  x: -150,
-                  opacity: 0,
-                  pointerEvents: "none",
-                },
-              }}
-              animate={controls}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute w-max flex flex-col justify-between gap-2 p-2 *:px-3 *:py-1 hover:*:bg-gray-300 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400"
-              ref={menuRef}
-            >
-              <AppLink href="/discover">Discover</AppLink>
-              <AppLink href="/about">About</AppLink>
-              <AppLink href="/#contact">Contact</AppLink>
-              <AppLink href="/auth/login">Login</AppLink>
-              <AppLink href="/auth/register" className="!p-0">
-                <Button variant="filled" color="orange">
-                  Get Started
-                </Button>
-              </AppLink>
-            </motion.aside>
+            <AnimatePresence>
+              {isVisible && (
+                <motion.aside
+                  initial={{
+                    y: 0,
+                    x: -150,
+                    opacity: 0,
+                  }}
+                  exit={{
+                    y: 0,
+                    x: -150,
+                    opacity: 0,
+                  }}
+                  animate={{ y: 20, opacity: 1 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute w-max flex flex-col justify-between gap-2 p-2 *:px-3 *:py-1 hover:*:bg-primary-light-100 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400 dark:hover:*:bg-primary-dark-100"
+                  ref={menuRef}
+                >
+                  <AppLink href="/discover">Discover</AppLink>
+                  <AppLink href="/about">About</AppLink>
+                  <AppLink href="/#contact">Contact</AppLink>
+                  <AppLink href="/auth/login">Login</AppLink>
+                  <AppLink href="/auth/register" className="!p-0">
+                    <Button variant="filled" color="orange">
+                      Get Started
+                    </Button>
+                  </AppLink>
+                  <Theme screen="mobile" setMobileIsVisible={setIsVisible} />
+                </motion.aside>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </motion.div>

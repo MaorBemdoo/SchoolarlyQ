@@ -1,5 +1,10 @@
 import { MotionValue } from "framer-motion";
 
+export type RefType =
+  | React.RefObject<HTMLElement>
+  | React.RefObject<HTMLElement>[];
+export type EventType = keyof DocumentEventMap | Array<keyof DocumentEventMap>;
+
 export interface AppLinkProps {
   children: React.ReactNode;
   className?: string;
