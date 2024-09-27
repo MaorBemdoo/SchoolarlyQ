@@ -40,7 +40,6 @@ const MenuIcon = ({
         }}
         style={{ backgroundColor: textColor }}
         animate={controls}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
       ></motion.div>
       <motion.div
         initial="initial2"
@@ -50,7 +49,6 @@ const MenuIcon = ({
         }}
         style={{ backgroundColor: textColor }}
         animate={controls}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
       ></motion.div>
       <motion.div
         initial="initial3"
@@ -67,7 +65,6 @@ const MenuIcon = ({
         }}
         style={{ backgroundColor: textColor }}
         animate={controls}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
       ></motion.div>
     </div>
   );

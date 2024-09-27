@@ -27,7 +27,7 @@ const Theme = ({
 
   const borderColor = useTransform(
     scrollYProgress,
-    [0, 0.1],
+    [0, 0.00001],
     ["#fff", resolvedTheme == "dark" ? "#fff" : "#27284E"],
   );
 
@@ -57,8 +57,10 @@ const Theme = ({
     if (name !== theme) {
       setTheme(name);
     }
+    if (typeof setMobileIsVisible !== "undefined") {
+      setMobileIsVisible(false); // set mobile aside visibility to false
+    }
     setIsVisible(false);
-    setMobileIsVisible(false); // mobile aside
   };
 
   return (
@@ -94,7 +96,6 @@ const Theme = ({
                 initial={{ x: 0, y: 0, opacity: 0 }}
                 animate={{ y: 20, opacity: 1 }}
                 exit={{ y: 0, opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeIn" }}
                 ref={menuRef}
                 className="absolute flex flex-col justify-between gap-2 p-2 rounded shadow-md border border-secondary-light-400 bg-white text-secondary-light-400 dark:border-secondary-dark-400 dark:bg-secondary-dark-100 dark:text-secondary-dark-400"
               >

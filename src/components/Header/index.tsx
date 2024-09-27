@@ -23,19 +23,19 @@ const Header = () => {
 
   const backgroundColor = useTransform(
     scrollYProgress,
-    [0, 0.1],
+    [0, 0.00001],
     ["transparent", resolvedTheme == "dark" ? "#27284E" : "#fff"],
   );
 
   const textColor = useTransform(
     scrollYProgress,
-    [0, 0.1],
+    [0, 0.00001],
     ["#fff", resolvedTheme == "dark" ? "#fff" : "#27284E"],
   );
 
   const boxShadow = useTransform(
     scrollYProgress,
-    [0, 0.1],
+    [0, 0.00001],
     ["", "0 1px 3px 0 rgb(0 0 0 / 0.1)"],
   );
 
@@ -48,8 +48,7 @@ const Header = () => {
     <>
       <motion.div
         style={{ backgroundColor, color: textColor, boxShadow }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="desktop-header none fixed w-screen sm:block"
+        className="desktop-header none fixed w-screen z-10 sm:block"
       >
         <div className="container flex justify-between items-center p-4 font-semibold">
           <div className="flex items-center gap-5">
@@ -85,8 +84,7 @@ const Header = () => {
       </motion.div>
       <motion.div
         style={{ backgroundColor, color: textColor, boxShadow }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="mobile-header fixed w-screen block sm:none"
+        className="mobile-header fixed w-screen block z-10 sm:none"
       >
         <div className="container p-4 flex justify-between items-center font-semibold">
           <AppLink href="/" className="flex items-center gap-1">
@@ -114,7 +112,6 @@ const Header = () => {
                     opacity: 0,
                   }}
                   animate={{ y: 20, opacity: 1 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
                   className="absolute w-max flex flex-col justify-between gap-2 p-2 *:px-3 *:py-1 hover:*:bg-primary-light-100 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400 dark:hover:*:bg-primary-dark-100"
                   ref={menuRef}
                 >
