@@ -56,8 +56,8 @@ const Header = () => {
               <Image
                 src="/favicon.ico"
                 alt="Logo image"
-                width={25}
-                height={25}
+                width={50}
+                height={50}
               />
             </AppLink>
             <AppLink href="/discover">Discover</AppLink>
@@ -88,7 +88,7 @@ const Header = () => {
       >
         <div className="container p-4 flex justify-between items-center font-semibold">
           <AppLink href="/" className="flex items-center gap-1">
-            <Image src="/favicon.ico" alt="Logo image" width={25} height={25} />
+            <Image src="/favicon.ico" alt="Logo image" width={50} height={50} />
             <h1>SchoolarlyQ</h1>
           </AppLink>
           <div className="relative">

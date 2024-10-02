@@ -84,8 +84,7 @@ export default function Home() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Key Features</h2>
           <p className="text-lg mt-4">
-            Discover our app&apos;s powerful features that enhance your
-            experience.
+            Discover our app&apos;s powerful features that enhance your experience.
           </p>
         </div>
 
