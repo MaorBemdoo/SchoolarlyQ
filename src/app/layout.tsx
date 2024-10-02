@@ -7,13 +7,13 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "SchoolarlyQ - Overview",
-  description: "Your tool to success",
+  description: "Elevate your learning, Elevate your GPA",
   authors: [{ name: "🚀Bemdoo Maor" }, { name: "Adamu Jighjigh" }],
   openGraph: {
     type: "website",
     url: `${baseUrl}`,
     title: "SchoolarlyQ - Overview",
-    description: "Your tool to success",
+    description: "Elevate your learning, Elevate your GPA",
     siteName: "SchoolarlyQ",
     images: [
       {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     site: `${baseUrl}`,
     creator: "@BemdooMaor",
     title: "SchoolarlyQ - Overview",
-    description: "Your tool to success",
+    description: "Elevate your learning, Elevate your GPA",
     images: "/full-logo.png",
   },
 };
@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="relative text-secondary-light-400 dark:bg-secondary-dark-100 dark:text-white">
+      <body className="text-secondary-light-400 dark:bg-secondary-dark-100 dark:text-white">
         <Providers>
           <Header />
           {children}

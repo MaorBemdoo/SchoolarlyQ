@@ -7,14 +7,14 @@ const AppLink = ({ children, className, href }: AppLinkProps) => {
     return (
       <Link
         href={href}
-        className={`${cn} transition hover:text-primary-light-300 dark:hover:text-primary-dark-300`}
+        className={`${cn} size-fit transition hover:text-primary-light-300 dark:hover:text-primary-dark-300`}
       >
         {children}
       </Link>
     );
   }
   return (
-    <Link href={href} className={cn}>
+    <Link href={href} className={`${cn} size-fit`}>
       {children}
     </Link>
   );

@@ -48,7 +48,7 @@ const Header = () => {
     <>
       <motion.div
         style={{ backgroundColor, color: textColor, boxShadow }}
-        className="desktop-header none fixed w-screen z-10 sm:block"
+        className="desktop-header none fixed w-screen z-20 sm:block"
       >
         <div className="container flex justify-between items-center p-4 font-semibold">
           <div className="flex items-center gap-5">
@@ -84,7 +84,7 @@ const Header = () => {
       </motion.div>
       <motion.div
         style={{ backgroundColor, color: textColor, boxShadow }}
-        className="mobile-header fixed w-screen block z-10 sm:none"
+        className="mobile-header fixed w-screen block z-20 sm:none"
       >
         <div className="container p-4 flex justify-between items-center font-semibold">
           <AppLink href="/" className="flex items-center gap-1">
