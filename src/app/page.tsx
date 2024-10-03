@@ -2,9 +2,11 @@
 
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
-import { motion } from "framer-motion";
+import { motion, useScroll, useVelocity } from "framer-motion";
+import { useState, useEffect } from "react";
 import { BsMenuButtonWide } from "react-icons/bs";
 import { FaRegFileCode } from "react-icons/fa6";
+import { HiSparkles } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
 
 const features = [
@@ -33,6 +35,17 @@ const features = [
 ];
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+  const velocity = useVelocity(scrollYProgress);
+  const [speed, setSpeed] = useState(100);
+
+  useEffect(() => {
+    const unsubscribe = velocity.onChange((latest) => {
+      setSpeed(100 + latest * 200);
+    });
+    return () => unsubscribe();
+  }, [velocity])
+
   return (
     <main>
       <section className="relative bg-[url(/hero.jpg)] bg-cover bg-center bg-no-repeat h-screen w-full flex items-center">
@@ -112,6 +125,53 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <div className="w-full p-4 whitespace-nowrap *:inline-block bg-gradient-to-r from-primary-light-300 to-primary-light-400 overflow-hidden dark:from-primary-dark-300 dark:to-primary-dark-400">
+        <motion.div
+          style={{ x: speed }}
+          animate={{ x: "-100%" }}
+          transition={{ ease: "linear", duration: 25, repeat: Infinity }}
+          className="flex items-center justify-center text-white w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
+        >
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+        </motion.div>
+        <motion.div
+          style={{ x: speed }}
+          animate={{ x: "-100%"}}
+          transition={{ ease: "linear", duration: 25, repeat: Infinity }}
+          className="flex items-center justify-between text-white w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
+        >
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+          <HiSparkles />
+          <span>Elevate your learning, Elevate your GPA</span>
+        </motion.div>
+      </div>
     </main>
   );
 }
