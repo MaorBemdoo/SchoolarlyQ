@@ -38,14 +38,11 @@ const pricingPlans = [
   {
     name: "Basic plan",
     price: 0,
-    features: [
-      "Aceess past questions",
-      "View correct answer",
-    ],
+    features: ["Aceess past questions", "View correct answer"],
     button: {
       text: "Get Started",
-      to: "/register"
-    }
+      to: "/register",
+    },
   },
   {
     name: "Pro plan",
@@ -54,14 +51,14 @@ const pricingPlans = [
       "Get latest past questions",
       "View explanation to answers",
       "unlimited daily attempts",
-      "Download questions"
+      "Download questions",
     ],
     button: {
       text: "Upgrade to Pro",
-      to: "/pricing"
-    }
-  }
-]
+      to: "/pricing",
+    },
+  },
+];
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -73,7 +70,7 @@ export default function Home() {
       setSpeed(100 + latest * 200);
     });
     return () => unsubscribe();
-  }, [velocity])
+  }, [velocity]);
 
   return (
     <main>
@@ -126,7 +123,8 @@ export default function Home() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Key Features</h2>
           <p className="text-lg mt-4">
-            Discover our app&apos;s powerful features that enhance your experience.
+            Discover our app&apos;s powerful features that enhance your
+            experience.
           </p>
         </div>
 
@@ -180,7 +178,7 @@ export default function Home() {
         </motion.div>
         <motion.div
           style={{ x: speed }}
-          animate={{ x: "-100%"}}
+          animate={{ x: "-100%" }}
           transition={{ ease: "linear", duration: 25, repeat: Infinity }}
           className="flex items-center justify-between w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
         >
@@ -205,22 +203,28 @@ export default function Home() {
         <p>Choose the perfect plan for you</p>
         <h1 className="text-4xl font-bold">Pricing plan</h1>
         <div className="w-full grid justify-center grid-cols-[repeat(auto-fit,_minmax(200px,_400px))] gap-6 mt-8">
-          {
-            pricingPlans.map(({ name, price, features, button }, idx) => (
-              <div className={`flex flex-col items-center justify-between h-full w-full mx-auto p-8 border border-black ${idx == 0 ? "bg-primary-light-100 dark:bg-primary-dark-100" : "bg-primary-light-200 dark:bg-primary-dark-200"}`} key={idx}>
-                <p className="font-semibold">{name}</p>
-                <h1 className="text-4xl font-bold">₦{price}{idx == 1 ? "/month" : ""}</h1>
-                <ul className="list-image-[url(/check.png)] p-[inherit] m-[inherit]">
-                  {
-                    features.map((feat, idx) => (
-                      <li className="w-fit ps-2" key={idx}>{feat}</li>
-                    ))
-                  }
-                </ul>
-                <AppLink href={button.to}><Button variant="filled">{button.text}</Button></AppLink>
-              </div>
-            ))
-          }
+          {pricingPlans.map(({ name, price, features, button }, idx) => (
+            <div
+              className={`flex flex-col items-center justify-between h-full w-full mx-auto p-8 border border-black ${idx == 0 ? "bg-primary-light-100 dark:bg-primary-dark-100" : "bg-primary-light-200 dark:bg-primary-dark-200"}`}
+              key={idx}
+            >
+              <p className="font-semibold">{name}</p>
+              <h1 className="text-4xl font-bold">
+                ₦{price}
+                {idx == 1 ? "/month" : ""}
+              </h1>
+              <ul className="list-image-[url(/check.png)] p-[inherit] m-[inherit]">
+                {features.map((feat, idx) => (
+                  <li className="w-fit ps-2" key={idx}>
+                    {feat}
+                  </li>
+                ))}
+              </ul>
+              <AppLink href={button.to}>
+                <Button variant="filled">{button.text}</Button>
+              </AppLink>
+            </div>
+          ))}
         </div>
       </section>
       {/* <section>
