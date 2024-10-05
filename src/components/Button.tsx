@@ -7,7 +7,8 @@ const Button = ({
   variant = "standard",
   color = "orange",
 }: ButtonProps) => {
-  const baseClass = "transition px-4 py-2 rounded text-secondary-light-200 shadow-md focus:scale-[0.98] dark:text-secondary-dark-200";
+  const baseClass =
+    "transition px-4 py-2 rounded text-secondary-light-200 shadow-md focus:scale-[0.98] dark:text-secondary-dark-200";
 
   let variantClass = "";
   let hoverClass = "";
