@@ -2,19 +2,17 @@ import { ButtonProps } from "@/types";
 
 const Button = ({
   children,
-  className,
+  className = "",
   onClick,
-  variant,
-  color,
+  variant = "standard",
+  color = "orange",
 }: ButtonProps) => {
-  const cn = !className ? "" : className;
-  const baseClass =
-    "transition px-4 py-2 rounded text-secondary-light-200 shadow-md focus:scale-[0.98] dark:text-secondary-dark-200";
+  const baseClass = "transition px-4 py-2 rounded text-secondary-light-200 shadow-md focus:scale-[0.98] dark:text-secondary-dark-200";
 
   let variantClass = "";
   let hoverClass = "";
 
-  if (!variant || variant === "standard") {
+  if (variant === "standard") {
     variantClass =
       color === "orange"
         ? "bg-primary-light-300 dark:bg-primary-dark-300"
@@ -42,7 +40,7 @@ const Button = ({
 
   return (
     <button
-      className={`${baseClass} ${variantClass} ${hoverClass} ${cn}`}
+      className={`${baseClass} ${variantClass} ${hoverClass} ${className}`}
       onClick={onClick}
     >
       {children}

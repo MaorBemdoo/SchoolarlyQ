@@ -16,7 +16,7 @@ export interface ButtonProps {
   className?: string;
   onClick?: () => void | Promise<() => void>;
   variant?: "standard" | "outlined" | "filled" | "custom";
-  color: "orange" | "blue";
+  color?: "orange" | "blue";
 }
 
 export interface MenuIconProps {

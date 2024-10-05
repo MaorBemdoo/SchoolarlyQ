@@ -34,6 +34,35 @@ const features = [
   },
 ];
 
+const pricingPlans = [
+  {
+    name: "Basic plan",
+    price: 0,
+    features: [
+      "Aceess past questions",
+      "View correct answer",
+    ],
+    button: {
+      text: "Get Started",
+      to: "/register"
+    }
+  },
+  {
+    name: "Pro plan",
+    price: 1000,
+    features: [
+      "Get latest past questions",
+      "View explanation to answers",
+      "unlimited daily attempts",
+      "Download questions"
+    ],
+    button: {
+      text: "Upgrade to Pro",
+      to: "/pricing"
+    }
+  }
+]
+
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
@@ -125,12 +154,12 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <div className="w-full p-4 whitespace-nowrap *:inline-block bg-gradient-to-r from-primary-light-300 to-primary-light-400 overflow-hidden dark:from-primary-dark-300 dark:to-primary-dark-400">
+      <div className="w-full p-4 whitespace-nowrap text-white *:inline-block bg-gradient-to-r from-primary-light-300 to-primary-light-400 overflow-hidden dark:from-primary-dark-300 dark:to-primary-dark-400 dark:text-black">
         <motion.div
           style={{ x: speed }}
           animate={{ x: "-100%" }}
           transition={{ ease: "linear", duration: 25, repeat: Infinity }}
-          className="flex items-center justify-center text-white w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
+          className="flex items-center justify-center w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
         >
           <span>Elevate your learning, Elevate your GPA</span>
           <HiSparkles />
@@ -153,7 +182,7 @@ export default function Home() {
           style={{ x: speed }}
           animate={{ x: "-100%"}}
           transition={{ ease: "linear", duration: 25, repeat: Infinity }}
-          className="flex items-center justify-between text-white w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
+          className="flex items-center justify-between w-max even:*:text-2xl *:uppercase *:font-bold space-x-4 *:inline-block"
         >
           <span>Elevate your learning, Elevate your GPA</span>
           <HiSparkles />
@@ -172,6 +201,31 @@ export default function Home() {
           <span>Elevate your learning, Elevate your GPA</span>
         </motion.div>
       </div>
+      <section className="container mt-4 text-center">
+        <p>Choose the perfect plan for you</p>
+        <h1 className="text-4xl font-bold">Pricing plan</h1>
+        <div className="w-full grid justify-center grid-cols-[repeat(auto-fit,_minmax(200px,_400px))] gap-6 mt-8">
+          {
+            pricingPlans.map(({ name, price, features, button }, idx) => (
+              <div className={`flex flex-col items-center justify-between h-full w-full mx-auto p-8 border border-black ${idx == 0 ? "bg-primary-light-100 dark:bg-primary-dark-100" : "bg-primary-light-200 dark:bg-primary-dark-200"}`} key={idx}>
+                <p className="font-semibold">{name}</p>
+                <h1 className="text-4xl font-bold">₦{price}{idx == 1 ? "/month" : ""}</h1>
+                <ul className="list-image-[url(/check.png)] p-[inherit] m-[inherit]">
+                  {
+                    features.map((feat, idx) => (
+                      <li className="w-fit ps-2" key={idx}>{feat}</li>
+                    ))
+                  }
+                </ul>
+                <AppLink href={button.to}><Button variant="filled">{button.text}</Button></AppLink>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+      {/* <section>
+        Testimonials
+      </section> */}
     </main>
   );
 }
