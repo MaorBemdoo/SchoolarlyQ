@@ -62,7 +62,6 @@ const Header = () => {
             </AppLink>
             <AppLink href="/discover">Discover</AppLink>
             <AppLink href="/about">About</AppLink>
-            <AppLink href="#contact">Contact</AppLink>
           </div>
           <div className="flex items-center gap-5">
             <AppLink href="https://github.com/MaorBemdoo/ScoolarlyQ">
@@ -117,7 +116,6 @@ const Header = () => {
                 >
                   <AppLink href="/discover">Discover</AppLink>
                   <AppLink href="/about">About</AppLink>
-                  <AppLink href="/#contact">Contact</AppLink>
                   <AppLink href="/auth/login">Login</AppLink>
                   <AppLink href="/auth/register" className="!p-0">
                     <Button variant="filled" color="orange">
