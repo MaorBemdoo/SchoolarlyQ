@@ -5,9 +5,10 @@ import Button from "@/components/Button";
 import { motion, useScroll, useVelocity } from "framer-motion";
 import { useState, useEffect } from "react";
 import { BsMenuButtonWide } from "react-icons/bs";
-import { FaRegFileCode } from "react-icons/fa6";
+import { FaPhone, FaRegFileCode } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
+import { IoMail } from "react-icons/io5";
 
 const features = [
   {
@@ -72,6 +73,19 @@ const faqs = [
   {
     title: "Lorem Ipsum dolor sit amit",
     description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+  },
+]
+
+const contacts = [
+  {
+    name: "Email",
+    Icon: IoMail,
+    contacts: ["bemdoo.maor1@gmail.com", "adamujighjigh144k@gmail.com"]
+  },
+  {
+    name: "Phone",
+    Icon: FaPhone,
+    contacts: ["+234-814-308-0977","+234-901-947-6263"]
   },
 ]
 
@@ -269,6 +283,29 @@ export default function Home() {
                 <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">{title}</div>
                 <div className="px-4 border-t border-t-black collapse-content">
                   <p>{description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+      <section className="container mt-16">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold">Contact Us</h2>
+          <p className="text-lg mt-4">Get in touch with us today!</p>
+        </div>
+        <div className="flex items-center justify-between">
+          {
+            contacts.map(({ name, Icon, contacts }, idx) => (
+              <div className="flex flex-col items-center text-center space-y-8" key={idx}>
+                <Icon className="text-6xl text-black"/>
+                <h2 className="text-3xl font-bold">{name}</h2>
+                <div className="space-y-2">
+                  {
+                    contacts.map((contact, idx) => (
+                      <p key={idx}>{contact}</p>
+                    ))
+                  }
                 </div>
               </div>
             ))
