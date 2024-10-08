@@ -155,10 +155,17 @@ export default function Home() {
       <section className="container my-16">
         <div className="relative flex items-center justify-between gap-4 px-8 py-16 w-full transition bg-primary-light-100 hover:text-white hover:-rotate-1 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-primary-light-200 before:-rotate-1 before:-z-10 hover:before:bg-secondary-light-400 lg:hover:scale-110 dark:bg-primary-dark-100 dark:hover:text-secondary-dark-100 dark:before:bg-primary-dark-200 dark:hover:before:bg-secondary-dark-400">
           <div>
-            <h2 className="text-4xl font-bold mb-4">Begin your learning journey</h2>
-            <p className="text-lg">Prepare for exams by practicing with a wide range of past questions and answers from various courses.</p>
+            <h2 className="text-4xl font-bold mb-4">
+              Begin your learning journey
+            </h2>
+            <p className="text-lg">
+              Prepare for exams by practicing with a wide range of past
+              questions and answers from various courses.
+            </p>
           </div>
-          <AppLink href="/auth/register"><Button className="whitespace-nowrap">Get Started</Button></AppLink>
+          <AppLink href="/auth/register">
+            <Button className="whitespace-nowrap">Get Started</Button>
+          </AppLink>
         </div>
       </section>
       <div className="w-full p-4 whitespace-nowrap text-white *:inline-block bg-gradient-to-r from-primary-light-300 to-primary-light-400 overflow-hidden dark:from-primary-dark-300 dark:to-primary-dark-400 dark:text-black">
