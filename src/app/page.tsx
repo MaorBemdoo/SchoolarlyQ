@@ -60,6 +60,21 @@ const pricingPlans = [
   },
 ];
 
+const faqs = [
+  {
+    title: "Lorem Ipsum dolor sit amit",
+    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+  },
+  {
+    title: "Lorem Ipsum dolor sit amit",
+    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+  },
+  {
+    title: "Lorem Ipsum dolor sit amit",
+    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+  },
+]
+
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
@@ -241,10 +256,23 @@ export default function Home() {
       {/* <section>
         Testimonials
       </section> */}
-      <section>
-        <div className="text-center mt-16">
-          <h2 className="text-4xl font-bold">FAQs</h2>
-          <p className="text-lg mt-4">Check out frequently asked questions</p>
+      <section className="container mt-16">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold">Frequently Asked Question</h2>
+          <p className="text-lg mt-4">Find questions and answers related to SchoolarlyQ</p>
+        </div>
+        <div className="max-w-[800px] mx-auto space-y-2">
+          {
+            faqs.map(({ title, description }, idx) => (
+              <div className="group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100" key={idx}>
+                <input type="radio" name="accordion" className="peer"/>
+                <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">{title}</div>
+                <div className="px-4 border-t border-t-black collapse-content">
+                  <p>{description}</p>
+                </div>
+              </div>
+            ))
+          }
         </div>
       </section>
     </main>
