@@ -103,7 +103,7 @@ export default function Home() {
 
   return (
     <main>
-      <section className="relative bg-[url(/hero.jpg)] bg-cover bg-center bg-no-repeat h-screen w-full flex items-center">
+      <section className="relative bg-[url(/hero.jpg)] bg-cover bg-center bg-no-repeat h-screen w-full flex items-center" id="hero">
         <div className="absolute top-0 left-0 w-full h-screen flex justify-between gap-8">
           <motion.div
             animate={{ left: ["calc(100% - 0.25rem)", 0] }}
@@ -148,7 +148,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <section className="container mt-16">
+      <section className="container mt-16" id="features">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Key Features</h2>
           <p className="text-lg mt-4">
@@ -181,8 +181,8 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="container my-16">
-        <div className="relative flex items-center justify-between gap-4 px-8 py-16 w-full transition bg-primary-light-100 hover:text-white hover:-rotate-1 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-primary-light-200 before:-rotate-1 before:-z-10 hover:before:bg-secondary-light-400 lg:hover:scale-110 dark:bg-primary-dark-100 dark:hover:text-secondary-dark-100 dark:before:bg-primary-dark-200 dark:hover:before:bg-secondary-dark-400">
+      <section className="container my-16" id="cta">
+        <div className="relative rounded flex items-center justify-between gap-4 px-8 py-16 w-full transition bg-primary-light-100 hover:text-white hover:-rotate-1 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:rounded before:bg-primary-light-200 before:-rotate-1 before:-z-10 hover:before:bg-secondary-light-400 lg:hover:scale-110 dark:bg-primary-dark-100 dark:hover:text-secondary-dark-100 dark:before:bg-primary-dark-200 dark:hover:before:bg-secondary-dark-400">
           <div>
             <h2 className="text-4xl font-bold mb-4">Begin your learning journey</h2>
             <p className="text-lg">Prepare for exams by practicing with a wide range of past questions and answers from various courses.</p>
@@ -237,7 +237,7 @@ export default function Home() {
           <span>Elevate your learning, Elevate your GPA</span>
         </motion.div>
       </div>
-      <section className="container mt-16">
+      <section className="container mt-16" id="pricing">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Pricing plan</h2>
           <p className="text-lg mt-4">Choose the perfect plan for you</p>
@@ -270,7 +270,7 @@ export default function Home() {
       {/* <section>
         Testimonials
       </section> */}
-      <section className="container mt-16">
+      <section className="container mt-16" id="faq">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Frequently Asked Question</h2>
           <p className="text-lg mt-4">Find questions and answers related to SchoolarlyQ</p>
@@ -289,21 +289,21 @@ export default function Home() {
           }
         </div>
       </section>
-      <section className="container mt-16">
+      <section className="container mt-16" id="contact">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Contact Us</h2>
           <p className="text-lg mt-4">Get in touch with us today!</p>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-8 items-center justify-evenly sm:flex-row">
           {
             contacts.map(({ name, Icon, contacts }, idx) => (
-              <div className="flex flex-col items-center text-center space-y-8" key={idx}>
-                <Icon className="text-6xl text-black"/>
+              <div className="flex flex-col items-center text-center space-y-6" key={idx}>
+                <Icon className="text-6xl"/>
                 <h2 className="text-3xl font-bold">{name}</h2>
                 <div className="space-y-2">
                   {
                     contacts.map((contact, idx) => (
-                      <p key={idx}>{contact}</p>
+                      <AppLink href={`${name == "Email" ? "mailto" : "tel"}:${contact}`} className="block" key={idx}>{contact}</AppLink>
                     ))
                   }
                 </div>
