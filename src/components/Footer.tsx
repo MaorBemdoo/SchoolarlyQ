@@ -1,4 +1,4 @@
-import { version } from "../../package.json"
+import app from "../../package.json"
 import Image from "next/image";
 import { FaLinkedinIn, FaGithub, FaXTwitter, FaInstagram } from "react-icons/fa6";
 import AppLink from "./AppLink";
@@ -14,7 +14,7 @@ const Footer = () => {
               <Image src="/favicon.ico" alt="logo" height={50} width={50} />
               <h2 className="text-2xl font-bold">SchoolarlyQ</h2>
             </div>
-            <p className="text-2xl text-slate-500">v{version}</p>
+            <p className="text-2xl text-slate-500">v{app.version}</p>
           </div>
 
           <div className="flex flex-col space-y-2">

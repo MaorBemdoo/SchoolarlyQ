@@ -1,5 +1,6 @@
 import { MenuIconProps } from "@/types";
 import { motion, useAnimationControls } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 const MenuIcon = ({
@@ -9,6 +10,7 @@ const MenuIcon = ({
   iconRef,
 }: MenuIconProps) => {
   const controls = useAnimationControls();
+  const pathname = usePathname()
 
   useEffect(() => {
     if (isVisible) {
@@ -38,8 +40,9 @@ const MenuIcon = ({
             transformOrigin: "center",
           },
         }}
-        style={{ backgroundColor: textColor }}
+        style={ pathname === "/" ? { backgroundColor: textColor } : { }}
         animate={controls}
+        className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
       <motion.div
         initial="initial2"
@@ -47,8 +50,9 @@ const MenuIcon = ({
           initial2: { width: `${(2 / 3) * 100}%`, opacity: 1 },
           animate2: { opacity: 0 },
         }}
-        style={{ backgroundColor: textColor }}
+        style={ pathname === "/" ? { backgroundColor: textColor } : { }}
         animate={controls}
+        className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
       <motion.div
         initial="initial3"
@@ -63,8 +67,9 @@ const MenuIcon = ({
             transformOrigin: "center",
           },
         }}
-        style={{ backgroundColor: textColor }}
+        style={ pathname === "/" ? { backgroundColor: textColor } : { }}
         animate={controls}
+        className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
     </div>
   );
