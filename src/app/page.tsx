@@ -64,30 +64,33 @@ const pricingPlans = [
 const faqs = [
   {
     title: "Lorem Ipsum dolor sit amit",
-    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+    description:
+      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
   },
   {
     title: "Lorem Ipsum dolor sit amit",
-    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+    description:
+      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
   },
   {
     title: "Lorem Ipsum dolor sit amit",
-    description: "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u"
+    description:
+      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
   },
-]
+];
 
 const contacts = [
   {
     name: "Email",
     Icon: IoMail,
-    contacts: ["bemdoo.maor1@gmail.com", "adamujighjigh144k@gmail.com"]
+    contacts: ["bemdoo.maor1@gmail.com", "adamujighjigh144k@gmail.com"],
   },
   {
     name: "Phone",
     Icon: FaPhone,
-    contacts: ["+234-814-308-0977","+234-901-947-6263"]
+    contacts: ["+234-814-308-0977", "+234-901-947-6263"],
   },
-]
+];
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -103,7 +106,10 @@ export default function Home() {
 
   return (
     <main>
-      <section className="relative bg-[url(/hero.jpg)] bg-cover bg-center bg-no-repeat h-screen w-full flex items-center" id="hero">
+      <section
+        className="relative bg-[url(/hero.jpg)] bg-cover bg-center bg-no-repeat h-screen w-full flex items-center"
+        id="hero"
+      >
         <div className="absolute top-0 left-0 w-full h-screen flex justify-between gap-8">
           <motion.div
             animate={{ left: ["calc(100% - 0.25rem)", 0] }}
@@ -280,20 +286,25 @@ export default function Home() {
       <section className="container mt-16" id="faq">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Frequently Asked Question</h2>
-          <p className="text-lg mt-4">Find questions and answers related to SchoolarlyQ</p>
+          <p className="text-lg mt-4">
+            Find questions and answers related to SchoolarlyQ
+          </p>
         </div>
         <div className="max-w-[800px] mx-auto space-y-2">
-          {
-            faqs.map(({ title, description }, idx) => (
-              <div className="group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100" key={idx}>
-                <input type="radio" name="accordion" className="peer"/>
-                <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">{title}</div>
-                <div className="px-4 border-t border-t-black collapse-content">
-                  <p>{description}</p>
-                </div>
+          {faqs.map(({ title, description }, idx) => (
+            <div
+              className="group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100"
+              key={idx}
+            >
+              <input type="radio" name="accordion" className="peer" />
+              <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">
+                {title}
               </div>
-            ))
-          }
+              <div className="px-4 border-t border-t-black collapse-content">
+                <p>{description}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
       <section className="container mt-16" id="contact">
@@ -302,21 +313,26 @@ export default function Home() {
           <p className="text-lg mt-4">Get in touch with us today!</p>
         </div>
         <div className="flex flex-col gap-8 items-center justify-evenly sm:flex-row">
-          {
-            contacts.map(({ name, Icon, contacts }, idx) => (
-              <div className="flex flex-col items-center text-center space-y-6" key={idx}>
-                <Icon className="text-6xl"/>
-                <h2 className="text-3xl font-bold">{name}</h2>
-                <div className="space-y-2">
-                  {
-                    contacts.map((contact, idx) => (
-                      <AppLink href={`${name == "Email" ? "mailto" : "tel"}:${contact}`} className="block" key={idx}>{contact}</AppLink>
-                    ))
-                  }
-                </div>
+          {contacts.map(({ name, Icon, contacts }, idx) => (
+            <div
+              className="flex flex-col items-center text-center space-y-6"
+              key={idx}
+            >
+              <Icon className="text-6xl" />
+              <h2 className="text-3xl font-bold">{name}</h2>
+              <div className="space-y-2">
+                {contacts.map((contact, idx) => (
+                  <AppLink
+                    href={`${name == "Email" ? "mailto" : "tel"}:${contact}`}
+                    className="block"
+                    key={idx}
+                  >
+                    {contact}
+                  </AppLink>
+                ))}
               </div>
-            ))
-          }
+            </div>
+          ))}
         </div>
       </section>
     </main>

@@ -39,7 +39,7 @@ const config: Config = {
   darkMode: "class",
   plugins: [
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require('daisyui'),
+    require("daisyui"),
   ],
 };
 export default config;
