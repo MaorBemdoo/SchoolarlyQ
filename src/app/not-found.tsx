@@ -1,6 +1,10 @@
 import AppLink from "@/components/AppLink"
 import Button from "@/components/Button"
 
+export const metadata = {
+    title: "404 - Page Not Found - SchoolarlyQ"
+}
+
 const NotFound = () => {
     return (
         <main className="containers h-[90vh] text-center">

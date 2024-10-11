@@ -10,6 +10,7 @@ import {
 import { SetStateAction, useRef, useState } from "react";
 import useEventOutside from "@/hooks/useEventOutside";
 import { FaChevronDown } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 const Theme = ({
   screen,
@@ -21,6 +22,7 @@ const Theme = ({
   const [isVisible, setIsVisible] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+  const pathname = usePathname()
 
   const { theme, resolvedTheme, setTheme } = useTheme();
   const { scrollYProgress } = useScroll();
@@ -82,10 +84,10 @@ const Theme = ({
       ) : (
         <div className="relative">
           <motion.div
-            className="flex items-center gap-2 p-2 rounded-full border cursor-pointer last:*:hover:animate-bounce"
+            className="flex items-center gap-2 p-2 rounded-full border border-secondary-light-400 cursor-pointer last:*:hover:animate-bounce dark:border-white"
             ref={buttonRef}
             onClick={() => setIsVisible(!isVisible)}
-            style={{ borderColor }}
+            style={ pathname === "/" ? { borderColor } : {} }
           >
             <Icon className="text-2xl" />
             <FaChevronDown className="text-xs" />
