@@ -21,7 +21,7 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { resolvedTheme } = useTheme();
   const { scrollYProgress } = useScroll();
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const backgroundColor = useTransform(
     scrollYProgress,
@@ -49,8 +49,12 @@ const Header = () => {
   return (
     <>
       <motion.div
-        style={ pathname === "/" ? { backgroundColor, color: textColor, boxShadow } : { boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)" }}
-        className={`desktop-header none ${ pathname == "/" ? "fixed w-screen": "" } z-20 sm:block`}
+        style={
+          pathname === "/"
+            ? { backgroundColor, color: textColor, boxShadow }
+            : { boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)" }
+        }
+        className={`desktop-header none ${pathname == "/" ? "fixed w-screen" : ""} z-20 sm:block`}
       >
         <div className="container flex justify-between items-center p-4 font-semibold">
           <div className="flex items-center gap-5">
@@ -84,8 +88,12 @@ const Header = () => {
         </div>
       </motion.div>
       <motion.div
-        style={ pathname === "/" ? { backgroundColor, color: textColor, boxShadow } : { boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)" }}
-        className={`mobile-header ${ pathname == "/" ? "fixed w-screen": "" } block z-20 sm:none`}
+        style={
+          pathname === "/"
+            ? { backgroundColor, color: textColor, boxShadow }
+            : { boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)" }
+        }
+        className={`mobile-header ${pathname == "/" ? "fixed w-screen" : ""} block z-20 sm:none`}
       >
         <div className="container p-4 flex justify-between items-center font-semibold">
           <AppLink href="/" className="flex items-center gap-1">
