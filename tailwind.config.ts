@@ -39,10 +39,10 @@ const config: Config = {
   },
   darkMode: "class",
   plugins: [
-    require('daisyui'),
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/typography'),
+    require("daisyui"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/typography"),
   ],
 };
 export default config;
