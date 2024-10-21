@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { baseUrl } from "@/constants";
-import { Providers } from "./providers";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "SchoolarlyQ - Overview",
