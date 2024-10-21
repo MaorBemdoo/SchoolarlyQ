@@ -3,13 +3,15 @@ import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import User from '@/models/User';
-import connectDB from '@/config/mongo';
+import client from '@/config/mongo';
+import { MongoDBAdapter } from '@auth/mongodb-adapter';
 
-export const { handlers, signIn, signOut, auth } =  NextAuth({
-    adapter: MongoDBAdapter(connectDB),
+export const { handlers, signIn, signOut, auth } = NextAuth({
+    adapter: MongoDBAdapter(client),
     providers: [
         Google({
-
+            clientId: process.env.AUTH_GOOGLE_ID,
+            clientSecret: process.env.AUTH_GOOGLE_SECRET,
         }),
         Credentials({
             name: 'Credentials',
@@ -35,14 +37,9 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
                 }
 
                 if (bcrypt.compareSync(credentials.password as string, user.password)) {
-                    return {
-                        id: user._id,
-                        username: user.username,
-                        full_name: user.full_name,
-                        favourites: user.favourites,
-                        createdAt: user.createdAt,
-                        updatedAt: user.updatedAt,
-                    }
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { password, ...userWithoutPassword } = user;
+                    return userWithoutPassword;
                 } else {
                     throw new PasswordIncorrectError()
                 }
@@ -50,15 +47,9 @@ export const { handlers, signIn, signOut, auth } =  NextAuth({
         })
     ],
     callbacks: {
-        async session({ session, token }) {
-            session.user.id = token.sub as string;
-            return session;
+        session({ session, user }) {
+            session.user = user
+            return session
         },
-        async jwt({ token, user }) {
-            if (user) {
-                token.sub = user.id;
-            }
-            return token;
-        }
-    },
+    }
 });

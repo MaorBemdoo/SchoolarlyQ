@@ -1,7 +1,10 @@
 import mongoose from "mongoose"
 
 const questionSchema = new mongoose.Schema({
-    type: {type: String, required: true},
+    type: {type: String, enum: {
+        values: ["objective", "theory"],
+        message: "{VALUE} is not a supported data source",
+    }, required: true},
     question: {
         type: String,
         required: true,

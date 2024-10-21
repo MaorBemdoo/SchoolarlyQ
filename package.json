@@ -13,9 +13,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^3.7.2",
     "@logtail/pino": "^0.5.2",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^11.7.0",
+    "mongodb": "^6.9.0",
     "mongoose": "^8.7.1",
     "next": "^14.2.15",
     "next-auth": "^5.0.0-beta.22",

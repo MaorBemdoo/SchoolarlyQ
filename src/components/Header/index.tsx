@@ -22,7 +22,7 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { resolvedTheme } = useTheme();
   const { scrollYProgress } = useScroll();
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const backgroundColor = useTransform(
     scrollYProgress,
