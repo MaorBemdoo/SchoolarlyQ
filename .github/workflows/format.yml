@@ -13,10 +13,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
-      - run: npm ci
+          cache: "yarn"
+      - run: yarn install --immutable
+
       - name: Prettier
-        run: npx prettier --write "**/*.{js,ts,jsx,tsx,json}"
+        run: yarn prettier --write "**/*.{js,ts,jsx,tsx,json}"
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         id: format-files
         with:
