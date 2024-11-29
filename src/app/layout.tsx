@@ -6,7 +6,10 @@ import { baseUrl } from "@/constants";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "SchoolarlyQ - Overview",
+  title: { 
+    template: "%s | SchoolarlyQ",
+    default: "SchoolarlyQ"
+  },
   description: "Elevate your learning, Elevate your GPA",
   authors: [{ name: "🚀Bemdoo Maor" }, { name: "Adamu Jighjigh" }],
   openGraph: {
@@ -38,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="text-secondary-light-400 dark:bg-[#121212] dark:text-white">
+      <body className="text-secondary-light-400 bg-white dark:bg-[#121212] dark:text-white">
         <Providers>
           <Header />
           {children}

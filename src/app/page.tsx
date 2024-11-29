@@ -10,6 +10,10 @@ import { HiSparkles } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
 import { IoMail } from "react-icons/io5";
 
+export const metadata = {
+  title: "Overview"
+}
+
 const features = [
   {
     title: "Interractive Quizzes",

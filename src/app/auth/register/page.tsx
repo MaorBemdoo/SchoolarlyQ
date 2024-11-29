@@ -1,4 +1,12 @@
+export const metadata = {
+  title: "Register"
+}
+
 const Register = () => {
-  return <form>register</form>;
+  return (
+    <form>
+      Register
+    </form>
+  );
 };
 export default Register;
