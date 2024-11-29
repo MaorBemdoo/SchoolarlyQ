@@ -8,7 +8,8 @@ import Providers from "./providers";
 export const metadata: Metadata = {
   title: { 
     template: "%s | SchoolarlyQ",
-    default: "SchoolarlyQ"
+    default: "SchoolarlyQ",
+    absolute: "Overview | SchoolarlyQ"
   },
   description: "Elevate your learning, Elevate your GPA",
   authors: [{ name: "🚀Bemdoo Maor" }, { name: "Adamu Jighjigh" }],

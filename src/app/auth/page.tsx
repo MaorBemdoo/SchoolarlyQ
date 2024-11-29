@@ -1,7 +1,7 @@
-import Router from "next/router"
+import { redirect } from "next/navigation"
 
 const AuthPage = () => {
-    Router.push("/auth/login")
+    redirect("/auth/login")
     return null
 }
 
