@@ -6,9 +6,9 @@ import { baseUrl } from "@/constants";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: { 
+  title: {
     template: "%s | SchoolarlyQ",
-    default: "SchoolarlyQ"
+    default: "SchoolarlyQ",
   },
   description: "Elevate your learning, Elevate your GPA",
   authors: [{ name: "🚀Bemdoo Maor" }, { name: "Adamu Jighjigh" }],

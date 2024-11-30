@@ -11,8 +11,8 @@ import { ImStatsDots } from "react-icons/im";
 import { IoMail } from "react-icons/io5";
 
 export const metadata = {
-  title: "Overview"
-}
+  title: "Overview",
+};
 
 const features = [
   {
