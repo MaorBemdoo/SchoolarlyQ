@@ -6,7 +6,7 @@ import { baseUrl } from "@/constants";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: { 
+  title: {
     template: "%s | SchoolarlyQ",
     default: "SchoolarlyQ",
     absolute: "Overview | SchoolarlyQ"
