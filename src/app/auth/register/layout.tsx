@@ -1,11 +1,11 @@
 export const metadata = {
-    title: "Register"
-}
+  title: "Register",
+};
 
 export default function RegisterLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-    return children;
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return children;
 }

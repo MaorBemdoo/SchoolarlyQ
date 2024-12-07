@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       { message: "User created and signed in successfully" },
       { status: 201 },
     );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     logger.error("Error Registering User", err);
     return NextResponse.json(
