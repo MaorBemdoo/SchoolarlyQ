@@ -2,6 +2,7 @@
 
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -53,6 +54,7 @@ const Register = () => {
         <Button
           variant="custom"
           className="flex items-center justify-center gap-[7px] p-3 !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
+          onClick={(e) => {e.preventDefault();signIn("google", {redirect: false}) }}
         >
           <Image src="/google.png" alt="Google logo" width={20} height={20} />
           Sign up with Google

@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema(
     username: { type: String, unique: true, required: true },
     email: { type: String, unique: true, required: true },
     full_name: { type: String, required: true },
-    profile_pic_url: { type: String, default: "" },
     password: { type: String },
     role: {
       type: String,
@@ -23,9 +22,9 @@ const userSchema = new mongoose.Schema(
       },
       default: "free",
     },
-    matric_number: { type: String, unique: true, required: true },
-    // department: {type: String, required: true},
-    // level: {type: String, required: true}
+    matric_number: { type: String, unique: true },
+    department: {type: String},
+    level: {type: String}
   },
   { timestamps: true },
 );

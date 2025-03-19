@@ -12,6 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
+      
     }),
     Credentials({
       name: "Credentials",
@@ -50,6 +51,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     session({ session, user }) {
       session.user = user;
       return session;
+    },
+    async signIn({ account, profile }) {
+      if (account?.provider == "google") {
+        class EmailNotFoundError {
+          message = "User doesn't exist";
+          status = 404;
+        }
+
+        const user = await User.findOne({ email: profile?.email });
+
+        if (!user) {
+          throw new EmailNotFoundError();
+        }
+
+      }
+      return true
     },
   },
 });
