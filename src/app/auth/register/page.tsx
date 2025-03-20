@@ -54,7 +54,10 @@ const Register = () => {
         <Button
           variant="custom"
           className="flex items-center justify-center gap-[7px] p-3 !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
-          onClick={(e) => {e.preventDefault();signIn("google", {redirect: false}) }}
+          onClick={(e) => {
+            e.preventDefault();
+            signIn("google", { redirect: false });
+          }}
         >
           <Image src="/google.png" alt="Google logo" width={20} height={20} />
           Sign up with Google

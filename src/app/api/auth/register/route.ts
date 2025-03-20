@@ -6,21 +6,31 @@ import logger from "@/config/logger";
 import connectDB from "@/utils/db";
 
 export async function POST(req: NextRequest) {
-  const { full_name, email, password, step = 1, type = "credentials", matric_number, department, level, username: username2 } = await req.json();
+  const {
+    full_name,
+    email,
+    password,
+    step = 1,
+    type = "credentials",
+    matric_number,
+    department,
+    level,
+    username: username2,
+  } = await req.json();
 
-  if(step == 1){
-    if(type == "credentials"){
+  if (step == 1) {
+    if (type == "credentials") {
       if (!full_name || !email || !password) {
         return NextResponse.json(
           { message: "Missing required fields" },
           { status: 400 },
         );
       }
-    
-      const username = email.slice(0, email.indexOf("@"))
-    
+
+      const username = email.slice(0, email.indexOf("@"));
+
       await connectDB();
-    
+
       const existingUser = await User.findOne({ username });
       if (existingUser) {
         return NextResponse.json(
@@ -28,7 +38,7 @@ export async function POST(req: NextRequest) {
           { status: 409 },
         );
       }
-    
+
       const hashedPassword = await bcrypt.hash(password, 7);
       const user = new User({
         full_name,
@@ -36,16 +46,16 @@ export async function POST(req: NextRequest) {
         email,
         password: hashedPassword,
       });
-    
+
       try {
         await user.save();
-    
+
         await signIn("credentials", {
           username,
           password,
           redirect: false,
         });
-    
+
         logger.info("User created and signed in successfully", {
           id: user._id,
         });
@@ -61,11 +71,11 @@ export async function POST(req: NextRequest) {
           { status: err.cause.err.status },
         );
       }
-    }else{
-      const data = await signIn("google", { redirect: false })
-      console.log(data)
+    } else {
+      const data = await signIn("google", { redirect: false });
+      console.log(data);
     }
-  }else{
+  } else {
     if (!matric_number || !department || !level || !username2) {
       return NextResponse.json(
         { message: "Missing required fields" },
@@ -90,16 +100,19 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      await User.updateOne({ username: username2 }, {
-        matric_number,
-        department,
-        level
-      });
+      await User.updateOne(
+        { username: username2 },
+        {
+          matric_number,
+          department,
+          level,
+        },
+      );
       return NextResponse.json(
         { message: "User updated successfully" },
         { status: 200 },
       );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       logger.error("Error Updating User", err);
       return NextResponse.json(

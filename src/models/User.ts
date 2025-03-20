@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema(
       default: "free",
     },
     matric_number: { type: String, unique: true },
-    department: {type: String},
-    level: {type: String}
+    department: { type: String },
+    level: { type: String },
   },
   { timestamps: true },
 );
