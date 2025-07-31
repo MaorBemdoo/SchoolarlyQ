@@ -1,4 +1,5 @@
 import { MotionValue } from "framer-motion";
+import { MouseEventHandler } from "react";
 
 export type RefType =
   | React.RefObject<HTMLElement>
@@ -14,9 +15,10 @@ export interface AppLinkProps {
 export interface ButtonProps {
   children: React.ReactNode;
   className?: string;
-  onClick?: () => void | Promise<() => void>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   variant?: "standard" | "outlined" | "filled" | "custom";
   color?: "orange" | "blue";
+  loading?: boolean;
 }
 
 export interface MenuIconProps {

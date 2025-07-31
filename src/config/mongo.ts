@@ -14,6 +14,7 @@ const options = {
 };
 
 let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
 
 if (process.env.NODE_ENV === "development") {
   const globalWithMongo = global as typeof globalThis & {
@@ -28,4 +29,7 @@ if (process.env.NODE_ENV === "development") {
   client = new MongoClient(uri, options);
 }
 
-export default client;
+// eslint-disable-next-line prefer-const
+clientPromise = client.connect();
+
+export default clientPromise;

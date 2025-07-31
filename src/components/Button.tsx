@@ -6,6 +6,7 @@ const Button = ({
   onClick,
   variant = "standard",
   color = "orange",
+  loading,
 }: ButtonProps) => {
   const baseClass =
     "transition px-4 py-2 rounded text-secondary-light-200 shadow-md focus:scale-[0.98] dark:text-secondary-dark-200";
@@ -43,8 +44,9 @@ const Button = ({
     <button
       className={`${baseClass} ${variantClass} ${hoverClass} ${className}`}
       onClick={onClick}
+      disabled={loading}
     >
-      {children}
+      {loading ? <span className="loading loading-spinner"></span> : children}
     </button>
   );
 };

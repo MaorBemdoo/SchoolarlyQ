@@ -1,20 +1,21 @@
 import bcrypt from "bcryptjs";
 import { signIn } from "@/utils/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import User from "@/models/User";
 import logger from "@/config/logger";
 import connectDB from "@/utils/db";
+import ResponseHandler from "@/utils/ResponseHandler";
 
 export async function POST(req: NextRequest) {
-  const { full_name, email, password, step = 1, type = "credentials", matric_number, department, level, username: username2 } = await req.json();
+  const { full_name, email, password, step = 1, type = "credentials", matric_number, department, level } = await req.json();
 
   if(step == 1){
     if(type == "credentials"){
       if (!full_name || !email || !password) {
-        return NextResponse.json(
-          { message: "Missing required fields" },
-          { status: 400 },
-        );
+        return ResponseHandler(
+          400,
+          "Missing required fields",
+        )
       }
     
       const username = email.slice(0, email.indexOf("@"))
@@ -23,9 +24,9 @@ export async function POST(req: NextRequest) {
     
       const existingUser = await User.findOne({ username });
       if (existingUser) {
-        return NextResponse.json(
-          { message: "User with email already exist" },
-          { status: 409 },
+        return ResponseHandler(
+          409,
+          "User with email already exist",
         );
       }
     
@@ -49,62 +50,77 @@ export async function POST(req: NextRequest) {
         logger.info("User created and signed in successfully", {
           id: user._id,
         });
-        return NextResponse.json(
-          { message: "User created and signed in successfully" },
-          { status: 201 },
+        return ResponseHandler(
+          201,
+          "User created and signed in successfully",
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        logger.error("Error Registering User", err);
-        return NextResponse.json(
-          { message: err.cause.err.message },
-          { status: err.cause.err.status },
+        logger.error(err, "Error Registering User");
+        return ResponseHandler(
+          err.cause.err.status || 500,
+          err.cause.err.message,
         );
       }
     }else{
-      const data = await signIn("google", { redirect: false })
-      console.log(data)
+      try {
+        const data = await signIn("google", { redirect: false })
+        console.log(data)
+
+        return ResponseHandler(
+          201,
+          "User created and signed in successfully"
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        logger.error(err, "Error Registering User");
+        return ResponseHandler(
+          err.cause.err.status || 500,
+          err.cause.err.message,
+        );
+      }
     }
   }else{
-    if (!matric_number || !department || !level || !username2) {
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 },
+    if (!matric_number || !department || !level || !email) {
+      return ResponseHandler(
+        400,
+        "Missing required fields"
       );
     }
 
+    await connectDB();
     const existingMatricNumber = await User.findOne({ matric_number });
     if (existingMatricNumber) {
-      return NextResponse.json(
-        { message: "Hmmm... Are you sure that's your matric number" },
-        { status: 409 },
+      return ResponseHandler(
+        409,
+        "Hmmm... Are you sure that's your matric number"
       );
     }
 
-    const existingUser = await User.findOne({ username: username2 });
+    const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return NextResponse.json(
-        { message: "User does not exist" },
-        { status: 404 },
+      return ResponseHandler(
+        404,
+        "User does not exist"
       );
     }
 
     try {
-      await User.updateOne({ username: username2 }, {
+      await User.updateOne({ email }, {
         matric_number,
         department,
         level
       });
-      return NextResponse.json(
-        { message: "User updated successfully" },
-        { status: 200 },
+      return ResponseHandler(
+        200,
+        "User updated successfully"
       );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       logger.error("Error Updating User", err);
-      return NextResponse.json(
-        { message: err.cause.err.message },
-        { status: err.cause.err.status },
+      return ResponseHandler(
+        err?.cause?.err?.status || 500,
+        err?.cause?.err?.message
       );
     }
   }

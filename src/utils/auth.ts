@@ -3,16 +3,19 @@ import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import User from "@/models/User";
-import client from "@/config/mongo";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/config/mongo";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: MongoDBAdapter(client),
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      
+      async profile(profile) {
+        console.log(profile)
+        return { ...profile }
+      },
     }),
     Credentials({
       name: "Credentials",
@@ -52,20 +55,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user = user;
       return session;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async signIn({ account, profile }) {
-      if (account?.provider == "google") {
-        class EmailNotFoundError {
-          message = "User doesn't exist";
-          status = 404;
-        }
+      // if (account?.provider == "google") {
+      //   class EmailNotFoundError {
+      //     message = "User doesn't exist";
+      //     status = 404;
+      //   }
 
-        const user = await User.findOne({ email: profile?.email });
+      //   const user = await User.findOne({ email: profile?.email });
 
-        if (!user) {
-          throw new EmailNotFoundError();
-        }
+      //   if (!user) {
+      //     throw new EmailNotFoundError();
+      //   }
 
-      }
+      // }
       return true
     },
   },
