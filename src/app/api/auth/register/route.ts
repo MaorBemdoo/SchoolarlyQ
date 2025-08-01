@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
         await user.save();
     
         await signIn("credentials", {
-          username,
+          usernameOrEmailOrMatric: username,
           password,
           redirect: false,
         });

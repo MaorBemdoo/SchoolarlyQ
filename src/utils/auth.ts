@@ -1,13 +1,15 @@
-import NextAuth, { CredentialsSignin } from "next-auth";
+import NextAuth, { CredentialsSignin, User as UserType } from "next-auth";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import User from "@/models/User";
-import clientPromise from "@/config/mongo";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+// import clientPromise from "@/config/mongo";
+// import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import connectDB from "./db";
+import { AdapterUser } from "next-auth/adapters";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  // adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
       clientId: process.env.GOOGLE_ID,
@@ -20,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        usernameOrEmailOrMatric: { label: "Username or Email or Matric Number", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -34,7 +36,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           status = 400;
         }
 
-        const user = await User.findOne({ username: credentials.username });
+        await connectDB()
+
+        const user = await User.findOne({ username: credentials.usernameOrEmailOrMatric }) || await User.findOne({ email: credentials.usernameOrEmailOrMatric }) || await User.findOne({ matric_number: credentials.usernameOrEmailOrMatric });
 
         if (!user) {
           throw new UserNotFoundError();
@@ -42,8 +46,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (bcrypt.compareSync(credentials.password as string, user.password)) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { password, ...userWithoutPassword } = user;
-          return userWithoutPassword;
+          user.password = undefined;
+          return user;
         } else {
           throw new PasswordIncorrectError();
         }
@@ -51,9 +55,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    session({ session, user }) {
-      session.user = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    session({ session, token, user }) {
+      session.user = token.user as UserType & AdapterUser
       return session;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async signIn({ account, profile }) {
