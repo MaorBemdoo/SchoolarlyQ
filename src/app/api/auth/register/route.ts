@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
       );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      logger.error("Error Updating User", err);
+      logger.error(err, "Error Updating User");
       return ResponseHandler(
         err?.cause?.err?.status || 500,
         err?.cause?.err?.message
