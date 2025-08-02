@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
       },
       default: "free",
     },
-    matric_number: { type: String, unique: true },
+    matric_number: { type: String },
     department: {type: String},
     level: {type: Number}
   },
