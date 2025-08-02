@@ -59,8 +59,8 @@ export async function POST(req: NextRequest) {
       } catch (err: any) {
         logger.error(err, "Error Registering User");
         return ResponseHandler(
-          err.cause.err.status || 500,
-          err.cause.err.message,
+          err?.cause?.err?.status || 500,
+          err?.cause?.err?.message,
         );
       }
     }else{
@@ -76,8 +76,8 @@ export async function POST(req: NextRequest) {
       } catch (err: any) {
         logger.error(err, "Error Registering User");
         return ResponseHandler(
-          err.cause.err.status || 500,
-          err.cause.err.message,
+          err?.cause?.err?.status || 500,
+          err?.cause?.err?.message,
         );
       }
     }
