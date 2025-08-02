@@ -23,12 +23,12 @@ if (!isEdge) {
         },
       ],
     });
+  } else{
+    resolvedTransport = transport({
+      target: "@logtail/pino",
+      options: { sourceToken: process.env.BETTERSTACK_TOKEN },
+    });
   }
-
-  resolvedTransport = transport({
-    target: "@logtail/pino",
-    options: { sourceToken: process.env.BETTERSTACK_TOKEN },
-  });
 
   logger = pino(resolvedTransport);
 }
