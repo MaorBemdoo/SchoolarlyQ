@@ -1,15 +1,10 @@
-import pino, { Logger } from "pino";
+import pino, { transport } from "pino";
 
 const isEdge = process.env.NEXT_RUNTIME === "edge";
 
-let logger: Logger;
+let logger = pino({ level: "info" });
 
-if (isEdge) {
-  logger = pino({ level: "info" });
-} else {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { transport } = require("pino");
-
+if (!isEdge) {
   const devTransport = transport({
     targets: [
       {

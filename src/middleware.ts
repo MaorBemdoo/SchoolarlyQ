@@ -1,12 +1,10 @@
-export const runtime = "nodejs";
-
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/utils/auth";
+import { cookies } from "next/headers";
 
 const protectedRoutes = ["/quiz"];
 export const middleware = async (req: NextRequest) => {
   if (protectedRoutes.includes(req.nextUrl.pathname)) {
-    const session = await auth()
+    const session = (await cookies()).get("authjs.session-token")?.value
     if (!session) {
       return NextResponse.redirect(new URL('/auth/login', req.url));
     }
