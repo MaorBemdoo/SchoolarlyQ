@@ -27,13 +27,14 @@ const Register = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (emailStore === undefined) return;
     if (step < 1 || step > 2) {
       router.push("/auth/register?step=1");
     }
-    if(step == 2 && !email && !emailStore) {
+    if (step === 2 && !emailStore) {
       router.push("/auth/register?step=1");
     }
-  }, [step, router, emailStore, email]);
+  }, [step, router, emailStore]);
 
 
 
