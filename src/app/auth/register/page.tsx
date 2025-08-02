@@ -33,7 +33,7 @@ const Register = () => {
     if(step == 2 && !email && !emailStore) {
       router.push("/auth/register?step=1");
     }
-  }, [step, router]);
+  }, [step, router, emailStore, email]);
 
 
 
