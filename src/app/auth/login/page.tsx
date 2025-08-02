@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [email, setEmail] = useState("")
@@ -42,10 +43,10 @@ const Login = () => {
   }
 
   return (
-    <form className="w-[380px] p-4 border border-black rounded-md space-y-6 text-center dark:border-white">
+    <motion.form animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} exit={{ opacity: 0, y: 20 }} className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit">
       <div>
         <h1 className="text-2xl font-bold">Login</h1>
-        <p className="text-gray-300 text-sm font-semibold">Welcome Back!</p>
+        <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">Welcome Back!</p>
       </div>
       <div className="flex flex-col gap-4">
          <input type="text" placeholder="Email or Matric Number" className="form-input" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -75,7 +76,7 @@ const Login = () => {
           Signup with Google
         </Button>
       </div> */}
-    </form>
+    </motion.form>
   );
 };
 export default Login;

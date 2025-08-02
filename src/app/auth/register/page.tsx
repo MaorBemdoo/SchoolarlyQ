@@ -9,6 +9,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useLocalStorage } from "react-use";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [fullname, setFullname] = useState("")
@@ -105,10 +106,10 @@ const Register = () => {
   }
 
   return (
-    <form className="w-[380px] p-4 border border-black rounded-md space-y-6 text-center dark:border-white">
+    <motion.form animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} exit={{ opacity: 0, y: 20 }} className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit">
       <div>
         <h1 className="text-2xl font-bold">Register</h1>
-        <p className="text-gray-300 text-sm font-semibold">
+        <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
           Get started with SchoolaryQ
         </p>
       </div>
@@ -189,7 +190,7 @@ const Register = () => {
           Sign up with Google
         </Button>
       </div> */}
-    </form>
+    </motion.form>
   );
 };
 export default Register;
