@@ -7,6 +7,8 @@ function useEventOutside(
   events: EventType = ["mousedown", "touchstart"],
 ) {
   useEffect(() => {
+    if (!refs) return;
+
     const listener = (event: Event) => {
       const refArray = Array.isArray(refs) ? refs : [refs];
 

@@ -3,7 +3,7 @@ import { MouseEventHandler } from "react";
 
 export type RefType =
   | React.RefObject<HTMLElement>
-  | React.RefObject<HTMLElement>[];
+  | React.RefObject<HTMLElement | null>[];
 export type EventType = keyof DocumentEventMap | Array<keyof DocumentEventMap>;
 
 export interface AppLinkProps {
@@ -25,5 +25,5 @@ export interface MenuIconProps {
   textColor: MotionValue<string>;
   onClick: () => void;
   isVisible: boolean;
-  iconRef: React.RefObject<HTMLDivElement>;
+  iconRef: React.RefObject<HTMLDivElement | null>;
 }

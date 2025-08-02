@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 export const metadata = {
   title: "Register",
 };
@@ -7,5 +9,5 @@ export default function RegisterLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return <Suspense>{children}</Suspense>;
 }
