@@ -1,16 +1,20 @@
 import pino, { Logger } from "pino";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let logger: Logger | any;
+const isEdge = process.env.NEXT_RUNTIME === "edge";
 
-try {
-  const devTransport = pino.transport({
+let logger: Logger;
+
+if (isEdge) {
+  logger = pino({ level: "info" });
+} else {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { transport } = require("pino");
+
+  const devTransport = transport({
     targets: [
       {
         target: "pino-pretty",
-        options: {
-          colorize: true,
-        },
+        options: { colorize: true },
       },
       {
         target: "pino/file",
@@ -21,19 +25,16 @@ try {
       },
     ],
   });
-  
-  const prodTransport = pino.transport({
+
+  const prodTransport = transport({
     target: "@logtail/pino",
     options: { sourceToken: process.env.BETTERSTACK_TOKEN },
   });
-  
-  const transport =
+
+  const resolvedTransport =
     process.env.NODE_ENV === "development" ? devTransport : prodTransport;
-  
-  logger = pino(transport);
-  
-} catch {
-  logger = null
+
+  logger = pino(resolvedTransport);
 }
 
 export default logger;
