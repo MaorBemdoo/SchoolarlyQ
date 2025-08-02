@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Course from "./Course";
 
 const questionSchema = new mongoose.Schema(
   {
@@ -18,12 +19,12 @@ const questionSchema = new mongoose.Schema(
     options: [{ type: String }],
     correct_answer: { type: String, required: true },
     explanation: { type: String },
-    course: { type: String, required: true },
+    course: { type: new Course(), required: true },
     tags: [{ type: String }],
   },
   { timestamps: true },
 );
 
-const Question = mongoose.model("Question", questionSchema);
+const Question = mongoose.models?.Question || mongoose.model("Question", questionSchema);
 
 export default Question;

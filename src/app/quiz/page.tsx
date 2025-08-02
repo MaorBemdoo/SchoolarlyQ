@@ -4,7 +4,7 @@ import React from 'react'
 
 const Quiz = () => {
   return (
-    <main>Quiz</main>
+    <main className=''>Quiz</main>
   )
 }
 
