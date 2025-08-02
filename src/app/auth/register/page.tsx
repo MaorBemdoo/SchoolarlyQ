@@ -74,7 +74,7 @@ const Register = () => {
       
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "An error occurred while registering");
+      toast.error(error?.response?.data?.message || error?.message || "An error occurred while registering");
     } finally{
       setLoading(false);
     }
@@ -100,7 +100,7 @@ const Register = () => {
       router.push("/quiz");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "An error occurred while registering");
+      toast.error(error?.response?.data?.message || error?.message || "An error occurred while registering");
     } finally {
       setLoading(false);
     }
