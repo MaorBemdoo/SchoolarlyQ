@@ -2,12 +2,13 @@ import bcrypt from "bcryptjs";
 import { signIn } from "@/utils/auth";
 import { NextRequest } from "next/server";
 import User from "@/models/User";
-import logger from "@/config/logger";
 import connectDB from "@/utils/db";
 import ResponseHandler from "@/utils/ResponseHandler";
+import initLogger from "@/config/logger";
 
 export async function POST(req: NextRequest) {
   const { full_name, email, password, step = 1, type = "credentials", matric_number, department, level } = await req.json();
+  const logger = await initLogger()
 
   if(step == 1){
     if(type == "credentials"){

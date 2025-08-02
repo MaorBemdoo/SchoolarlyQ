@@ -1,14 +1,13 @@
-import pino, { transport } from "pino";
+import pino, { Logger, transport } from "pino";
+import logtailPino from "@logtail/pino";
 
 const isEdge = process.env.NEXT_RUNTIME === "edge";
 const isDev = process.env.NODE_ENV === "development"
 
-let logger = pino({ level: "info" });
-
-if (!isEdge) {
-  let resolvedTransport;
-  if(isDev){
-    resolvedTransport = transport({
+export default async function initLogger(): Promise<Logger> {
+  if (isEdge) return pino({ level: "info" });
+  if (isDev) {
+    const devTransport = transport({
       targets: [
         {
           target: "pino-pretty",
@@ -23,14 +22,8 @@ if (!isEdge) {
         },
       ],
     });
-  } else{
-    resolvedTransport = transport({
-      target: "@logtail/pino",
-      options: { sourceToken: process.env.BETTERSTACK_TOKEN },
-    });
+    return pino(devTransport);
   }
-
-  logger = pino(resolvedTransport);
+  const stream = await logtailPino({ sourceToken: process.env.BETTERSTACK_TOKEN!, options: {} });
+  return pino(stream);
 }
-
-export default logger;

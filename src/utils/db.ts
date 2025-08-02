@@ -1,4 +1,4 @@
-import logger from "@/config/logger";
+import initLogger from "@/config/logger";
 import mongoose from "mongoose";
 
 if (!process.env.MONGODB_URI) {
@@ -10,6 +10,7 @@ const uri = process.env.MONGODB_URI;
 let isConnected: boolean = false;
 
 export default async function connectDB() {
+  const logger = await initLogger()
   if (isConnected) {
     return;
   }
