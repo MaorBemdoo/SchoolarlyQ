@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { baseUrl } from "@/data/baseUrl";
 import Providers from "./providers";
 import { ToastContainer } from "react-toastify";
+import { auth } from "@/utils/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -42,11 +43,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth()
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="text-secondary-light-400 bg-white dark:bg-[#121212] dark:text-white">
         <ToastContainer limit={5} stacked/>
-        <Providers>
+        <Providers session={session}>
           <Header />
           {children}
           <Footer />

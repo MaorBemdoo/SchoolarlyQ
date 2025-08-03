@@ -17,12 +17,16 @@ import Theme from "./Theme";
 import useEventOutside from "@/hooks/useEventOutside";
 import { usePathname } from "next/navigation";
 import displayHeaderAndFooter from "@/utils/displayHeaderAndFooter";
+import { signOut, useSession } from "next-auth/react";
+import { FaRegUserCircle } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { resolvedTheme } = useTheme();
   const { scrollYProgress } = useScroll();
   const pathname = usePathname();
+  const { data, status } = useSession()
 
   const backgroundColor = useTransform(
     scrollYProgress,
@@ -69,24 +73,35 @@ const Header = () => {
                     height={50}
                   />
                 </AppLink>
-                <AppLink href="/discover">Discover</AppLink>
-                <AppLink href="/about">About</AppLink>
+                <AppLink href="/quiz" className={pathname == "/quiz" ? "text-primary-light-300 dark:text-primary-dark-300" : ""}>Discover</AppLink>
               </div>
               <div className="flex items-center gap-5">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                { status == "authenticated" && <div>Welcome back, <span className="font-semibold">{(data.user as any).full_name}</span></div>}
                 <AppLink href="https://github.com/MaorBemdoo/ScoolarlyQ">
                   <FaGithub className="text-2xl" />
                 </AppLink>
                 <Theme screen="desktop" />
-                <AppLink href="/auth/login">
-                  <Button variant="filled" color="orange">
-                    Login
-                  </Button>
-                </AppLink>
-                <AppLink href="/auth/register">
-                  <Button variant="outlined" color="orange">
-                    Get Started
-                  </Button>
-                </AppLink>
+                {
+                  status == "loading" ? <span className="loading loading-spinner"/> : status == "authenticated" ? (
+                    <Button className="flex gap-2 items-center" variant="filled" onClick={() => signOut({
+                      redirectTo: "/auth/login"
+                    })}>Logout</Button>
+                   ) : (
+                      <>
+                        <AppLink href="/auth/login">
+                          <Button variant="filled" color="orange">
+                            Login
+                          </Button>
+                        </AppLink>
+                        <AppLink href="/auth/register">
+                          <Button variant="outlined" color="orange">
+                            Get Started
+                          </Button>
+                        </AppLink>
+                      </>
+                    )
+                }
               </div>
             </div>
           </motion.div>
@@ -132,14 +147,30 @@ const Header = () => {
                       className="absolute w-max flex flex-col justify-between gap-2 p-2 *:w-full *:px-3 *:py-1 hover:*:bg-primary-light-100 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400 dark:hover:*:bg-primary-dark-100"
                       ref={menuRef}
                     >
-                      <AppLink href="/discover">Discover</AppLink>
-                      <AppLink href="/about">About</AppLink>
-                      <AppLink href="/auth/login">Login</AppLink>
-                      <AppLink href="/auth/register" className="!p-0">
-                        <Button variant="filled" color="orange">
-                          Get Started
-                        </Button>
-                      </AppLink>
+                      <AppLink href="/quiz" className={pathname == "/quiz" ? "text-primary-light-300 dark:text-primary-dark-300" : ""}>Discover</AppLink>
+                      {
+                        status == "loading" ? <span className="loading loading-spinner"/> : status == "authenticated" ? (
+                          <>
+                            <div className="flex items-center gap-2">
+                              <FaRegUserCircle className="text-2xl"/>
+                              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                              <span className="text-sm">{(data.user as any).full_name}</span>
+                            </div>
+                            <Button className="flex gap-2 items-center w-full" onClick={() => signOut({
+                              redirectTo: "/auth/login"
+                            })}><BiLogOut className="text-2xl"/> Logout</Button>
+                          </>
+                        ) : (
+                            <>
+                              <AppLink href="/auth/login">Login</AppLink>
+                              <AppLink href="/auth/register" className="!p-0">
+                                <Button variant="filled" color="orange">
+                                  Get Started
+                                </Button>
+                              </AppLink>
+                            </>
+                          )
+                      }
                       <Theme
                         screen="mobile"
                         setMobileIsVisible={setIsVisible}
