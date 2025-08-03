@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     
       const hashedPassword = await bcrypt.hash(password, 7);
       const user = new User({
-        full_name,
+        full_name: full_name.trim(),
         username,
         email,
         password: hashedPassword,
