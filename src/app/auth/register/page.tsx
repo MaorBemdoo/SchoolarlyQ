@@ -12,13 +12,13 @@ import { useLocalStorage } from "react-use";
 import { motion } from "framer-motion";
 
 const Register = () => {
-  const [fullname, setFullname] = useState("")
-  const [email, setEmail] = useState("")
-  const [matricNumber, setMatricNumber] = useState("")
-  const [department, setDepartment] = useState("")
-  const [level, setLevel] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [matricNumber, setMatricNumber] = useState("");
+  const [department, setDepartment] = useState("");
+  const [level, setLevel] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [emailStore, setEmailStore] = useLocalStorage("email");
@@ -36,25 +36,23 @@ const Register = () => {
     }
   }, [step, router, emailStore]);
 
-
-
   const credentialsSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e?.preventDefault()
-    if(!fullname || !email || !password || !confirmPassword){
-      toast.error("All fields are required")
+    e?.preventDefault();
+    if (!fullname || !email || !password || !confirmPassword) {
+      toast.error("All fields are required");
       return;
     }
 
-    if(!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)){
-      toast.error("Invalid email format")
+    if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+      toast.error("Invalid email format");
       return;
     }
 
-    if(password !== confirmPassword){
-      toast.error("Passwords are not the same")
+    if (password !== confirmPassword) {
+      toast.error("Passwords are not the same");
       return;
     }
-    if(emailStore && emailStore == email){
+    if (emailStore && emailStore == email) {
       router.push("/auth/register?step=2");
       return;
     }
@@ -66,24 +64,27 @@ const Register = () => {
         email,
         password,
         step: 1,
-        type: "credentials"
-      })
+        type: "credentials",
+      });
       setEmailStore(email);
       router.push("/auth/register?step=2");
-      
-      
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || error?.message || "An error occurred while registering");
-    } finally{
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "An error occurred while registering",
+      );
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   const step2Submit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e?.preventDefault()
-    if(!matricNumber || !department || !level){
-      toast.error("All fields are required")
+    e?.preventDefault();
+    if (!matricNumber || !department || !level) {
+      toast.error("All fields are required");
       return;
     }
 
@@ -98,16 +99,25 @@ const Register = () => {
       });
       setEmailStore(null);
       router.push("/quiz");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || error?.message || "An error occurred while registering");
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "An error occurred while registering",
+      );
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <motion.form animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} exit={{ opacity: 0, y: 20 }} className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit">
+    <motion.form
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      exit={{ opacity: 0, y: 20 }}
+      className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit"
+    >
       <div>
         <h1 className="text-2xl font-bold">Register</h1>
         <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
@@ -115,64 +125,103 @@ const Register = () => {
         </p>
       </div>
       <div className="flex flex-col gap-4">
-        {
-          step == 1 ? (
-            <>
-              <input type="text" placeholder="Full Name" className="form-input" value={fullname} onChange={(e) => setFullname(e.target.value)} />
-              <input type="email" placeholder="Email" className="form-input" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-              <div className="relative">
-                <input
-                  type={isPasswordVisible ? "text" : "password"}
-                  autoComplete="false"
-                  placeholder="Password"
-                  className="form-input"
-                  value={password} onChange={(e) => setPassword(e.target.value)}
-                />
-                <div
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl cursor-pointer"
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                </div>
-              </div>
+        {step == 1 ? (
+          <>
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="form-input"
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="form-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <div className="relative">
               <input
-                type="password"
-                placeholder="Confirm Password"
+                type={isPasswordVisible ? "text" : "password"}
+                autoComplete="false"
+                placeholder="Password"
                 className="form-input"
-                value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            </>
-          ) : (
-            <>
-              <input type="text" placeholder="Matric Number" className="form-input" value={matricNumber} onChange={(e) => setMatricNumber(e.target.value)} />
-              <select name="department" id="department" className="form-input dark:*:text-black" value={department} onChange={(e) => setDepartment(e.target.value)}>
-                <option value="" className="opacity-80" disabled>Select Department</option>
-                {
-                  faculties.map(({ faculty, departments }) => (
-                    <optgroup key={faculty} label={faculty}>
-                      {departments.map(({ id, name }) => (
-                        <option key={id} value={name}>
-                          {name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))
-                }
-              </select>
-              <select name="level" id="level" className="form-input dark:*:text-black" value={level} onChange={(e) => setLevel(e.target.value)}>
-                <option value="" disabled>Select Level</option>
-                {
-                  ["IJMB", "100", "200", "300", "400", "500", "600", "700"].map((lvl) => (
-                    <option key={lvl} value={lvl}>
-                      {lvl}
+              <div
+                className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl cursor-pointer"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+              >
+                {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="form-input"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="Matric Number"
+              className="form-input"
+              value={matricNumber}
+              onChange={(e) => setMatricNumber(e.target.value)}
+            />
+            <select
+              name="department"
+              id="department"
+              className="form-input dark:*:text-black"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+            >
+              <option value="" className="opacity-80" disabled>
+                Select Department
+              </option>
+              {faculties.map(({ faculty, departments }) => (
+                <optgroup key={faculty} label={faculty}>
+                  {departments.map(({ id, name }) => (
+                    <option key={id} value={name}>
+                      {name}
                     </option>
-                  ))
-                }
-              </select>
-            </>
-          )
-        }
-        <Button className="w-full self-center" onClick={step == 1 ? credentialsSubmit : step2Submit} loading={loading}>{ step == 1 ? "Continue" : "Submit" }</Button>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+            <select
+              name="level"
+              id="level"
+              className="form-input dark:*:text-black"
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+            >
+              <option value="" disabled>
+                Select Level
+              </option>
+              {["IJMB", "100", "200", "300", "400", "500", "600", "700"].map(
+                (lvl) => (
+                  <option key={lvl} value={lvl}>
+                    {lvl}
+                  </option>
+                ),
+              )}
+            </select>
+          </>
+        )}
+        <Button
+          className="w-full self-center"
+          onClick={step == 1 ? credentialsSubmit : step2Submit}
+          loading={loading}
+        >
+          {step == 1 ? "Continue" : "Submit"}
+        </Button>
         <AppLink
           href="/auth/login"
           className="self-end text-sm hover:underline"

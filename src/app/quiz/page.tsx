@@ -1,11 +1,9 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React from "react";
 
 const Quiz = () => {
-  return (
-    <main className=''>Quiz</main>
-  )
-}
+  return <main className="container">Quiz</main>;
+};
 
-export default Quiz
+export default Quiz;

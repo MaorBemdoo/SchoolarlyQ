@@ -15,14 +15,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       async profile(profile) {
-        console.log(profile)
-        return { ...profile }
+        console.log(profile);
+        return { ...profile };
       },
     }),
     Credentials({
       name: "Credentials",
       credentials: {
-        usernameOrEmailOrMatric: { label: "Username or Email or Matric Number", type: "text" },
+        usernameOrEmailOrMatric: {
+          label: "Username or Email or Matric Number",
+          type: "text",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -36,9 +39,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           status = 400;
         }
 
-        await connectDB()
+        await connectDB();
 
-        const user = await User.findOne({ username: credentials.usernameOrEmailOrMatric }) || await User.findOne({ email: credentials.usernameOrEmailOrMatric }) || await User.findOne({ matric_number: credentials.usernameOrEmailOrMatric });
+        const user =
+          (await User.findOne({
+            username: credentials.usernameOrEmailOrMatric,
+          })) ||
+          (await User.findOne({
+            email: credentials.usernameOrEmailOrMatric,
+          })) ||
+          (await User.findOne({
+            matric_number: credentials.usernameOrEmailOrMatric,
+          }));
 
         if (!user) {
           throw new UserNotFoundError();
@@ -57,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     session({ session, token, user }) {
-      session.user = token.user as UserType & AdapterUser
+      session.user = token.user as UserType & AdapterUser;
       return session;
     },
     jwt({ token, user }) {
@@ -81,7 +93,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       //   }
 
       // }
-      return true
+      return true;
     },
   },
 });

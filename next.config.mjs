@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    serverExternalPackages: ['pino']
+  serverExternalPackages: ["pino"],
 };
 
 export default nextConfig;

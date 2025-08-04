@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
@@ -10,63 +10,86 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
 const Login = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const submit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    if(!email || !password){
-      toast.error("All fields are required")
+    e.preventDefault();
+    if (!email || !password) {
+      toast.error("All fields are required");
       return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await signIn("credentials", {
         usernameOrEmailOrMatric: email,
         password,
         redirect: false,
-      })
-      if(res?.error){
-        throw new Error("Invalid credentials")
+      });
+      if (res?.error) {
+        throw new Error("Invalid credentials");
       }
-      router.push("/quiz")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      router.push("/quiz");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error.message || "Error logging user")
-    } finally{
-      setLoading(false)
+      toast.error(error.message || "Error logging user");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <motion.form animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} exit={{ opacity: 0, y: 20 }} className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit">
+    <motion.form
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      exit={{ opacity: 0, y: 20 }}
+      className="w-[380px] bg-slate-50 p-4 border border-black rounded-md space-y-6 text-center dark:border-white dark:bg-[#121212] !md:bg-inherit"
+    >
       <div>
         <h1 className="text-2xl font-bold">Login</h1>
-        <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">Welcome Back!</p>
+        <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
+          Welcome Back!
+        </p>
       </div>
       <div className="flex flex-col gap-4">
-         <input type="text" placeholder="Email or Matric Number" className="form-input" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <div className="relative">
-            <input
-              type={isPasswordVisible ? "text" : "password"}
-              autoComplete="false"
-              placeholder="Password"
-              className="form-input"
-              value={password} onChange={(e) => setPassword(e.target.value)}
-            />
-            <div
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl cursor-pointer"
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            >
-              {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-            </div>
+        <input
+          type="text"
+          placeholder="Email or Matric Number"
+          className="form-input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <div className="relative">
+          <input
+            type={isPasswordVisible ? "text" : "password"}
+            autoComplete="false"
+            placeholder="Password"
+            className="form-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div
+            className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl cursor-pointer"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
           </div>
-        <Button className="w-full self-center" loading={loading} onClick={submit}>Submit</Button>
-        <AppLink href="/auth/register" className="self-end text-sm hover:underline">
+        </div>
+        <Button
+          className="w-full self-center"
+          loading={loading}
+          onClick={submit}
+        >
+          Submit
+        </Button>
+        <AppLink
+          href="/auth/register"
+          className="self-end text-sm hover:underline"
+        >
           Don&apos;t have an account? Register
         </AppLink>
       </div>

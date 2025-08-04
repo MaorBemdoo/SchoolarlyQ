@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
 let isConnected: boolean = false;
 
 export default async function connectDB() {
-  const logger = await initLogger()
+  const logger = await initLogger();
   if (isConnected) {
     return;
   }

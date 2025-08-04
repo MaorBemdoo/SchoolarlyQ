@@ -8,6 +8,6 @@
   }
 }
 
-.form-input{
+.form-input {
   @apply w-full rounded-md bg-gray-200 focus:bg-inherit focus:ring-secondary-light-400 dark:bg-inherit;
 }
