@@ -73,9 +73,6 @@ export const faculties = [
     departments: [
       { id: 33, name: "Chemical Sciences" },
       { id: 34, name: "Biological Sciences" },
-      { id: 35, name: "Computer Science" },
-      { id: 36, name: "Cyber Security" },
-      { id: 37, name: "Information Technology" },
       { id: 38, name: "Physics" },
       { id: 39, name: "Mathematics" },
     ],

@@ -19,7 +19,7 @@ const questionSchema = new mongoose.Schema(
     options: [{ type: String }],
     correct_answer: { type: String, required: true },
     explanation: { type: String },
-    course: { type: new Course(), required: true },
+    course: { type: Course, required: true },
     tags: [{ type: String }],
   },
   { timestamps: true },

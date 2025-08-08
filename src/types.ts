@@ -27,3 +27,12 @@ export interface MenuIconProps {
   isVisible: boolean;
   iconRef: React.RefObject<HTMLDivElement | null>;
 }
+
+export interface FilterProps {
+  data: string[];
+  checked?: string[] | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setParams: React.Dispatch<any>;
+  showSearch?: boolean;
+  label: string;
+}
