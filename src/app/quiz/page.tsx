@@ -34,7 +34,7 @@ const Quiz = () => {
       (typeof value === "string" && value.trim() === "") ||
       (Array.isArray(value) && value.length === 0)
     )) {
-        query.set(key, String(value).toLowerCase());
+        query.set(key, String(value)?.toLowerCase());
       }
     });
 
