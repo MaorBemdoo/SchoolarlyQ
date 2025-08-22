@@ -8,7 +8,7 @@ const Filter = ({ data, label, setParams, checked = [], showSearch = false }: Fi
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setParams((prev: any) => {
             return {...prev, [label.toLowerCase()]:
-                !prev[label.toLowerCase()].includes(e.target.value) ? [...checked, e.target.value] : prev[label.toLowerCase()].filter((item: string) => item !== e.target.value)
+                !prev[label.toLowerCase()]?.includes(e.target.value) ? [...checked, e.target.value] : prev[label.toLowerCase()].filter((item: string) => item !== e.target.value)
             }
         })
     }
