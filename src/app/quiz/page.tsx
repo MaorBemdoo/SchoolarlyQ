@@ -24,7 +24,6 @@ const Quiz = () => {
   }
   const [params, setParams] = useState<Record<string, string | string[]>>(parsedParams)
   const [search, setSearch] = useState(params.q || "")
-  console.log(data)
 
   useEffect(() => {
     if(!didMountRef.current) return;
