@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     matric_number: { type: String },
     department: { type: String },
-    level: { type: Number },
+    level: { type: String },
   },
   { timestamps: true },
 );

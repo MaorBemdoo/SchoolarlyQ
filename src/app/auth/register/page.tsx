@@ -8,8 +8,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { MouseEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { useLocalStorage } from "react-use";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { signIn, useSession } from "next-auth/react";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -21,20 +22,20 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [emailStore, setEmailStore] = useLocalStorage("email");
   const searchParams = useSearchParams();
   const step = Number(searchParams.get("step")) || 1;
   const router = useRouter();
+  const { data, update, status } = useSession()
 
   useEffect(() => {
-    if (emailStore === undefined) return;
+    if(status === "loading") return;
     if (step < 1 || step > 2) {
       router.push("/auth/register?step=1");
     }
-    if (step === 2 && !emailStore) {
+    if (step === 2 && status === "unauthenticated") {
       router.push("/auth/register?step=1");
     }
-  }, [step, router, emailStore]);
+  }, [step, router, data, status]);
 
   const credentialsSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
@@ -52,7 +53,7 @@ const Register = () => {
       toast.error("Passwords are not the same");
       return;
     }
-    if (emailStore && emailStore == email) {
+    if (data && data.user?.email == email) {
       router.push("/auth/register?step=2");
       return;
     }
@@ -66,7 +67,7 @@ const Register = () => {
         step: 1,
         type: "credentials",
       });
-      setEmailStore(email);
+      update()
       router.push("/auth/register?step=2");
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,6 +82,31 @@ const Register = () => {
     }
   };
 
+  const googleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    try {
+      setLoading(true);
+      // await axios.post("/api/auth/register", {
+      //   step: 1,
+      //   type: "google",
+      // });
+      const res = await signIn("google", { redirectTo: "/auth/register?step=2" });
+      if (res?.error) {
+        throw new Error(res?.error);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "An error occurred while registering",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const step2Submit = async (e: MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
     if (!matricNumber || !department || !level) {
@@ -91,14 +117,13 @@ const Register = () => {
     try {
       setLoading(true);
       await axios.post("/api/auth/register", {
-        email: emailStore,
+        email: data && data.user?.email,
         matric_number: matricNumber,
         department,
         level,
         step: 2,
       });
-      setEmailStore(null);
-      router.push("/quiz");
+      router.push("/auth/login");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(
@@ -222,24 +247,31 @@ const Register = () => {
         >
           {step == 1 ? "Continue" : "Submit"}
         </Button>
-        <AppLink
-          href="/auth/login"
-          className="self-end text-sm hover:underline"
-        >
-          ALready have an Account? <span className="font-semibold">Login</span>
-        </AppLink>
+        { step == 1 && (
+          <AppLink
+            href="/auth/login"
+            className="self-end text-sm hover:underline"
+          >
+            Already have an Account? <span className="font-semibold">Login</span>
+          </AppLink>
+        )}
       </div>
-      {/* <div className="relative w-full h-[1px] bg-black text-black before:content-['OR'] before:px-2 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:bg-white dark:bg-white dark:text-white dark:before:bg-[#121212]"></div>
-      <div className="flex flex-col items-center">
-        <Button
-          variant="custom"
-          className="flex items-center justify-center gap-[7px] p-3 !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
-          onClick={(e) => {e.preventDefault();signIn("google", {redirect: false}) }}
-        >
-          <Image src="/google.png" alt="Google logo" width={20} height={20} />
-          Sign up with Google
-        </Button>
-      </div> */}
+      { step == 1 && (
+        <>
+          <div className="relative w-full h-[1px] bg-black text-black before:content-['OR'] before:px-2 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:bg-slate-50 dark:bg-white dark:text-white dark:before:bg-[#121212]"></div>
+          <div className="flex flex-col items-center">
+            <Button
+              variant="custom"
+              className="flex items-center justify-center gap-[7px] p-3 min-w-[200px] !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
+              onClick={googleSubmit}
+              loading={loading}
+            >
+              <Image src="/google.png" alt="Google logo" width={20} height={20} />
+              Sign up with Google
+            </Button>
+          </div>
+        </>
+      ) }
     </motion.form>
   );
 };

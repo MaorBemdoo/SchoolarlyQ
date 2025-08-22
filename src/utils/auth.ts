@@ -7,16 +7,45 @@ import User from "@/models/User";
 // import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import connectDB from "./db";
 import { AdapterUser } from "next-auth/adapters";
+import initLogger from "@/config/logger";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  logger: {
+    async error(error) {
+      (await initLogger()).error(error)
+    },
+    async warn(code) {
+      (await initLogger()).warn(code)
+    },
+    async debug(message, metadata) {
+      (await initLogger()).debug(metadata, message)
+    },
+  },
   // adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       async profile(profile) {
-        console.log(profile);
-        return { ...profile };
+        const logger = await initLogger();
+        await connectDB()
+
+        const user = await User.findOne({ email: profile?.email }).lean();
+
+        if (!user) {
+          const newUser = new User({
+            full_name: profile?.name,
+            username: profile?.email.split("@")[0],
+            email: profile?.email,
+          });
+
+          const result = await newUser.save();
+          logger.info("User created with google successfully");
+          return result.toObject();
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return { ...user, password: undefined } as any;
       },
     }),
     Credentials({
@@ -77,23 +106,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.user = user;
       }
       return token;
-    },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async signIn({ account, profile }) {
-      // if (account?.provider == "google") {
-      //   class EmailNotFoundError {
-      //     message = "User doesn't exist";
-      //     status = 404;
-      //   }
-
-      //   const user = await User.findOne({ email: profile?.email });
-
-      //   if (!user) {
-      //     throw new EmailNotFoundError();
-      //   }
-
-      // }
-      return true;
     },
   },
 });

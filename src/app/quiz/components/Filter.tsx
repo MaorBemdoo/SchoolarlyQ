@@ -4,7 +4,7 @@ import React, { ChangeEvent, useState } from 'react'
 
 const Filter = ({ data, label, setParams, checked = [], showSearch = false }: FilterProps) => {
     const [search, setSearch] = useState("")
-    checked = checked.map(val => val.toString().toLowerCase())
+    checked = checked.map(val => val?.toString()?.toLowerCase())
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setParams((prev: any) => {
             return {...prev, [label.toLowerCase()]:

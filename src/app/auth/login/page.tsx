@@ -8,6 +8,7 @@ import { MouseEvent, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const submit = async (e: MouseEvent<HTMLButtonElement>) => {
+  const credentialSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!email || !password) {
       toast.error("All fields are required");
@@ -35,6 +36,23 @@ const Login = () => {
       }
       router.push("/quiz");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message || "Error logging user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const googleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const res = await signIn("google", { redirectTo: "/quiz" });
+      if (res?.error) {
+        throw new Error("Invalid credentials");
+      }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message || "Error logging user");
     } finally {
@@ -82,7 +100,7 @@ const Login = () => {
         <Button
           className="w-full self-center"
           loading={loading}
-          onClick={submit}
+          onClick={credentialSubmit}
         >
           Submit
         </Button>
@@ -93,12 +111,18 @@ const Login = () => {
           Don&apos;t have an account? Register
         </AppLink>
       </div>
-      {/* <div className="relative w-full h-[1px] bg-black text-black before:content-['OR'] before:px-2 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:bg-white dark:bg-white dark:text-white dark:before:bg-[#121212]"></div>
+      <div className="relative w-full h-[1px] bg-black text-black before:content-['OR'] before:px-2 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:bg-white dark:bg-white dark:text-white dark:before:bg-[#121212]"></div>
       <div className="flex flex-col items-center">
-        <Button variant="custom" className="">
-          Signup with Google
+        <Button
+          variant="custom"
+          className="flex items-center justify-center gap-[7px] min-w-[200px] p-3 !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
+          onClick={googleSubmit}
+          loading={loading}
+        >
+          <Image src="/google.png" alt="Google logo" width={20} height={20} />
+          Sign in with Google
         </Button>
-      </div> */}
+      </div>
     </motion.form>
   );
 };

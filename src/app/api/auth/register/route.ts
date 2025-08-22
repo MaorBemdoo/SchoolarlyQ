@@ -64,22 +64,9 @@ export async function POST(req: NextRequest) {
         );
       }
     } else {
-      try {
-        const data = await signIn("google", { redirect: false });
-        console.log(data);
-
-        return ResponseHandler(201, "User created and signed in successfully");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        logger.error(err, "Error Registering User");
-        return ResponseHandler(
-          err?.cause?.err?.status || 500,
-          err?.cause?.err?.message ||
-            err?.cause?.err?.message ||
-            err?.message ||
-            "Error registering user",
-        );
-      }
+      await signIn("google");
+      logger.info("User created and signed in successfully");
+      return ResponseHandler(201, "User created and signed in successfully");
     }
   } else {
     if (!matric_number || !department || !level || !email) {
