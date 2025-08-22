@@ -10,7 +10,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -123,6 +123,7 @@ const Register = () => {
         level,
         step: 2,
       });
+      signOut({ redirect: false })
       router.push("/auth/login");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
