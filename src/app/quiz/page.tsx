@@ -34,7 +34,7 @@ const Quiz = () => {
       (typeof value === "string" && value.trim() === "") ||
       (Array.isArray(value) && value.length === 0)
     )) {
-        query.set(key, String(value)?.toLowerCase());
+        query.set(key, String(value).toLowerCase());
       }
     });
 
@@ -46,8 +46,8 @@ const Quiz = () => {
     if(!didMountRef.current){
       if(searchParams.size < 1){
         setParams({
-          levels: [data?.user?.level?.toLowerCase()],
-          departments: [data?.user?.department?.toLowerCase()],
+          levels: [data?.user.level?.toLowerCase()],
+          departments: [data?.user.department?.toLowerCase()],
           semesters: [((m => [9,10,11,12,1,2].includes(m) ? "1" : [4,5,6,7,8].includes(m) ? "2" : "")(new Date().getMonth() + 1))]
         })
       }
