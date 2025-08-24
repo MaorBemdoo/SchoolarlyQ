@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { userRepository } from "@/repository/user.repository"
-import { AxiosError, HttpStatusCode } from "axios"
 
 export const userService = {
     async getUserByUsername(username: string){
@@ -15,14 +14,14 @@ export const userService = {
     async createUser(data: any){
         const existingUser = await userService.getUserByUsername(data.username);
         if (existingUser) {
-            throw new AxiosError("User with email already exist", HttpStatusCode.Conflict.toString());
+            throw new Error("User with email already exist");
         }
         return userRepository.create(data)
     },
     async updateUser(username: string, data: any){
         const user = await userService.getUserByUsername(username);
         if (!user) {
-            throw new AxiosError("User does not exist", HttpStatusCode.NotFound.toString())
+            throw new Error("User does not exist");
         }
         return userRepository.update(username, data)
     }

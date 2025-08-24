@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const examSchema = new mongoose.Schema({
-  course_title: { type: String, required: true },
-  course_code: { type: String, unique: true, required: true },
+  course_title: { type: String, required: true, trim: true },
+  course_code: { type: String, unique: true, required: true, trim: true },
   credit_units: { type: Number, required: true },
   time_allowed: { type: Number, required: true },
-  level: { type: String, required: true },
+  level: { type: String, required: true, trim: true },
   semester: { type: Number, required: true },
-  session: { type: String, required: true },
-  department: { type: String, required: true },
+  session: { type: String, required: true, trim: true },
+  department: { type: String, required: true, trim: true },
   type: {
     type: String,
     enum: {

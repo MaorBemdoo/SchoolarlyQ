@@ -8,6 +8,7 @@ import Filter from "./components/Filter";
 import { faculties } from "@/data/faculties";
 import Button from "@/components/Button";
 import { FaSearch } from "react-icons/fa";
+import { getQuestions } from "@/actions/question";
 
 const Quiz = () => {
   const { data }: {data: any} = useSession()
@@ -24,6 +25,13 @@ const Quiz = () => {
   }
   const [params, setParams] = useState<Record<string, string | string[]>>(parsedParams)
   const [search, setSearch] = useState(params.q || "")
+
+  useEffect(() => {
+    (async() => {
+      const res = await getQuestions()
+      console.log(res)
+    })()
+  }, [])
 
   useEffect(() => {
     if(!didMountRef.current) return;

@@ -1,22 +1,13 @@
-import { NextResponse } from "next/server";
-
-const ResponseHandler = (
-  status: number | string,
+  const ResponseHandler = (
+  status: "success" | "failed",
   message: string,
-  data: unknown = null,
+  data: unknown = null
 ) => {
-  const statusCode = status as number;
-  status = status.toString().startsWith("2") ? "success" : "failed";
-  return NextResponse.json(
-    {
-      status,
-      message,
-      data: data ? data : undefined,
-    },
-    {
-      status: statusCode,
-    },
-  );
+  return {
+    status,
+    message,
+    data: data ? data : undefined,
+  };
 };
 
 export default ResponseHandler;

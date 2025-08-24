@@ -3,7 +3,6 @@
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
 import { faculties } from "@/data/faculties";
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MouseEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -11,7 +10,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { getErrorMessage } from "@/utils/getErrorMessage";
+import { registerUser } from "@/actions/register";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -59,24 +58,22 @@ const Register = () => {
       return;
     }
 
-    try {
       setLoading(true);
-      await axios.post("/api/auth/register", {
+      const res = await registerUser({
         full_name: fullname,
         email,
         password,
-        step: 1,
         type: "credentials",
-      });
-      update()
-      router.push("/auth/register?step=2");
+      }, 1);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(getErrorMessage(error, "An error occurred while registering"));
-    } finally {
+      if (res.status === "success") {
+        update();
+        router.push("/auth/register?step=2");
+      } else {
+        toast.error(res.message);
+      }
+
       setLoading(false);
-    }
   };
 
   const googleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -84,17 +81,13 @@ const Register = () => {
 
     try {
       setLoading(true);
-      // await axios.post("/api/auth/register", {
-      //   step: 1,
-      //   type: "google",
-      // });
       const res = await signIn("google", { redirectTo: "/auth/register?step=2" });
       if (res?.error) {
         throw new Error(res?.error);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(getErrorMessage(error, "An error occurred while registering"));
+      toast.error(error.message || "An error occurred while registering");
     } finally {
       setLoading(false);
     }
@@ -107,23 +100,21 @@ const Register = () => {
       return;
     }
 
-    try {
       setLoading(true);
-      await axios.post("/api/auth/register", {
-        email: data && data.user?.email,
+      const res = await registerUser({
+        email: (data && data.user?.email) || "",
         matric_number: matricNumber,
         department,
         level,
-        step: 2,
-      });
-      signOut({ redirect: false })
-      router.push("/auth/login");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(getErrorMessage(error, "An error occurred while registering"));
-    } finally {
+      }, 2);
+
+      if(res.status === "success"){
+        signOut({ redirect: false })
+        router.push("/auth/login");
+      } else {
+        toast.error(res.message || "An error occurred while registering");
+      }
       setLoading(false);
-    }
   };
 
   return (
