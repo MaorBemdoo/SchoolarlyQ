@@ -90,7 +90,7 @@ const Header = () => {
                     Welcome back,{" "}
                     <span className="font-bold">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(data.user as any).full_name}
+                      {(data.user as any).full_name.split(" ")[0]}
                     </span>
                   </p>
                 )}

@@ -2,12 +2,11 @@ import NextAuth, { CredentialsSignin, User as UserType } from "next-auth";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import User from "@/models/User";
 // import clientPromise from "@/config/mongo";
 // import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import connectDB from "./db";
 import { AdapterUser } from "next-auth/adapters";
 import initLogger from "@/config/logger";
+import { userService } from "@/services/user.service";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   logger: {
@@ -28,24 +27,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.GOOGLE_SECRET,
       async profile(profile) {
         const logger = await initLogger();
-        await connectDB()
-
-        const user = await User.findOne({ email: profile?.email }).lean();
+        const user = await userService.getUserByEmail(profile?.email);
 
         if (!user) {
-          const newUser = new User({
+          const result = await userService.createUser({
             full_name: profile?.name,
             username: profile?.email.split("@")[0],
             email: profile?.email,
           });
-
-          const result = await newUser.save();
           logger.info("User created with google successfully");
           return result.toObject();
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return { ...user, password: undefined } as any;
+        return { ...user.toObject(), password: undefined } as any;
       },
     }),
     Credentials({
@@ -68,18 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           status = 400;
         }
 
-        await connectDB();
-
-        const user =
-          (await User.findOne({
-            username: credentials.usernameOrEmailOrMatric,
-          })) ||
-          (await User.findOne({
-            email: credentials.usernameOrEmailOrMatric,
-          })) ||
-          (await User.findOne({
-            matric_number: credentials.usernameOrEmailOrMatric,
-          }));
+        const user = await userService.getUserByUsername(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByEmail(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByMatricNumber(credentials.usernameOrEmailOrMatric as string)
 
         if (!user) {
           throw new UserNotFoundError();

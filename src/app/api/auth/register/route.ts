@@ -1,10 +1,11 @@
 import bcrypt from "bcryptjs";
 import { signIn } from "@/utils/auth";
 import { NextRequest } from "next/server";
-import User from "@/models/User";
-import connectDB from "@/utils/db";
 import ResponseHandler from "@/utils/ResponseHandler";
 import initLogger from "@/config/logger";
+import { userService } from "@/services/user.service";
+import { HttpStatusCode } from "axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export async function POST(req: NextRequest) {
   const {
@@ -22,28 +23,20 @@ export async function POST(req: NextRequest) {
   if (step == 1) {
     if (type == "credentials") {
       if (!full_name || !email || !password) {
-        return ResponseHandler(400, "Missing required fields");
+        return ResponseHandler(HttpStatusCode.BadRequest, "Missing required fields");
       }
 
       const username = email.slice(0, email.indexOf("@"));
-
-      await connectDB();
-
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-        return ResponseHandler(409, "User with email already exist");
-      }
-
       const hashedPassword = await bcrypt.hash(password, 7);
-      const user = new User({
+      const user = {
         full_name: full_name.trim(),
         username,
         email,
         password: hashedPassword,
-      });
+      };
 
       try {
-        await user.save();
+        const newUser = await userService.createUser(user)
 
         await signIn("credentials", {
           usernameOrEmailOrMatric: username,
@@ -51,30 +44,27 @@ export async function POST(req: NextRequest) {
           redirect: false,
         });
 
-        logger.info("User created and signed in successfully", {
-          id: user._id,
-        });
-        return ResponseHandler(201, "User created and signed in successfully");
+        logger.info({id: newUser._id}, "User created and signed in successfully");
+        return ResponseHandler(HttpStatusCode.Created, "User created and signed in successfully");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         logger.error(err, "Error Registering User");
         return ResponseHandler(
-          err?.cause?.err?.status || 500,
-          err?.cause?.err?.message || err?.message || "Error registering user",
+          err?.code || HttpStatusCode.InternalServerError,
+          getErrorMessage(err, "Error registering user"),
         );
       }
     } else {
       await signIn("google");
       logger.info("User created and signed in successfully");
-      return ResponseHandler(201, "User created and signed in successfully");
+      return ResponseHandler(HttpStatusCode.Created, "User created and signed in successfully");
     }
   } else {
     if (!matric_number || !department || !level || !email) {
-      return ResponseHandler(400, "Missing required fields");
+      return ResponseHandler(HttpStatusCode.BadRequest, "Missing required fields");
     }
 
-    await connectDB();
-    const existingMatricNumber = await User.findOne({ matric_number });
+    const existingMatricNumber = await userService.getUserByMatricNumber(matric_number);
     if (existingMatricNumber) {
       return ResponseHandler(
         409,
@@ -82,30 +72,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingUser = await User.findOne({ email });
-    if (!existingUser) {
-      return ResponseHandler(404, "User does not exist");
-    }
-
     try {
-      await User.updateOne(
-        { email },
+      const username = email.slice(0, email.indexOf("@"));
+      await userService.updateUser(username,
         {
           matric_number,
           department,
           level,
         },
       );
-      return ResponseHandler(200, "User updated successfully");
+      return ResponseHandler(HttpStatusCode.Ok, "User updated successfully");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       logger.error(err, "Error Updating User");
       return ResponseHandler(
-        err?.cause?.err?.status || 500,
-        err?.cause?.err?.message ||
-          err?.cause?.err?.message ||
-          err?.message ||
-          "Error registering user",
+        err?.code || HttpStatusCode.InternalServerError,
+        err?.message || "Error registering user",
       );
     }
   }

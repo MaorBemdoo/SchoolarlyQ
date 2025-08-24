@@ -1,16 +1,7 @@
 import mongoose from "mongoose";
-import Course from "./Course";
 
 const questionSchema = new mongoose.Schema(
   {
-    type: {
-      type: String,
-      enum: {
-        values: ["objective", "theory"],
-        message: "{VALUE} is not a supported data source",
-      },
-      required: true,
-    },
     question: {
       type: String,
       required: true,
@@ -19,8 +10,7 @@ const questionSchema = new mongoose.Schema(
     options: [{ type: String }],
     correct_answer: { type: String, required: true },
     explanation: { type: String },
-    course: { type: Course, required: true },
-    tags: [{ type: String }],
+    course: { type: mongoose.Schema.Types.ObjectId, ref: "Exam", required: true },
   },
   { timestamps: true },
 );

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -72,11 +73,7 @@ const Register = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ||
-          error?.message ||
-          "An error occurred while registering",
-      );
+      toast.error(getErrorMessage(error, "An error occurred while registering"));
     } finally {
       setLoading(false);
     }
@@ -97,11 +94,7 @@ const Register = () => {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ||
-          error?.message ||
-          "An error occurred while registering",
-      );
+      toast.error(getErrorMessage(error, "An error occurred while registering"));
     } finally {
       setLoading(false);
     }
@@ -127,11 +120,7 @@ const Register = () => {
       router.push("/auth/login");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ||
-          error?.message ||
-          "An error occurred while registering",
-      );
+      toast.error(getErrorMessage(error, "An error occurred while registering"));
     } finally {
       setLoading(false);
     }
