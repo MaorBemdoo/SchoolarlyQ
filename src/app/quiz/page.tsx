@@ -169,7 +169,7 @@ const Quiz = () => {
               className="flex gap-2 items-center"
             >
               <FaSearch />
-              Search
+              <p className="hidden sm:block">Search</p>
             </Button>
           </form>
           <div className="flex justify-between items-center sm:hidden">
