@@ -6,11 +6,16 @@ export const examService = {
         return examRepository.find(filter);
     },
 
-    async findExamById(id: number) {
+    async findExamById(id: string) {
         return examRepository.findById(id);
     },
 
     async createExam(exam: any) {
         return examRepository.create(exam);
+    },
+
+    async getExamSessions() {
+        return examRepository.getSessions();
     }
+
 }

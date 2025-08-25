@@ -11,7 +11,7 @@ export const questionRepository = {
         }
         return Question.create(data);
     },
-    async findByExamId(examId: number) {
+    async findByExamId(examId: string) {
         const exam = await examRepository.findById(examId);
         if (!exam) throw new Error("Exam not found");
         return Question.find({ course: exam._id }).populate("course");

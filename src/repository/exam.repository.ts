@@ -17,6 +17,10 @@ export const examRepository = {
       query.semester = { $in: filter.semesters };
     }
 
+    if(filter.sessions && filter.sessions.length > 0){
+        query.session = { $in: filter.sessions }
+    }
+
     if (filter.q) {
       query.$or = [
         { course_title: new RegExp(filter.q, "i") },
@@ -38,5 +42,9 @@ export const examRepository = {
 
   async create(exam: any) {
     return Exam.create(exam);
+  },
+  
+  async getSessions() {
+    return Exam.distinct("session").sort({ session: -1 });
   },
 };

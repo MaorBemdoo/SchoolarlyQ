@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
 import initLogger from "@/config/logger"
@@ -20,9 +21,21 @@ export async function getExams(filter: Record<string, string> = {}){
             }
         })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         logger.error(err)
         return ResponseHandler("failed", err.message || "Error retrieving exams")
+    }
+}
+
+export async function getExamSessions(){
+    await connectDB()
+    const logger = await initLogger()
+
+    try {
+        const sessions = await examService.getExamSessions()
+        return ResponseHandler("success", "Exams sessions retrieved successfully", sessions)
+    } catch (err: any) {
+        logger.error(err)
+        return ResponseHandler("failed", err.message || "Error retrieving exams sessions")
     }
 }

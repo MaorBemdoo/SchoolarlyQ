@@ -8,7 +8,7 @@ import Filter from "./components/Filter";
 import { faculties } from "@/data/faculties";
 import Button from "@/components/Button";
 import { FaSearch } from "react-icons/fa";
-import { getExams } from "@/actions/exam";
+import { getExams, getExamSessions } from "@/actions/exam";
 import useAction from "@/hooks/useAction";
 import ExamCard from "./components/ExamCard";
 
@@ -30,8 +30,13 @@ const Quiz = () => {
   const [params, setParams] =
     useState<Record<string, string | string[]>>(parsedParams);
   const [search, setSearch] = useState(params.q || "");
+  const { execute: execSessions, res: sessionsRes } = useAction(getExamSessions)
   const { execute, status, res } = useAction(getExams);
   const exams = res?.data;
+
+  useEffect(() => {
+    execSessions()
+  }, [execSessions])
 
   useEffect(() => {
     if (!didMountRef.current) return;
@@ -87,8 +92,7 @@ const Quiz = () => {
           <div className="space-y-4 md:max-w-[50%]">
             <p className="text-4xl font-semibold">Browse Past Questions</p>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
-              laborum delectus maxime fugit reprehenderit obcaecati.
+              Search our curated list of past questions from {sessionsRes?.data[sessionsRes.data.length - 1].split("/")[0] || "2015"} to date. Take any exam and see instant score with feedbacks as a way to ace your next paper.
             </p>
           </div>
         </div>
@@ -128,9 +132,22 @@ const Quiz = () => {
             label="Levels"
             setParams={setParams}
           />
+          {
+            sessionsRes?.data && (
+              <Filter
+                data={sessionsRes?.data}
+                checked={params.sessions as string[]}
+                label="Sessions"
+                setParams={setParams}
+              />
+            )
+          }
         </div>
         <div className="w-full space-y-8">
-          <div className="flex gap-4">
+          <form className="flex gap-4" onSubmit={(e) => {
+            e.preventDefault();
+            setParams({ ...params, q: search })
+          }}>
             <input
               type="text"
               placeholder="Search"
@@ -140,14 +157,13 @@ const Quiz = () => {
             />
             <Button
               className="flex gap-2 items-center"
-              onClick={() => setParams({ ...params, q: search })}
             >
               <FaSearch />
               Search
             </Button>
-          </div>
+          </form>
           {exams && (
-            <div className="flex justify-between gap-8 items-center font-sembold text-xl">
+            <div className="flex justify-between gap-8 items-center font-semibold">
               <p>{exams?.metadata?.total} result(s)</p>
               <div className="flex items-center gap-4">
                 <label>Sort by: </label>
@@ -167,24 +183,22 @@ const Quiz = () => {
             </div>
           )}
           <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {status === "loading" || status === "idle" &&
+            {status == "failed" ? (
+              <div>
+                <p>An Error Occured</p>
+                <p>{res?.message}</p>
+              </div>
+            ) : status == "success" ? (
+              res?.data?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
+                <ExamCard title={course_title} code={course_code} level={level} department={department} semester={semester} session={session} id={_id} key={_id} />
+              ))
+            ) : (
               Array.from({ length: 12 }).map((_, id) => (
                 <div
                   className="h-[200px] rounded-md animate-pulse bg-gray-300"
                   key={id}
                 />
-              ))}
-            {status == "failed" ? (
-              <div>
-                <p>An Error Occured</p>
-                <p>{res.message}</p>
-              </div>
-            ) : status == "success" ? (
-              res?.data?.data.map(({ course_title, course_code, _id }) => (
-                <ExamCard title={course_title} code={course_code} key={_id} />
               ))
-            ) : (
-              <></>
             )}
           </div>
         </div>
