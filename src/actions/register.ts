@@ -6,6 +6,7 @@ import { signIn } from "@/utils/auth";
 import initLogger from "@/config/logger";
 import { userService } from "@/services/user.service";
 import ResponseHandler from "@/utils/ResponseHandler";
+import connectDB from "@/utils/db";
 
 interface StepOneData {
   full_name: string;
@@ -25,6 +26,7 @@ export async function registerUser(
   data: StepOneData | StepTwoData,
   step: 1 | 2 = 1
 ) {
+  await connectDB()
   const logger = await initLogger();
 
   if (step === 1) {

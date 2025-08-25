@@ -19,6 +19,7 @@ export interface ButtonProps {
   variant?: "standard" | "outlined" | "filled" | "custom";
   color?: "orange" | "blue";
   loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface MenuIconProps {
@@ -35,4 +36,11 @@ export interface FilterProps {
   setParams: React.Dispatch<any>;
   showSearch?: boolean;
   label: string;
+}
+
+export interface ActionResponse {
+  status: "success" | "failed";
+  message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: any
 }

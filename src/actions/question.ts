@@ -2,6 +2,7 @@
 
 import initLogger from "@/config/logger";
 import { questionService } from "@/services/question.service";
+import connectDB from "@/utils/db";
 import ResponseHandler from "@/utils/ResponseHandler";
 import { questionSchema, validate } from "@/utils/validators";
 
@@ -21,6 +22,7 @@ export async function createQuestion(
   data: SingleQuestion | BulkQuestions,
   type: "single" | "bulk" = "single"
 ) {
+    await connectDB()
   const logger = await initLogger();
 
   try {
@@ -36,7 +38,7 @@ export async function createQuestion(
       return ResponseHandler("failed", "Invalid type parameter");
       };
 
-    await questionService.create(type === "bulk" ? (data as BulkQuestions).questions : data);
+    await questionService.createQuestion(type === "bulk" ? (data as BulkQuestions).questions : data);
     logger.info("Question(s) created successfully");
 
     return ResponseHandler("success", "Question(s) created successfully");

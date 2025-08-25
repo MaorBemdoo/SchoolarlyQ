@@ -21,7 +21,7 @@ const Filter = ({ data, label, setParams, checked = [], showSearch = false }: Fi
                 data.filter(val => val.toLowerCase().includes(search.toLowerCase())).map((val, id) => (
                     <li className='flex gap-2 cursor-pointer' key={id}>
                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        <input type="checkbox" className='rounded-[4px]' checked={checked.includes(val.toLowerCase())} onChange={changeHandler} id={val + id} value={val} />
+                        <input type="checkbox" className='rounded-[4px]' checked={checked.includes(val.toLowerCase())} onChange={changeHandler} id={val + id} value={val.toLowerCase()} />
                         <label htmlFor={val + id}>{val}</label>
                     </li>
                 ))

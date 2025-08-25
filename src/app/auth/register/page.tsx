@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { registerUser } from "@/actions/register";
+import useAction from "@/hooks/useAction";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -26,6 +27,7 @@ const Register = () => {
   const step = Number(searchParams.get("step")) || 1;
   const router = useRouter();
   const { data, update, status } = useSession()
+  const { status: registerStatus, res, execute } = useAction(registerUser)
 
   useEffect(() => {
     if(status === "loading") return;
@@ -58,22 +60,20 @@ const Register = () => {
       return;
     }
 
-      setLoading(true);
-      const res = await registerUser({
+      await execute({
         full_name: fullname,
         email,
         password,
         type: "credentials",
       }, 1);
 
-      if (res.status === "success") {
+      if (res?.status === "success") {
         update();
         router.push("/auth/register?step=2");
       } else {
-        toast.error(res.message);
+        toast.error(res?.message);
       }
 
-      setLoading(false);
   };
 
   const googleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -100,21 +100,19 @@ const Register = () => {
       return;
     }
 
-      setLoading(true);
-      const res = await registerUser({
+      await execute({
         email: (data && data.user?.email) || "",
         matric_number: matricNumber,
         department,
         level,
       }, 2);
 
-      if(res.status === "success"){
+      if(res?.status === "success"){
         signOut({ redirect: false })
         router.push("/auth/login");
       } else {
-        toast.error(res.message || "An error occurred while registering");
+        toast.error(res?.message || "An error occurred while registering");
       }
-      setLoading(false);
   };
 
   return (
@@ -224,7 +222,8 @@ const Register = () => {
         <Button
           className="w-full self-center"
           onClick={step == 1 ? credentialsSubmit : step2Submit}
-          loading={loading}
+          loading={registerStatus === "loading"}
+          disabled={loading}
         >
           {step == 1 ? "Continue" : "Submit"}
         </Button>
@@ -246,6 +245,7 @@ const Register = () => {
               className="flex items-center justify-center gap-[7px] p-3 min-w-[200px] !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
               onClick={googleSubmit}
               loading={loading}
+              disabled={registerStatus === "loading"}
             >
               <Image src="/google.png" alt="Google logo" width={20} height={20} />
               Sign up with Google

@@ -14,7 +14,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [credentialLoading, setCredentialLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
 
   const credentialSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -25,7 +26,7 @@ const Login = () => {
     }
 
     try {
-      setLoading(true);
+      setCredentialLoading(true);
       const res = await signIn("credentials", {
         usernameOrEmailOrMatric: email,
         password,
@@ -39,7 +40,7 @@ const Login = () => {
     } catch (error: any) {
       toast.error(error.message || "Error logging user");
     } finally {
-      setLoading(false);
+      setCredentialLoading(false);
     }
   };
 
@@ -47,7 +48,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      setGoogleLoading(true);
       const res = await signIn("google", { redirectTo: "/quiz" });
       if (res?.error) {
         throw new Error("Invalid credentials");
@@ -56,7 +57,7 @@ const Login = () => {
     } catch (error: any) {
       toast.error(error.message || "Error logging user");
     } finally {
-      setLoading(false);
+      setGoogleLoading(false);
     }
   };
 
@@ -99,7 +100,8 @@ const Login = () => {
         </div>
         <Button
           className="w-full self-center"
-          loading={loading}
+          loading={credentialLoading}
+          disabled={googleLoading}
           onClick={credentialSubmit}
         >
           Submit
@@ -117,7 +119,8 @@ const Login = () => {
           variant="custom"
           className="flex items-center justify-center gap-[7px] min-w-[200px] p-3 !text-black border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition"
           onClick={googleSubmit}
-          loading={loading}
+          loading={googleLoading}
+          disabled={credentialLoading}
         >
           <Image src="/google.png" alt="Google logo" width={20} height={20} />
           Sign in with Google
