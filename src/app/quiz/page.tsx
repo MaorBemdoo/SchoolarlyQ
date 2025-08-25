@@ -11,6 +11,9 @@ import { FaSearch } from "react-icons/fa";
 import { getExams, getExamSessions } from "@/actions/exam";
 import useAction from "@/hooks/useAction";
 import ExamCard from "./components/ExamCard";
+import { BiFilter } from "react-icons/bi";
+import { FaX } from "react-icons/fa6";
+import useEventOutside from "@/hooks/useEventOutside";
 
 const Quiz = () => {
   const { data }: { data: any } = useSession();
@@ -33,6 +36,10 @@ const Quiz = () => {
   const { execute: execSessions, res: sessionsRes } = useAction(getExamSessions)
   const { execute, status, res } = useAction(getExams);
   const exams = res?.data;
+  const [filterOpen, setFilterOpen] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+
+  useEventOutside(filterRef, () => setFilterOpen(false))
 
   useEffect(() => {
     execSessions()
@@ -98,18 +105,21 @@ const Quiz = () => {
         </div>
       </section>
       <section className="container flex gap-10 mt-4">
-        <div className="basis-2/5 divide-y-[1px] *:py-4">
-          <div className="!pt-0">
-            <p className="text-2xl font-semibold">Filter</p>
-            <p
-              onClick={() => {
-                setParams({});
-                setSearch("");
-              }}
-              className="cursor-pointer w-fit text-sm text-primary-light-300 hover:underline dark:text-primary-dark-300"
-            >
-              Clear all
-            </p>
+        <div className={`fixed top-0 left-0 z-10 w-[250px] ${filterOpen ? "translate-x-0" : "-translate-x-[250px]"} h-screen overflow-y-auto border-r border-r-secondary-light-400 bg-secondary-light-100 basis-2/5 divide-y-[1px] *:py-4 sm:static sm:bg-white sm:translate-x-0 sm:h-auto sm:overflow-y-visible sm:border-0 *:px-4 sm:*:px-0 dark:bg-secondary-dark-100 dark:sm:bg-[#121212] dark:border-r-secondary-dark-400 transition-transform`} ref={filterRef}>
+          <div className="flex justify-between items-center border-b bg-inherit sticky top-0 sm:static sm:border-0 sm:!pt-0">
+            <div>
+              <p className="text-2xl font-semibold">Filter</p>
+              <p
+                onClick={() => {
+                  setParams({});
+                  setSearch("");
+                }}
+                className="cursor-pointer w-fit text-sm text-primary-light-300 hover:underline dark:text-primary-dark-300"
+              >
+                Clear all
+              </p>
+            </div>
+            <FaX className="text-xl cursor-pointer text-end sm:hidden" onClick={() => setFilterOpen(false)}/>
           </div>
           <Filter
             data={faculties.flatMap((faculty) =>
@@ -162,10 +172,22 @@ const Quiz = () => {
               Search
             </Button>
           </form>
+          <div className="flex justify-between items-center sm:hidden">
+            <Button variant="outlined" className="flex items-center gap-2" onClick={() => setFilterOpen(true)}><BiFilter className="text-2xl" /> Search Filters</Button>
+            <p
+              onClick={() => {
+                setParams({});
+                setSearch("");
+              }}
+              className="cursor-pointer w-fit text-sm text-primary-light-300 hover:underline dark:text-primary-dark-300"
+            >
+              Clear all
+            </p>
+          </div>
           {exams && (
             <div className="flex justify-between gap-8 items-center font-semibold">
               <p>{exams?.metadata?.total} result(s)</p>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <label>Sort by: </label>
                 <select
                   className="form-input !w-[180px]"
@@ -200,6 +222,9 @@ const Quiz = () => {
                 />
               ))
             )}
+          </div>
+          <div>
+            Pagination
           </div>
         </div>
       </section>

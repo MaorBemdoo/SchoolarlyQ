@@ -2,7 +2,7 @@ import { MotionValue } from "framer-motion";
 import { MouseEventHandler } from "react";
 
 export type RefType =
-  | React.RefObject<HTMLElement>
+  | React.RefObject<HTMLElement | null>
   | React.RefObject<HTMLElement | null>[];
 export type EventType = keyof DocumentEventMap | Array<keyof DocumentEventMap>;
 
