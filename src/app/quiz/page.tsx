@@ -33,17 +33,18 @@ const Quiz = () => {
   const [params, setParams] =
     useState<Record<string, string | string[]>>(parsedParams);
   const [search, setSearch] = useState(params.q || "");
-  const { execute: execSessions, res: sessionsRes } = useAction(getExamSessions)
+  const { execute: execSessions, res: sessionsRes } =
+    useAction(getExamSessions);
   const { execute, status, res } = useAction(getExams);
   const exams = res?.data;
-  const [filterOpen, setFilterOpen] = useState(false)
-  const filterRef = useRef<HTMLDivElement>(null)
+  const [filterOpen, setFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
-  useEventOutside(filterRef, () => setFilterOpen(false))
+  useEventOutside(filterRef, () => setFilterOpen(false));
 
   useEffect(() => {
-    execSessions()
-  }, [execSessions])
+    execSessions();
+  }, [execSessions]);
 
   useEffect(() => {
     execute(params);
@@ -98,13 +99,20 @@ const Quiz = () => {
           <div className="space-y-4 md:max-w-[50%]">
             <p className="text-4xl font-semibold">Browse Past Questions</p>
             <p>
-              Search our curated list of past questions from {sessionsRes?.data[sessionsRes.data.length - 1]?.split("/")[0] || "2015"} to date. Take any exam and see instant score with feedbacks as a way to ace your next paper.
+              Search our curated list of past questions from{" "}
+              {sessionsRes?.data[sessionsRes.data.length - 1]?.split("/")[0] ||
+                "2015"}{" "}
+              to date. Take any exam and see instant score with feedbacks as a
+              way to ace your next paper.
             </p>
           </div>
         </div>
       </section>
       <section className="container flex gap-10 mt-4">
-        <div className={`fixed top-0 left-0 z-10 w-[250px] ${filterOpen ? "translate-x-0" : "-translate-x-[250px]"} h-screen overflow-y-auto border-r border-r-secondary-light-400 bg-secondary-light-100 basis-2/5 divide-y-[1px] *:py-4 sm:static sm:bg-white sm:translate-x-0 sm:h-auto sm:overflow-y-visible sm:border-0 *:px-4 sm:*:px-0 dark:bg-secondary-dark-100 dark:sm:bg-[#121212] dark:border-r-secondary-dark-400 transition-transform`} ref={filterRef}>
+        <div
+          className={`fixed top-0 left-0 z-10 w-[250px] ${filterOpen ? "translate-x-0" : "-translate-x-[250px]"} h-screen overflow-y-auto border-r border-r-secondary-light-400 bg-secondary-light-100 basis-2/5 divide-y-[1px] *:py-4 sm:static sm:bg-white sm:translate-x-0 sm:h-auto sm:overflow-y-visible sm:border-0 *:px-4 sm:*:px-0 dark:bg-secondary-dark-100 dark:sm:bg-[#121212] dark:border-r-secondary-dark-400 transition-transform`}
+          ref={filterRef}
+        >
           <div className="flex justify-between items-center border-b bg-inherit sticky top-0 sm:static sm:border-0 sm:!pt-0">
             <div>
               <p className="text-2xl font-semibold">Filter</p>
@@ -118,7 +126,10 @@ const Quiz = () => {
                 Clear all
               </p>
             </div>
-            <FaX className="text-xl cursor-pointer text-end sm:hidden" onClick={() => setFilterOpen(false)}/>
+            <FaX
+              className="text-xl cursor-pointer text-end sm:hidden"
+              onClick={() => setFilterOpen(false)}
+            />
           </div>
           <Filter
             data={faculties.flatMap((faculty) =>
@@ -141,22 +152,23 @@ const Quiz = () => {
             label="Levels"
             setParams={setParams}
           />
-          {
-            sessionsRes?.data && sessionsRes.data.length > 0 && (
-              <Filter
-                data={sessionsRes?.data}
-                checked={params.sessions as string[]}
-                label="Sessions"
-                setParams={setParams}
-              />
-            )
-          }
+          {sessionsRes?.data && sessionsRes.data.length > 0 && (
+            <Filter
+              data={sessionsRes?.data}
+              checked={params.sessions as string[]}
+              label="Sessions"
+              setParams={setParams}
+            />
+          )}
         </div>
         <div className="w-full space-y-8">
-          <form className="flex gap-4" onSubmit={(e) => {
-            e.preventDefault();
-            setParams({ ...params, q: search })
-          }}>
+          <form
+            className="flex gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setParams({ ...params, q: search });
+            }}
+          >
             <input
               type="text"
               placeholder="Search"
@@ -164,15 +176,19 @@ const Quiz = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <Button
-              className="flex gap-2 items-center"
-            >
+            <Button className="flex gap-2 items-center">
               <FaSearch />
               <p className="hidden sm:block">Search</p>
             </Button>
           </form>
           <div className="flex justify-between items-center sm:hidden">
-            <Button variant="outlined" className="flex items-center gap-2" onClick={() => setFilterOpen(true)}><BiFilter className="text-2xl" /> Search Filters</Button>
+            <Button
+              variant="outlined"
+              className="flex items-center gap-2"
+              onClick={() => setFilterOpen(true)}
+            >
+              <BiFilter className="text-2xl" /> Search Filters
+            </Button>
             <p
               onClick={() => {
                 setParams({});
@@ -205,20 +221,39 @@ const Quiz = () => {
           )}
           <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {status == "failed" ? (
-              <div>
-                <p>An Error Occured</p>
-                <p>{res?.message}</p>
+              <div className="col-span-full text-center space-y-2">
+                <p className="text-xl font-semibold">An Error Occured</p>
+                <p>{res?.message || "Please reload the page."}</p>
               </div>
             ) : status == "success" ? (
               exams?.data.length < 1 ? (
-                <div>
-                  <p>No results found</p>
+                <div className="col-span-full text-center space-y-2">
+                  <p className="text-xl font-semibold">No results found</p>
                   <p>Please try a different search term.</p>
                 </div>
               ) : (
-                exams?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
-                  <ExamCard title={course_title} code={course_code} level={level} department={department} semester={semester} session={session} id={_id} key={_id} />
-                ))
+                exams?.data.map(
+                  ({
+                    course_title,
+                    course_code,
+                    _id,
+                    level,
+                    department,
+                    semester,
+                    session,
+                  }: any) => (
+                    <ExamCard
+                      title={course_title}
+                      code={course_code}
+                      level={level}
+                      department={department}
+                      semester={semester}
+                      session={session}
+                      id={_id}
+                      key={_id}
+                    />
+                  ),
+                )
               )
             ) : (
               Array.from({ length: 12 }).map((_, id) => (
@@ -229,9 +264,7 @@ const Quiz = () => {
               ))
             )}
           </div>
-          <div>
-            Pagination
-          </div>
+          <div>Pagination</div>
         </div>
       </section>
     </main>
