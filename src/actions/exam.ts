@@ -9,6 +9,7 @@ import ResponseHandler from "@/utils/ResponseHandler"
 export async function getExams(filter: Record<string, string> = {}){
     await connectDB()
     const logger = await initLogger()
+    filter.limit = "20"
 
     try {
         let exams = await examService.getExams(filter)
@@ -17,7 +18,9 @@ export async function getExams(filter: Record<string, string> = {}){
         return ResponseHandler("success", "Exams retrieved successfully", {
             data: exams,
             metadata: {
-                total: exams.length
+                total: exams.length,
+                limit: Number(filter.limit),
+                page: Number(filter?.page) || 1 
             }
         })
 

@@ -99,7 +99,7 @@ const Quiz = () => {
           <div className="space-y-4 md:max-w-[50%]">
             <p className="text-4xl font-semibold">Browse Past Questions</p>
             <p>
-              Search our curated list of past questions from {sessionsRes?.data[sessionsRes.data.length - 1].split("/")[0] || "2015"} to date. Take any exam and see instant score with feedbacks as a way to ace your next paper.
+              Search our curated list of past questions from {sessionsRes?.data[sessionsRes.data.length - 1]?.split("/")[0] || "2015"} to date. Take any exam and see instant score with feedbacks as a way to ace your next paper.
             </p>
           </div>
         </div>
@@ -211,7 +211,7 @@ const Quiz = () => {
                 <p>{res?.message}</p>
               </div>
             ) : status == "success" ? (
-              res?.data?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
+              exams?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
                 <ExamCard title={course_title} code={course_code} level={level} department={department} semester={semester} session={session} id={_id} key={_id} />
               ))
             ) : (
