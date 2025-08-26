@@ -142,7 +142,7 @@ const Quiz = () => {
             setParams={setParams}
           />
           {
-            sessionsRes?.data && (
+            sessionsRes?.data && sessionsRes.data.length > 0 && (
               <Filter
                 data={sessionsRes?.data}
                 checked={params.sessions as string[]}
