@@ -33,7 +33,7 @@ export const examRepository = {
     else if (filter?.sort === "asc") sort = { course_code: 1 };
     else if (filter?.sort === "desc") sort = { course_code: -1 };
 
-    return Exam.find(query).sort(sort);
+    return Exam.find(query).limit(Number(filter.limit)).skip((Number(filter.page) - 1) * Number(filter.limit)).sort(sort);
   },
 
   async findById(id: string) {

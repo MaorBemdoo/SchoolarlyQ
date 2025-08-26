@@ -12,7 +12,7 @@ import { getExams, getExamSessions } from "@/actions/exam";
 import useAction from "@/hooks/useAction";
 import ExamCard from "./components/ExamCard";
 import { BiFilter } from "react-icons/bi";
-import { FaX } from "react-icons/fa6";
+import { FaChevronLeft, FaChevronRight, FaX } from "react-icons/fa6";
 import useEventOutside from "@/hooks/useEventOutside";
 import { motion } from "framer-motion";
 
@@ -259,7 +259,7 @@ const Quiz = () => {
                 )
               )
             ) : (
-              Array.from({ length: 12 }).map((_, id) => (
+              Array.from({ length: 30 }).map((_, id) => (
                 <div
                   className="h-[200px] rounded-md animate-pulse bg-gray-300"
                   key={id}
@@ -267,7 +267,47 @@ const Quiz = () => {
               ))
             )}
           </div>
-          <div>Pagination</div>
+          {exams?.metadata?.pages > 1 && (
+            <div className="flex justify-center items-center gap-4 *:size-10 *:p-0">
+              {
+                params.page && params.page !== "1" && (
+                  <Button
+                    variant="outlined"
+                    disabled={status === "loading"}
+                    onClick={() =>
+                      setParams({
+                        ...params,
+                        page: String(Number(params.page || "1") - 1),
+                      })
+                    }
+                  >
+                    <FaChevronLeft className="flex m-auto" />
+                  </Button>
+                )
+              }
+              {
+                Array.from({ length: exams?.metadata?.pages }).map((_, i) => (
+                  <Button key={i} variant={`${!params.page || params.page == String(i + 1) ? "standard" : "outlined"}`}>{i + 1}</Button>
+                ))
+              }
+              {
+                params.page && params.page !== String(exams?.metadata?.pages) && (
+                  <Button
+                    variant="outlined"
+                    disabled={status === "loading"}
+                    onClick={() =>
+                      setParams({
+                        ...params,
+                        page: String(Number(params.page || "1") + 1)
+                      })
+                    }
+                  >
+                    <FaChevronRight className="flex m-auto" />
+                  </Button>
+                )
+              }
+            </div>
+          )}
         </div>
       </section>
     </main>
