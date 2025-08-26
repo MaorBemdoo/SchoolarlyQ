@@ -14,6 +14,7 @@ import ExamCard from "./components/ExamCard";
 import { BiFilter } from "react-icons/bi";
 import { FaX } from "react-icons/fa6";
 import useEventOutside from "@/hooks/useEventOutside";
+import { motion } from "framer-motion";
 
 const Quiz = () => {
   const { data }: { data: any } = useSession();
@@ -109,8 +110,10 @@ const Quiz = () => {
         </div>
       </section>
       <section className="container flex gap-10 mt-4">
-        <div
-          className={`fixed top-0 left-0 z-10 w-[250px] ${filterOpen ? "translate-x-0" : "-translate-x-[250px]"} h-screen overflow-y-auto border-r border-r-secondary-light-400 bg-secondary-light-100 basis-2/5 divide-y-[1px] *:py-4 sm:static sm:bg-white sm:translate-x-0 sm:h-auto sm:overflow-y-visible sm:border-0 *:px-4 sm:*:px-0 dark:bg-secondary-dark-100 dark:sm:bg-[#121212] dark:border-r-secondary-dark-400 transition-transform`}
+        <motion.div
+          initial={{ x: -250 }}
+          animate={{ x: filterOpen ? 0 : -250 }}
+          className={`fixed top-0 left-0 z-10 w-[250px] h-screen overflow-y-auto border-r border-r-secondary-light-400 bg-secondary-light-100 basis-2/5 divide-y-[1px] *:py-4 sm:static sm:bg-white sm:!translate-x-0 sm:h-auto sm:overflow-y-visible sm:border-0 *:px-4 sm:*:px-0 dark:bg-secondary-dark-100 dark:sm:bg-[#121212] dark:border-r-secondary-dark-400`}
           ref={filterRef}
         >
           <div className="flex justify-between items-center border-b bg-inherit sticky top-0 sm:static sm:border-0 sm:!pt-0">
@@ -160,7 +163,7 @@ const Quiz = () => {
               setParams={setParams}
             />
           )}
-        </div>
+        </motion.div>
         <div className="w-full space-y-8">
           <form
             className="flex gap-4"
