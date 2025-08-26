@@ -46,6 +46,10 @@ const Quiz = () => {
   }, [execSessions])
 
   useEffect(() => {
+    execute(params);
+  }, [execute, params]);
+
+  useEffect(() => {
     if (!didMountRef.current) return;
     const query = new URLSearchParams();
 
@@ -65,11 +69,6 @@ const Quiz = () => {
     const queryString = query.toString();
     router.push(`?${queryString}`);
   }, [params, router]);
-
-  useEffect(() => {
-    if (!didMountRef.current) return;
-    execute(params);
-  }, [execute, params]);
 
   useEffect(() => {
     if (!didMountRef.current) {
@@ -211,9 +210,16 @@ const Quiz = () => {
                 <p>{res?.message}</p>
               </div>
             ) : status == "success" ? (
-              exams?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
-                <ExamCard title={course_title} code={course_code} level={level} department={department} semester={semester} session={session} id={_id} key={_id} />
-              ))
+              exams?.data.length < 1 ? (
+                <div>
+                  <p>No results found</p>
+                  <p>Please try a different search term.</p>
+                </div>
+              ) : (
+                exams?.data.map(({ course_title, course_code, _id, level, department, semester, session }: any) => (
+                  <ExamCard title={course_title} code={course_code} level={level} department={department} semester={semester} session={session} id={_id} key={_id} />
+                ))
+              )
             ) : (
               Array.from({ length: 12 }).map((_, id) => (
                 <div
