@@ -132,7 +132,7 @@ useEffect(() => {
               name="course_title"
               control={control}
               render={({ field }) => (
-                <input {...field} className="form-input" placeholder="Introduction to Computer Science" />
+                <input {...field} className={`form-input ${errors.course_title ? "error" : ""}`} placeholder="Introduction to Computer Science" />
               )}
             />
             {errors.course_title && <p className="text-red-500 text-sm">{errors.course_title.message}</p>}
@@ -144,7 +144,7 @@ useEffect(() => {
               name="course_code"
               control={control}
               render={({ field }) => (
-                <input {...field} className="form-input" placeholder="CSC101" />
+                <input {...field} className={`form-input ${errors.course_code ? "error" : ""}`} placeholder="CSC101" />
               )}
             />
             {errors.course_code && <p className="text-red-500 text-sm">{errors.course_code.message}</p>}
@@ -156,7 +156,7 @@ useEffect(() => {
               name="department"
               control={control}
               render={({ field }) => (
-                <select {...field} className="form-input dark:*:text-black">
+                <select {...field} className={`form-input dark:*:text-black ${errors.department ? "error" : ""}`}>
                   <option value="">Select Department</option>
                   {faculties.map(({ faculty, departments }) => (
                     <optgroup key={faculty} label={faculty}>
@@ -180,7 +180,7 @@ useEffect(() => {
                 name="level"
                 control={control}
                 render={({ field }) => (
-                  <select {...field} className="form-input dark:*:text-black">
+                  <select {...field} className={`form-input dark:*:text-black ${errors.level ? "error" : ""}`}>
                     <option value="">Select Level</option>
                     {["IJMB", "100", "200", "300", "400", "500", "600", "700"].map((lvl) => (
                       <option key={lvl} value={lvl}>
@@ -199,7 +199,7 @@ useEffect(() => {
                 name="semester"
                 control={control}
                 render={({ field }) => (
-                  <select {...field} className="form-input dark:*:text-black">
+                  <select {...field} className={`form-input dark:*:text-black ${errors.semester ? "error" : ""}`}>
                     <option value="">Select Semester</option>
                     <option value={1}>First Semester</option>
                     <option value={2}>Second Semester</option>
@@ -217,7 +217,7 @@ useEffect(() => {
                 name="credit_units"
                 control={control}
                 render={({ field }) => (
-                  <input {...field} type="number" className="form-input" placeholder="e.g. 3" />
+                  <input {...field} type="number" className={`form-input ${errors.credit_units ? "error" : ""}`} placeholder="e.g. 3" />
                 )}
               />
               {errors.credit_units && <p className="text-red-500 text-sm">{errors.credit_units.message}</p>}
@@ -229,7 +229,7 @@ useEffect(() => {
                 name="time_allowed"
                 control={control}
                 render={({ field }) => (
-                  <input {...field} type="number" className="form-input" placeholder="e.g. 60" />
+                  <input {...field} type="number" className={`form-input ${errors.time_allowed ? "error" : ""}`} placeholder="e.g. 60" />
                 )}
               />
               {errors.time_allowed && <p className="text-red-500 text-sm">{errors.time_allowed.message}</p>}
@@ -243,7 +243,7 @@ useEffect(() => {
                 name="session"
                 control={control}
                 render={({ field }) => (
-                  <input {...field} className="form-input" placeholder="e.g. 2023/2024" />
+                  <input {...field} className={`form-input ${errors.session ? "error" : ""}`} placeholder="e.g. 2023/2024" />
                 )}
               />
               {errors.session && <p className="text-red-500 text-sm">{errors.session.message}</p>}
@@ -255,7 +255,7 @@ useEffect(() => {
                 name="type"
                 control={control}
                 render={({ field }) => (
-                  <select {...field} className="form-input dark:*:text-black">
+                  <select {...field} className={`form-input dark:*:text-black ${errors.type ? "error" : ""}`}>
                     <option value="objective">Objective</option>
                     <option value="theory">Theory</option>
                   </select>
@@ -272,7 +272,7 @@ useEffect(() => {
               render={({ field }) => (
                 <input
                   {...field}
-                  className="form-input"
+                  className={`form-input ${errors.tags ? "error" : ""}`}
                   placeholder="variables, oop"
                   value={tagsInput}
                   onChange={(e) => {
@@ -318,7 +318,7 @@ useEffect(() => {
                         <input
                           key={optIndex}
                           type="text"
-                          className="form-input"
+                          className={`form-input`}
                           placeholder={`Option ${optIndex + 1}`}
                           value={opt}
                           onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
@@ -333,7 +333,7 @@ useEffect(() => {
                 <label className="font-semibold">Correct Answer*</label>
                 <input
                   type="text"
-                  className="form-input"
+                  className={`form-input`}
                   placeholder="e.g. Option 1"
                   value={q.correct_answer}
                   onChange={(e) => handleQuestionChange(qIndex, "correct_answer", e.target.value)}
