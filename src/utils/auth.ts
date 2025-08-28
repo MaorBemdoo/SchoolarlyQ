@@ -7,6 +7,7 @@ import Google from "next-auth/providers/google";
 import { AdapterUser } from "next-auth/adapters";
 import initLogger from "@/config/logger";
 import { userService } from "@/services/user.service";
+import connectDB from "./db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   logger: {
@@ -62,6 +63,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           message = "Invalid Password";
           status = 400;
         }
+
+        await connectDB()
 
         const user = await userService.getUserByUsername(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByEmail(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByMatricNumber(credentials.usernameOrEmailOrMatric as string)
 

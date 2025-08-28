@@ -9,5 +9,9 @@
 }
 
 .form-input {
-  @apply w-full rounded-md bg-gray-200 focus:bg-inherit focus:ring-secondary-light-400 dark:bg-inherit;
+  @apply w-full rounded-md bg-gray-200 focus:bg-inherit focus:border-secondary-light-400 dark:bg-inherit;
+}
+
+.form-input.error {
+  @apply !border-red-500 focus:!border-red-500;
 }
