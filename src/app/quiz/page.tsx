@@ -137,7 +137,7 @@ const Quiz = () => {
           <Filter
             data={faculties.flatMap((faculty) =>
               faculty.departments.map((dept) => dept.name),
-            )}
+            ).sort()}
             checked={params.departments as string[]}
             label="Departments"
             setParams={setParams}
