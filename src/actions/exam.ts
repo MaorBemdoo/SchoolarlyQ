@@ -15,7 +15,6 @@ export async function getExams(filter: Record<string, string> = {}){
     try {
         let exams = await examService.getExams(filter)
         exams = exams.map(exam => exam.toObject())
-        logger.info("Exams retrieved successfully")
         return ResponseHandler("success", "Exams retrieved successfully", {
             data: exams,
             metadata: {

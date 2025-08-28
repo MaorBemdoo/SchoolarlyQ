@@ -10,6 +10,7 @@ export interface AppLinkProps {
   children: React.ReactNode;
   className?: string;
   href: string | URL;
+  onClick?: MouseEventHandler<HTMLAnchorElement>
 }
 
 export interface ButtonProps {

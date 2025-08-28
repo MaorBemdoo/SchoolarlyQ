@@ -5,9 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./utils/auth";
 import ResponseHandler from "./utils/ResponseHandler";
 
-const protectedRoutes = ["/quiz"];
+const protectedRoutes = ["/quiz/*", "/admin/*"];
 export const middleware = async (req: NextRequest) => {
-  if (protectedRoutes.includes(req.nextUrl.pathname)) {
+  const pathname = req.nextUrl.pathname
+
+  const isProtected = protectedRoutes.some(
+    (route) =>
+      pathname === route ||
+      (route.endsWith('/*') && pathname.startsWith(route.replace('/*', '')))
+  );
+
+  if (isProtected) {
     const session = await auth()
 
     if (!session) {

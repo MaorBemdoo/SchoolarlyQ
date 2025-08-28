@@ -1,0 +1,374 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { useState, useEffect } from "react";
+import Button from "@/components/Button";
+import { faculties } from "@/data/faculties";
+import { examSchema, questionSchema } from "@/utils/validators";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+import { useLocalStorage } from "react-use";
+
+type Question = {
+  question: string;
+  options?: string[];
+  correct_answer: string;
+  explanation?: string;
+};
+
+type ExamForm = yup.InferType<typeof examSchema>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type QuestionForm = yup.InferType<typeof questionSchema>;
+
+const CreateQuestionsPage = () => {
+  const [savedProgress, setSavedProgress] = useLocalStorage<any>("examFormProgress");
+  const {
+    control,
+    handleSubmit,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useForm<ExamForm>({
+    resolver: yupResolver(examSchema),
+    defaultValues: {
+      course_title: savedProgress?.exam.course_title || "",
+      course_code: savedProgress?.exam.course_code || "",
+      department: savedProgress?.exam.department || "",
+      level: savedProgress?.exam.level || "",
+      semester: savedProgress?.exam.semester,
+      credit_units: savedProgress?.exam.credit_units,
+      time_allowed: savedProgress?.exam.time_allowed,
+      session: savedProgress?.exam.session || "",
+      type: savedProgress?.exam.type || "objective",
+      tags: savedProgress?.exam.tags ?? [],
+    },
+  });
+
+  const type = watch("type");
+  const [tagsInput, setTagsInput] = useState("");
+  useEffect(() => {
+    const currentTags = getValues("tags");
+    setTagsInput(Array.isArray(currentTags) ? currentTags.join(", ") : "");
+  }, [getValues, watch]);
+  const newQuestion = type === "objective" ? { question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" } : { question: "", correct_answer: "", explanation: "" };
+
+  const [questions, setQuestions] = useState<Question[]>(savedProgress?.questions || [newQuestion]);
+
+useEffect(() => {
+  const subscription = watch((formValues) => {
+    const updatedQuestions = questions.map((q) => ({ ...q, options: formValues.type === "objective" ? (q.options || ["", "", "", ""]) : undefined, }));
+    setSavedProgress((prev: any) => ({
+      exam: formValues,
+      questions: prev?.questions || updatedQuestions,
+    }));
+  });
+
+  return () => subscription.unsubscribe();
+}, [watch, setSavedProgress, questions]);
+
+useEffect(() => {
+  setSavedProgress((prev: any) => ({
+    exam: prev?.exam || getValues(),
+    questions: prev?.questions || questions,
+  }));
+}, [questions, setSavedProgress, getValues]);
+
+
+
+  const addQuestion = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setQuestions([
+      ...questions,
+      newQuestion
+    ]);
+  };
+
+  const handleQuestionChange = (index: number, field: keyof Question, value: string) => {
+    const updated = [...questions];
+    if (field === "options") {
+      if (Array.isArray(value)) {
+        (updated[index] as Question).options = value;
+      }
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (updated[index] as any)[field] = value;
+    }
+    setQuestions(updated);
+  };
+
+  const handleOptionChange = (qIndex: number, optIndex: number, value: string) => {
+    const updated = [...questions];
+    if (!updated[qIndex].options) {
+      updated[qIndex].options = ["", "", "", ""];
+    }
+    updated[qIndex].options[optIndex] = value;
+    setQuestions(updated);
+  };
+
+  const onSubmit = (data: any) => {
+    console.log("Exam Data:", data);
+    console.log("Questions:", questions);
+    // TODO: send to API
+    setSavedProgress(null);
+  };
+
+  return (
+    <main className="container max-w-[900px] mt-10">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold">Add Past Questions</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Fill in the exam details, then add one or more questions.
+        </p>
+      </header>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <section className="space-y-6 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
+          <h2 className="text-xl font-bold">Exam Details</h2>
+
+          <div className="space-y-2">
+            <label className="font-semibold">Course Title*</label>
+            <Controller
+              name="course_title"
+              control={control}
+              render={({ field }) => (
+                <input {...field} className="form-input" placeholder="Introduction to Computer Science" />
+              )}
+            />
+            {errors.course_title && <p className="text-red-500 text-sm">{errors.course_title.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-semibold">Course Code*</label>
+            <Controller
+              name="course_code"
+              control={control}
+              render={({ field }) => (
+                <input {...field} className="form-input" placeholder="CSC101" />
+              )}
+            />
+            {errors.course_code && <p className="text-red-500 text-sm">{errors.course_code.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-semibold">Department*</label>
+            <Controller
+              name="department"
+              control={control}
+              render={({ field }) => (
+                <select {...field} className="form-input dark:*:text-black">
+                  <option value="">Select Department</option>
+                  {faculties.map(({ faculty, departments }) => (
+                    <optgroup key={faculty} label={faculty}>
+                      {departments.map(({ id, name }) => (
+                        <option key={id} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              )}
+            />
+            {errors.department && <p className="text-red-500 text-sm">{errors.department.message}</p>}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="font-semibold">Level*</label>
+              <Controller
+                name="level"
+                control={control}
+                render={({ field }) => (
+                  <select {...field} className="form-input dark:*:text-black">
+                    <option value="">Select Level</option>
+                    {["IJMB", "100", "200", "300", "400", "500", "600", "700"].map((lvl) => (
+                      <option key={lvl} value={lvl}>
+                        {lvl}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              />
+              {errors.level && <p className="text-red-500 text-sm">{errors.level.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-semibold">Semester*</label>
+              <Controller
+                name="semester"
+                control={control}
+                render={({ field }) => (
+                  <select {...field} className="form-input dark:*:text-black">
+                    <option value="">Select Semester</option>
+                    <option value={1}>First Semester</option>
+                    <option value={2}>Second Semester</option>
+                  </select>
+                )}
+              />
+              {errors.semester && <p className="text-red-500 text-sm">{errors.semester.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="font-semibold">Credit Unit*</label>
+              <Controller
+                name="credit_units"
+                control={control}
+                render={({ field }) => (
+                  <input {...field} type="number" className="form-input" placeholder="e.g. 3" />
+                )}
+              />
+              {errors.credit_units && <p className="text-red-500 text-sm">{errors.credit_units.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-semibold">Time Allowed (minutes)*</label>
+              <Controller
+                name="time_allowed"
+                control={control}
+                render={({ field }) => (
+                  <input {...field} type="number" className="form-input" placeholder="e.g. 60" />
+                )}
+              />
+              {errors.time_allowed && <p className="text-red-500 text-sm">{errors.time_allowed.message}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="font-semibold">Session*</label>
+              <Controller
+                name="session"
+                control={control}
+                render={({ field }) => (
+                  <input {...field} className="form-input" placeholder="e.g. 2023/2024" />
+                )}
+              />
+              {errors.session && <p className="text-red-500 text-sm">{errors.session.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-semibold">Type*</label>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <select {...field} className="form-input dark:*:text-black">
+                    <option value="objective">Objective</option>
+                    <option value="theory">Theory</option>
+                  </select>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-semibold">Tags (optional)</label>
+            <Controller
+              name="tags"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  className="form-input"
+                  placeholder="variables, oop"
+                  value={tagsInput}
+                  onChange={(e) => {
+                    setTagsInput(e.target.value);
+                  }}
+                  onBlur={() => {
+                    const tagsArray = tagsInput
+                      .split(",")
+                      .map((tag) => tag.trim())
+                      .filter((tag) => tag.length > 0);
+
+                    field.onChange(tagsArray);
+                  }}
+                />
+              )}
+            />
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <h2 className="text-xl font-bold">Questions</h2>
+
+          {questions.map((q, qIndex) => (
+            <div key={qIndex} className="space-y-4 p-6 border rounded-lg shadow-sm bg-white dark:bg-gray-800">
+              <h3 className="font-semibold text-lg">Question {qIndex + 1}</h3>
+
+              <div className="space-y-2">
+                <label className="font-semibold">Question*</label>
+                <textarea
+                  className="form-input min-h-[100px]"
+                  placeholder="What is the time complexity of binary search?"
+                  value={q.question}
+                  onChange={(e) => handleQuestionChange(qIndex, "question", e.target.value)}
+                />
+              </div>
+
+              {
+                watch("type") === "objective" && (
+                  <div className="space-y-2">
+                    <label className="font-semibold">Options*</label>
+                    <div className="grid gap-2">
+                      {(q.options ?? ["", "", "", ""]).map((opt, optIndex) => (
+                        <input
+                          key={optIndex}
+                          type="text"
+                          className="form-input"
+                          placeholder={`Option ${optIndex + 1}`}
+                          value={opt}
+                          onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+
+              <div className="space-y-2">
+                <label className="font-semibold">Correct Answer*</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g. Option 1"
+                  value={q.correct_answer}
+                  onChange={(e) => handleQuestionChange(qIndex, "correct_answer", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="font-semibold">Explanation (optional)</label>
+                <textarea
+                  className="form-input min-h-[80px]"
+                  placeholder="Provide explanation if necessary"
+                  value={q.explanation}
+                  onChange={(e) => handleQuestionChange(qIndex, "explanation", e.target.value)}
+                />
+              </div>
+            </div>
+          ))}
+
+          <Button
+            variant="custom"
+            className="w-full bg-gray-200 !text-black hover:bg-gray-300 dark:bg-gray-700 dark:!text-white"
+            onClick={addQuestion}
+          >
+            + Add Another Question
+          </Button>
+        </section>
+
+        <div className="pt-4">
+          <Button className="w-full">
+            Save Exam & Questions
+          </Button>
+        </div>
+      </form>
+    </main>
+  );
+};
+
+export default CreateQuestionsPage;
