@@ -7,7 +7,7 @@ import { faculties } from "@/data/faculties";
 import { examSchema, questionSchema } from "@/utils/validators";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useLocalStorage } from "react-use";
 
 type Question = {
@@ -32,84 +32,97 @@ const CreateQuestionsPage = () => {
   } = useForm<ExamForm>({
     resolver: yupResolver(examSchema),
     defaultValues: {
-      course_title: savedProgress?.exam.course_title || "",
-      course_code: savedProgress?.exam.course_code || "",
-      department: savedProgress?.exam.department || "",
-      level: savedProgress?.exam.level || "",
-      semester: savedProgress?.exam.semester,
-      credit_units: savedProgress?.exam.credit_units,
-      time_allowed: savedProgress?.exam.time_allowed,
-      session: savedProgress?.exam.session || "",
-      type: savedProgress?.exam.type || "objective",
-      tags: savedProgress?.exam.tags ?? [],
+      course_title: savedProgress?.exam?.course_title || "",
+      course_code: savedProgress?.exam?.course_code || "",
+      department: savedProgress?.exam?.department || "",
+      level: savedProgress?.exam?.level || "",
+      semester: savedProgress?.exam?.semester,
+      credit_units: savedProgress?.exam?.credit_units,
+      time_allowed: savedProgress?.exam?.time_allowed,
+      session: savedProgress?.exam?.session || "",
+      type: savedProgress?.exam?.type || "objective",
+      tags: savedProgress?.exam?.tags ?? [],
     },
   });
 
   const type = watch("type");
+  const newQuestion = type === "objective" ? { question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" } : { question: "", correct_answer: "", explanation: "" };
+
+  const {
+    control: controlQuestions,
+    watch: watchQuestions,
+    handleSubmit: handleQuestionsSubmit,
+    formState: { errors: questionErrors, isValid: isQuestionsValid }
+  } = useForm<{ questions: Question[]}>({
+    defaultValues: {
+      questions: savedProgress?.questions || [newQuestion]
+    }
+  })
+
+  const questions = watchQuestions("questions")
+
+  const { fields, append, update } = useFieldArray({
+    control: controlQuestions,
+    name: "questions",
+  });
+
   const [tagsInput, setTagsInput] = useState("");
   useEffect(() => {
     const currentTags = getValues("tags");
     setTagsInput(Array.isArray(currentTags) ? currentTags.join(", ") : "");
   }, [getValues, watch]);
-  const newQuestion = type === "objective" ? { question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" } : { question: "", correct_answer: "", explanation: "" };
-
-  const [questions, setQuestions] = useState<Question[]>(savedProgress?.questions || [newQuestion]);
 
 useEffect(() => {
   const subscription = watch((formValues) => {
-    const updatedQuestions = questions.map((q) => ({ ...q, options: formValues.type === "objective" ? (q.options || ["", "", "", ""]) : undefined, }));
+    for(const q of fields){
+      if(formValues.type == "objective"){
+        update(fields.indexOf(q), {
+          ...q,
+          options: q.options || ["", "", "", ""]
+        })
+        break
+      }{
+        update(fields.indexOf(q), {
+          question: q.question,
+          correct_answer: q.correct_answer,
+          explanation: q.explanation,
+        })
+        break
+      }
+    }
     setSavedProgress((prev: any) => ({
       exam: formValues,
-      questions: prev?.questions || updatedQuestions,
+      questions: prev?.questions || questions,
     }));
   });
 
   return () => subscription.unsubscribe();
-}, [watch, setSavedProgress, questions]);
+}, [watch, setSavedProgress, questions, fields, update]);
 
 useEffect(() => {
-  setSavedProgress((prev: any) => ({
-    exam: prev?.exam || getValues(),
-    questions: prev?.questions || questions,
-  }));
-}, [questions, setSavedProgress, getValues]);
+  const subscription = watchQuestions((formValues) => {
+    setSavedProgress((prev: any) => ({
+      exam: prev?.exam || getValues(),
+      questions: formValues.questions,
+    }));
+  })
+
+  return () => subscription.unsubscribe();
+}, [setSavedProgress, getValues, watchQuestions]);
 
 
 
-  const addQuestion = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setQuestions([
-      ...questions,
-      newQuestion
-    ]);
-  };
-
-  const handleQuestionChange = (index: number, field: keyof Question, value: string) => {
-    const updated = [...questions];
-    if (field === "options") {
-      if (Array.isArray(value)) {
-        (updated[index] as Question).options = value;
-      }
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (updated[index] as any)[field] = value;
-    }
-    setQuestions(updated);
-  };
-
-  const handleOptionChange = (qIndex: number, optIndex: number, value: string) => {
-    const updated = [...questions];
-    if (!updated[qIndex].options) {
-      updated[qIndex].options = ["", "", "", ""];
-    }
-    updated[qIndex].options[optIndex] = value;
-    setQuestions(updated);
+  const addQuestion = () => {
+    append(newQuestion);
   };
 
   const onSubmit = (data: any) => {
     console.log("Exam Data:", data);
     console.log("Questions:", questions);
     // TODO: send to API
+    if(!isQuestionsValid){
+      return
+    }
     setSavedProgress(null);
   };
 
@@ -295,18 +308,27 @@ useEffect(() => {
         <section className="space-y-8">
           <h2 className="text-xl font-bold">Questions</h2>
 
-          {questions.map((q, qIndex) => (
+          {fields.map((q, qIndex) => (
             <div key={qIndex} className="space-y-4 p-6 border rounded-lg shadow-sm bg-white dark:bg-gray-800">
               <h3 className="font-semibold text-lg">Question {qIndex + 1}</h3>
 
               <div className="space-y-2">
                 <label className="font-semibold">Question*</label>
-                <textarea
-                  className="form-input min-h-[100px]"
-                  placeholder="What is the time complexity of binary search?"
-                  value={q.question}
-                  onChange={(e) => handleQuestionChange(qIndex, "question", e.target.value)}
+                <Controller
+                  name={`questions.${qIndex}.question`}
+                  rules={{
+                    required: "Question is required"
+                  }}
+                  control={controlQuestions}
+                  render={({ field }) => (
+                    <textarea
+                      {...field}
+                      className={`form-input ${questionErrors.questions?.[qIndex]?.question ? "error" : ""} min-h-[100px]`}
+                      placeholder="What is the time complexity of binary search?"
+                    />
+                  )}
                 />
+                {questionErrors.questions?.[qIndex]?.question && <p className="text-red-500 text-sm">{questionErrors.questions[qIndex].question?.message}</p>}
               </div>
 
               {
@@ -315,13 +337,13 @@ useEffect(() => {
                     <label className="font-semibold">Options*</label>
                     <div className="grid gap-2">
                       {(q.options ?? ["", "", "", ""]).map((opt, optIndex) => (
-                        <input
+                          <Controller
                           key={optIndex}
-                          type="text"
-                          className={`form-input`}
-                          placeholder={`Option ${optIndex + 1}`}
-                          value={opt}
-                          onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
+                          name={`questions.${qIndex}.options.${optIndex}`}
+                          control={controlQuestions}
+                          render={({ field }) => (
+                            <input {...field} className="form-input" placeholder={`Option ${optIndex + 1}`} />
+                          )}
                         />
                       ))}
                     </div>
@@ -331,22 +353,27 @@ useEffect(() => {
 
               <div className="space-y-2">
                 <label className="font-semibold">Correct Answer*</label>
-                <input
-                  type="text"
-                  className={`form-input`}
-                  placeholder="e.g. Option 1"
-                  value={q.correct_answer}
-                  onChange={(e) => handleQuestionChange(qIndex, "correct_answer", e.target.value)}
+                <Controller
+                  name={`questions.${qIndex}.correct_answer`}
+                  rules={{
+                    required: "Correct answer is required"
+                  }}
+                  control={controlQuestions}
+                  render={({ field }) => (
+                    <input {...field} className={`form-input ${questionErrors.questions?.[qIndex]?.correct_answer ? "error" : ""}`} placeholder="Correct answer" />
+                  )}
                 />
+                {questionErrors.questions?.[qIndex]?.correct_answer && <p className="text-red-500 text-sm">{questionErrors.questions[qIndex].correct_answer?.message}</p>}
               </div>
 
               <div className="space-y-2">
                 <label className="font-semibold">Explanation (optional)</label>
-                <textarea
-                  className="form-input min-h-[80px]"
-                  placeholder="Provide explanation if necessary"
-                  value={q.explanation}
-                  onChange={(e) => handleQuestionChange(qIndex, "explanation", e.target.value)}
+                <Controller
+                  name={`questions.${qIndex}.explanation`}
+                  control={controlQuestions}
+                  render={({ field }) => (
+                    <textarea {...field} className="form-input min-h-[80px]" placeholder="Explain the answer" />
+                  )}
                 />
               </div>
             </div>
@@ -355,7 +382,7 @@ useEffect(() => {
           <Button
             variant="custom"
             className="w-full bg-gray-200 !text-black hover:bg-gray-300 dark:bg-gray-700 dark:!text-white"
-            onClick={addQuestion}
+            onClick={handleQuestionsSubmit(addQuestion)}
           >
             + Add Another Question
           </Button>
