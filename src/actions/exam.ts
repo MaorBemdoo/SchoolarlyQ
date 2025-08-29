@@ -57,6 +57,10 @@ export async function createExamAndQuestions(exam: any, questions: any[]){
     }))
     try {
         await validate(examSchema, exam)
+        const [a, b] = exam.session.split("/")
+        if((Number(a) + 1) !== Number(b)){
+            throw new Error("Invalid session format")
+        }
         await Promise.all(questions.map((q) => validate(questionSchema, q)));
         const res = await examService.createExam(exam)
         const questionRes = await createQuestion({

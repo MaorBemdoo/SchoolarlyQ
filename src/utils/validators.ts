@@ -32,7 +32,7 @@ export const questionSchema = yup.object().shape({
 
 export const examSchema = yup.object().shape({
     course_title: yup.string().required("Course title is required"),
-    course_code: yup.string().required("Course code is required"),
+    course_code: yup.string().matches(/^[A-Z]{3}(?:-[A-Z]{3}|)\d{3}$/, "Invalid course code format").required("Course code is required"),
     department: yup.string().required("Department is required"),
     level: yup.string().required("Level is required"),
     semester: yup.number().oneOf([1, 2]).required("Semester is required"),

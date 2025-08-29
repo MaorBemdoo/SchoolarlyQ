@@ -32,6 +32,7 @@ const CreateQuestionsPage = () => {
     handleSubmit,
     watch,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<ExamForm>({
     resolver: yupResolver(examSchema),
@@ -57,6 +58,7 @@ const CreateQuestionsPage = () => {
     control: controlQuestions,
     watch: watchQuestions,
     handleSubmit: handleQuestionsSubmit,
+    reset: resetQuestions,
     formState: { errors: questionErrors, isValid: isQuestionsValid }
   } = useForm<{ questions: Question[]}>({
     defaultValues: {
@@ -79,25 +81,23 @@ const CreateQuestionsPage = () => {
 
 useEffect(() => {
   const subscription = watch((formValues) => {
-    const updatedQuestions = fields.map((q) => {
-      if (formValues.type === "objective") {
-        return {
-          ...q,
-          options: q.options || ["", "", "", ""],
-        };
-      } else {
-        return {
-          question: q.question,
-          correct_answer: q.correct_answer,
-          explanation: q.explanation,
-        };
-      }
-    });
-
-    setSavedProgress({
+    setSavedProgress((prev: any) => ({
       exam: formValues,
-      questions: updatedQuestions,
-    });
+      questions: prev.questions.map((q: any) => {
+        if (formValues.type === "objective") {
+          return {
+            ...q,
+            options: q.options || ["", "", "", ""],
+          };
+        } else {
+          return {
+            question: q.question,
+            correct_answer: q.correct_answer,
+            explanation: q.explanation,
+          };
+        }
+      }) || fields
+    }));
   });
 
   return () => subscription.unsubscribe();
@@ -137,8 +137,22 @@ useEffect(() => {
       if (result.isConfirmed) {
         const res = await execute(data, questions);
         if (res?.status === "success") {
-          control._reset();
-          controlQuestions._reset();
+          reset({
+            course_title: "",
+            course_code: "",
+            department: "",
+            level: "",
+            semester: undefined,
+            credit_units: 0,
+            time_allowed: 0,
+            session: "",
+            type:  "objective",
+            tags: [],
+          });
+          resetQuestions({
+            questions: [{ question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" }]
+          })
+          setSavedProgress(null)
           toast.success("Exam and questions added successfully");
         } else {
           toast.error(res?.message || "Error creating exam and questions");
