@@ -10,8 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useLocalStorage } from "react-use";
 import useAction from "@/hooks/useAction";
-import { toast } from "react-toastify";
 import { createExamAndQuestions } from "@/actions/exam";
+import toast from "@/utils/toast";
 
 type Question = {
   question: string;
@@ -49,7 +49,6 @@ const CreateQuestionsPage = () => {
   });
   const { execute, status } = useAction(createExamAndQuestions);
 
-
   const type = watch("type");
   const newQuestion = type === "objective" ? { question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" } : { question: "", correct_answer: "", explanation: "" };
 
@@ -66,7 +65,7 @@ const CreateQuestionsPage = () => {
 
   const questions = watchQuestions("questions")
 
-  const { fields, append, update } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control: controlQuestions,
     name: "questions",
   });
@@ -79,30 +78,30 @@ const CreateQuestionsPage = () => {
 
 useEffect(() => {
   const subscription = watch((formValues) => {
-    for(const q of fields){
-      if(formValues.type == "objective"){
-        update(fields.indexOf(q), {
+    const updatedQuestions = fields.map((q) => {
+      if (formValues.type === "objective") {
+        return {
           ...q,
-          options: q.options || ["", "", "", ""]
-        })
-        break
-      }{
-        update(fields.indexOf(q), {
+          options: q.options || ["", "", "", ""],
+        };
+      } else {
+        return {
           question: q.question,
           correct_answer: q.correct_answer,
           explanation: q.explanation,
-        })
-        break
+        };
       }
-    }
-    setSavedProgress((prev: any) => ({
+    });
+
+    setSavedProgress({
       exam: formValues,
-      questions: prev?.questions || questions,
-    }));
+      questions: updatedQuestions,
+    });
   });
 
   return () => subscription.unsubscribe();
-}, [watch, setSavedProgress, questions, fields, update]);
+}, [watch, fields, setSavedProgress]);
+
 
 useEffect(() => {
   const subscription = watchQuestions((formValues) => {

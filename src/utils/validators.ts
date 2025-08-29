@@ -12,7 +12,7 @@ export const step1RegisterSchema = yup.object({
 });
 
 export const step2RegisterSchema = yup.object({
-  matric_number: yup.string().matches(/^\d{2}-\d{4}-\d{4}$/, "Invalid matric number format").required("Matric number is required"),
+  matric_number: yup.string().matches(/^BHU\/(?:[A-Z]{3}\/\d{2}\/\d{3}|\d{2}\/\d{2}\/\d{2}\/\d{4})$/, "Invalid matric number format").required("Matric number is required"),
   department: yup.string().required("Department is required"),
   level: yup.string().required("Level is required"),
 });
