@@ -71,7 +71,7 @@ const Register = () => {
       update();
       router.push("/auth/register?step=2");
     } else {
-      toast.error(res?.message);
+      toast.error(res?.message as string);
     }
   };
 
