@@ -24,7 +24,7 @@ export const loginSchema = yup.object({
 
 export const questionSchema = yup.object().shape({
     question: yup.string().required("Question is required"),
-    options: yup.array().of(yup.string().required("Option is required")).min(2),
+    options: yup.array().of(yup.string()).min(2),
     correct_answer: yup.string().required("Correct answer is required"),
     explanation: yup.string().optional(),
     course: yup.string().required("Course is required"),

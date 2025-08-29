@@ -9,6 +9,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useLocalStorage } from "react-use";
+import useAction from "@/hooks/useAction";
+import { toast } from "react-toastify";
+import { createExamAndQuestions } from "@/actions/exam";
 
 type Question = {
   question: string;
@@ -44,6 +47,8 @@ const CreateQuestionsPage = () => {
       tags: savedProgress?.exam?.tags ?? [],
     },
   });
+  const { execute, status } = useAction(createExamAndQuestions);
+
 
   const type = watch("type");
   const newQuestion = type === "objective" ? { question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" } : { question: "", correct_answer: "", explanation: "" };
@@ -116,15 +121,24 @@ useEffect(() => {
     append(newQuestion);
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Exam Data:", data);
-    console.log("Questions:", questions);
-    // TODO: send to API
-    if(!isQuestionsValid){
-      return
+  const onSubmit = async (data: any) => {
+    await handleQuestionsSubmit(() => true)();
+    if (!isQuestionsValid) {
+      return;
     }
-    setSavedProgress(null);
-  };
+
+    const res = await execute(data, questions);
+
+    if (res?.status === "success") {
+      setSavedProgress(null);
+      control._reset();
+      controlQuestions._reset();
+      toast.success("Exam and questions added successfully");
+    } else {
+      toast.error(res?.message || "Error creating exam and questions");
+    }
+};
+
 
   return (
     <main className="container max-w-[900px] mt-10">
@@ -389,7 +403,7 @@ useEffect(() => {
         </section>
 
         <div className="pt-4">
-          <Button className="w-full">
+          <Button className="w-full" loading={status === "loading"}>
             Save Exam & Questions
           </Button>
         </div>
