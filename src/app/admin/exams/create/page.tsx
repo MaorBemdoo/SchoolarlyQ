@@ -12,6 +12,7 @@ import { useLocalStorage } from "react-use";
 import useAction from "@/hooks/useAction";
 import { createExamAndQuestions } from "@/actions/exam";
 import toast from "@/utils/toast";
+import { AppSwal } from "@/config/swal";
 
 type Question = {
   question: string;
@@ -126,16 +127,26 @@ useEffect(() => {
       return;
     }
 
-    const res = await execute(data, questions);
-
-    if (res?.status === "success") {
-      setSavedProgress(null);
-      control._reset();
-      controlQuestions._reset();
-      toast.success("Exam and questions added successfully");
-    } else {
-      toast.error(res?.message || "Error creating exam and questions");
-    }
+    AppSwal.fire({
+      text: "Are you sure you want to create this exam and its questions?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, create it!",
+      cancelButtonText: "No, cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await execute(data, questions);
+        if (res?.status === "success") {
+          setSavedProgress(null);
+          control._reset();
+          controlQuestions._reset();
+          toast.success("Exam and questions added successfully");
+        } else {
+          toast.error(res?.message || "Error creating exam and questions");
+        }
+      }
+    });
+    
 };
 
 

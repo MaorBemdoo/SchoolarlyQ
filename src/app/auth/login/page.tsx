@@ -7,13 +7,13 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
-import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { loginSchema } from "@/utils/validators";
+import toast from "@/utils/toast";
 type LoginForm = yup.InferType<typeof loginSchema>;
 
 const Login = () => {

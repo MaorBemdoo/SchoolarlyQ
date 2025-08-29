@@ -6,7 +6,6 @@ import { faculties } from "@/data/faculties";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -16,6 +15,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { step1RegisterSchema, step2RegisterSchema } from "@/utils/validators";
+import toast from "@/utils/toast";
 
 type Step1Form = yup.InferType<typeof step1RegisterSchema>;
 type Step2Form = yup.InferType<typeof step2RegisterSchema>;

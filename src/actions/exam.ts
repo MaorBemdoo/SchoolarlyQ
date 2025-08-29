@@ -52,7 +52,7 @@ export async function createExamAndQuestions(exam: any, questions: any[]){
 
     questions = questions.map(q => ({
         ...q,
-        options: q.options?.filter((val: string) => val.trim() !== ""),
+        options: exam.type == "theory" ? undefined : q.options?.filter((val: string) => val?.trim() !== ""),
         course: "fallback"
     }))
     try {

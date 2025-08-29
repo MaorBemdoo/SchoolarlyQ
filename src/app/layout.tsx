@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import "react-toastify/ReactToastify.min.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { baseUrl } from "@/data/baseUrl";
 import Providers from "./providers";
-import { ToastContainer } from "react-toastify";
 import { auth } from "@/utils/auth";
 
 export const metadata: Metadata = {
@@ -47,7 +45,6 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="text-secondary-light-400 bg-white dark:bg-[#121212] dark:text-white">
-        <ToastContainer limit={5} stacked />
         <Providers session={session}>
           <Header />
           {children}
