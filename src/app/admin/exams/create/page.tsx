@@ -137,7 +137,6 @@ useEffect(() => {
       if (result.isConfirmed) {
         const res = await execute(data, questions);
         if (res?.status === "success") {
-          setSavedProgress(null);
           control._reset();
           controlQuestions._reset();
           toast.success("Exam and questions added successfully");
