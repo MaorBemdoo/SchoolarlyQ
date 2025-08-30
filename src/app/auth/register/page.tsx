@@ -16,6 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { step1RegisterSchema, step2RegisterSchema } from "@/utils/validators";
 import toast from "@/utils/toast";
+import { analyzeMatricNumber } from "@/utils/analyzeMatricNumber";
 
 type Step1Form = yup.InferType<typeof step1RegisterSchema>;
 type Step2Form = yup.InferType<typeof step2RegisterSchema>;
@@ -39,6 +40,7 @@ const Register = () => {
   const {
     control: controlStep2,
     handleSubmit: handleStep2Submit,
+    setValue,
     formState: { errors: step2Errors },
   } = useForm<Step2Form>({ resolver: yupResolver(step2RegisterSchema) });
 
@@ -196,7 +198,15 @@ const Register = () => {
               name="matric_number"
               control={controlStep2}
               render={({ field }) => (
-                <input {...field} placeholder="Matric Number" className={`form-input ${step2Errors.matric_number ? "error" : ""}`} />
+                <input {...field} onBlur={() => {
+                  field.onBlur();
+                  if(field.value == "") return;
+                  const analysis = analyzeMatricNumber(field.value);
+                  if (analysis) {
+                    setValue("department", analysis.department);
+                    setValue("level", analysis.level);
+                  }
+                }} placeholder="Matric Number" className={`form-input ${step2Errors.matric_number ? "error" : ""}`} />
               )}
             />
             {step2Errors.matric_number && <p className="text-red-500 text-sm">{step2Errors.matric_number.message}</p>}
