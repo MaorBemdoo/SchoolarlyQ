@@ -2,7 +2,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 export const AppSwal = withReactContent(Swal).mixin({
-    theme: typeof window !== "undefined" ? window.document.getElementsByTagName('html')[0].className.split(" ")[0] as 'dark' | 'light' : "light",
+    // theme: typeof window !== "undefined" ? window.document.getElementsByTagName('html')[0].className.split(" ")[0] as 'dark' | 'light' : "light",
     customClass: {
         popup: '!w-[300px] md:!w-[600px]',
         icon: '!text-sm md:!text-base',
