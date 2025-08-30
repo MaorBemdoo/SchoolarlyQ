@@ -2,6 +2,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 export const AppSwal = withReactContent(Swal).mixin({
+    theme: typeof window !== "undefined" ? window.document.getElementsByTagName('html')[0].className.split(" ")[0] as 'dark' | 'light' : "light",
     customClass: {
         popup: '!w-[300px] md:!w-[600px]',
         icon: '!text-sm md:!text-base',
@@ -11,7 +12,7 @@ export const AppSwal = withReactContent(Swal).mixin({
 
 export const Toast = AppSwal.mixin({
     toast: true,
-    position: 'top-end',
+    position: typeof window !== "undefined" && window.innerWidth <= 765 ? 'top' : 'top-end',
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
