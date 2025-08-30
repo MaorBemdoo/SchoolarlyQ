@@ -6,6 +6,7 @@ const toast = {
             icon: "success",
             title: message,
             customClass: {
+                popup: "dark:!bg-secondary-dark-100 dark:*:!text-white",
                 timerProgressBar: "!bg-green-500"
             }
         });
@@ -15,6 +16,7 @@ const toast = {
             icon: "error",
             title: message,
             customClass: {
+                popup: "dark:!bg-secondary-dark-100 dark:*:!text-white",
                 timerProgressBar: "!bg-red-500"
             }
         });
