@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const examSchema = new mongoose.Schema({
   course_title: { type: String, required: true, trim: true },
-  course_code: { type: String, unique: true, required: true, trim: true },
+  course_code: { type: String, required: true, trim: true },
   credit_units: { type: Number, required: true },
   time_allowed: { type: Number, required: true },
   level: { type: String, required: true, trim: true },
