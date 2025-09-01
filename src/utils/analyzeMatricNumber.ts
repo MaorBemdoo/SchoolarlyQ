@@ -10,7 +10,7 @@ export const analyzeMatricNumber = (matricNumber: string) => {
     const array = matricNumber.split('/');
     if(array[1] == "SBS"){
         return {
-            department: "",
+            department: "IJMB",
             level: "IJMB"
         }
     }
