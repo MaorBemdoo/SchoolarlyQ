@@ -80,3 +80,16 @@ export async function createExamAndQuestions(exam: any, questions: any[]){
         return ResponseHandler("failed", error.message || "Error creating exam and questions")
     }
 }
+
+export async function getExam(id: string){
+    await connectDB()
+    const logger = await initLogger()
+
+    try {
+        const exam = await examService.findExamById(id)
+        return ResponseHandler("success", "Exam retrieved successfully", exam)
+    } catch (error: any) {
+        logger.error(error)
+        return ResponseHandler("failed", error.message || "Error retrieving exam")
+    }
+}

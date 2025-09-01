@@ -2,7 +2,7 @@ import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
 
 export const metadata = {
-  title: "Page Not Found",
+  title: "Page Not Found | SchoolarlyQ",
 };
 
 const NotFound = () => {

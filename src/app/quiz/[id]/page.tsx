@@ -1,63 +1,60 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import Button from "@/components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ExamCard from "../components/ExamCard";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import Link from "next/link";
+import useAction from "@/hooks/useAction";
+import { useParams } from "next/navigation";
+import { getExam, getExams } from "@/actions/exam";
 
 const QuizHomePage = () => {
-  const relatedExams = [
-    {
-      course_title: "Introduction",
-      course_code: "CSC211",
-      _id: "WERF",
-      level: "IJMB",
-      department: "Computer Science",
-      semester: 1,
-      session: "203/de",
-    },
-    {
-      course_title: "Introduction",
-      course_code: "CSC211",
-      _id: "WERF",
-      level: "IJMB",
-      department: "Computer Science",
-      semester: 1,
-      session: "203/de",
-    },
-    {
-      course_title: "Introduction",
-      course_code: "CSC211",
-      _id: "WERF",
-      level: "IJMB",
-      department: "Computer Science",
-      semester: 1,
-      session: "203/de",
-    },
-    {
-      course_title: "Introduction",
-      course_code: "CSC211",
-      _id: "WERF",
-      level: "IJMB",
-      department: "Computer Science",
-      semester: 1,
-      session: "203/de",
-    },
-    {
-      course_title: "Introduction",
-      course_code: "CSC211",
-      _id: "WERF",
-      level: "IJMB",
-      department: "Computer Science",
-      semester: 1,
-      session: "203/de",
-    },
-  ];
+  const { id } = useParams()
+  const { execute: fetchExam, res: examRes } = useAction(getExam)
+  const { execute: fetchExams, res: examsRes } = useAction(getExams)
+  const exam = examRes?.data
+  const relatedExams = examsRes?.data
 
   const [mode, setMode] = useState("study");
   const [questionCount, setQuestionCount] = useState(10);
   const [timer, setTimer] = useState("2");
+
+  const didMountRef = useRef(false);
+  const lastParamsRef = useRef<string>(null);
+
+    useEffect(() => {
+        const currentParams = JSON.stringify({
+            id,
+            level: exam?.level,
+            department: exam?.department,
+            semester: exam?.semester,
+            session: exam?.session,
+        });
+
+        if (!didMountRef.current) {
+            didMountRef.current = true;
+            lastParamsRef.current = currentParams;
+            fetchExam(id);
+            return;
+        }
+
+        if (lastParamsRef.current === currentParams) return;
+
+        lastParamsRef.current = currentParams;
+
+        fetchExams({
+            limit: 4,
+            levels: [exam?.level],
+            departments: [exam?.department],
+            semesters: [exam?.semester],
+            sessions: [exam?.session],
+            sort: "desc",
+        });
+    }, [id, exam?.level, exam?.department, exam?.semester, exam?.session, fetchExams, fetchExam]);
+
+    if(!exam) return null;
 
   return (
     <main className="mt-8">
@@ -66,7 +63,7 @@ const QuizHomePage = () => {
           <div className="md:max-w-[50%]">
             <p className="text-xs font-mono">E X A M</p>
             <p className="text-4xl font-semibold">
-              CSC 211: Introduction to Programming II
+              {exam?.course_code}: {exam?.course_title}
             </p>
           </div>
         </div>
@@ -75,30 +72,30 @@ const QuizHomePage = () => {
         <div className="grid gap-y-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 *:text-center">
           <div>
             <p className="text-xl font-semibold">Session</p>
-            <p>2012/2013</p>
+            <p>{exam?.session}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Semester</p>
-            <p>First Semester</p>
+            <p>{exam?.semester == 1 ? "First" : "Second"} Semester</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Department</p>
-            <p>Computer Science</p>
+            <p>{exam?.department}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Level</p>
-            <p>200 Level</p>
+            <p>{exam?.level} {exam?.level !== "IJMB" && "Level"}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Credit Unit(s)</p>
-            <p>2</p>
+            <p>{exam?.credit_units}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Type</p>
-            <p>Objective</p>
+            <p className="capitalize">{exam?.type}</p>
           </div>
         </div>
-        <div className="bg-gray-50 dark:bg-secondary-dark-100 p-6 rounded-lg shadow-sm grid gap-4 grid-cols-1 sm:grid-cols-3">
+        <div className={`bg-gray-50 dark:bg-secondary-dark-100 p-6 rounded-lg shadow-sm grid gap-4 grid-cols-1 ${exam?.questions >= 10 && exam?.type == "objective" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
             <div className="space-y-2">
                 <div className="flex items-center gap-1 space-x-1">
                     <label htmlFor="mode" className="font-semibold">
@@ -116,16 +113,20 @@ const QuizHomePage = () => {
                     <option value="exam">Exam mode</option>
                 </select>
             </div>
-            <div className="space-y-2">
-                <label htmlFor="question-count" className="font-semibold">No. of Questions</label>
-                <select value={questionCount} onChange={(e) => setQuestionCount(Number(e.target.value))} id="question-count" className="form-input" disabled={mode == "exam"}>
-                    {
-                        Array.from({ length: 60 }, (_, i) => (i + 1)).filter(val => val % 10 === 0).map(val => (
-                            <option key={val} value={val}>{val}</option>
-                        ))
-                    }
-                </select>
-            </div>
+            {
+                exam?.questions >= 10 && exam?.type == "objective" && (
+                    <div className="space-y-2">
+                        <label htmlFor="question-count" className="font-semibold">No. of Questions</label>
+                        <select value={questionCount} onChange={(e) => setQuestionCount(Number(e.target.value))} id="question-count" className="form-input" disabled={mode == "exam"}>
+                            {
+                                Array.from({ length: exam?.questions }, (_, i) => (i + 1)).filter(val => val % 10 === 0).map(val => (
+                                    <option key={val} value={val}>{val}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                )
+            }
             <div className="space-y-2">
                 <label htmlFor="timer" className="font-semibold">Timer</label>
                 <select value={timer} onChange={(e) => setTimer(e.target.value)} id="timer" className="form-input" disabled={mode == "exam"}>
@@ -136,48 +137,57 @@ const QuizHomePage = () => {
                 </select>
             </div>
         </div>
-        <div className="bg-primary-light-100 dark:bg-primary-dark-100 rounded-lg shadow-md p-6 w-full">
-          <h2 className="text-xl font-semibold mb-4">Topics Covered</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200">
-            <li>Object-Oriented Programming Concepts</li>
-            <li>Inheritance and Polymorphism</li>
-            <li>Exception Handling</li>
-            <li>File I/O Operations</li>
-            <li>Data Structures (Arrays, Lists)</li>
-            <li>Recursion</li>
-          </ul>
-        </div>
+        {
+            exam?.tags && exam.tags.length > 0 && (
+                <div className="bg-primary-light-100 dark:bg-primary-dark-100 rounded-lg shadow-md p-6 w-full">
+                    <h2 className="text-xl font-semibold mb-4">Topics Covered</h2>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200">
+                        {
+                            exam.tags.map((tag: string, index: number) => (
+                                <li key={index} className="capitalize">{tag}</li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            )
+        }
         <div className="text-center">
           <Button>Start Quiz</Button>
         </div>
       </section>
-      <section className="container max-w-[800px] my-8">
-        <h2 className="text-xl font-semibold mb-4">Related Exams</h2>
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
-          {relatedExams.map(
-            ({
-              course_title,
-              course_code,
-              _id,
-              level,
-              department,
-              semester,
-              session,
-            }) => (
-              <ExamCard
-                title={course_title}
-                code={course_code}
-                level={level}
-                department={department}
-                semester={semester}
-                session={session}
-                id={_id}
-                key={_id}
-              />
-            ),
-          )}
-        </div>
-      </section>
+      {
+        relatedExams && relatedExams.length > 0 && (
+            <section className="container max-w-[800px] my-8">
+                <h2 className="text-xl font-semibold mb-4">Related Exams</h2>
+                <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+                {
+                    relatedExams.map(
+                        ({
+                        course_title,
+                        course_code,
+                        _id,
+                        level,
+                        department,
+                        semester,
+                        session,
+                        }: any) => (
+                            <ExamCard
+                                title={course_title}
+                                code={course_code}
+                                level={level}
+                                department={department}
+                                semester={semester}
+                                session={session}
+                                id={_id}
+                                key={_id}
+                            />
+                        )
+                    )
+                }
+                </div>
+            </section>
+        )
+      }
     </main>
   );
 };

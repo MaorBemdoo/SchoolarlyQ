@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
   const ResponseHandler = (
   status: "success" | "failed",
   message: string,
-  data: unknown = null
+  data: any = null
 ) => {
   return {
     status,
