@@ -3,6 +3,8 @@
 import Button from "@/components/Button";
 import React, { useState } from "react";
 import ExamCard from "../components/ExamCard";
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import Link from "next/link";
 
 const QuizHomePage = () => {
   const relatedExams = [
@@ -98,7 +100,17 @@ const QuizHomePage = () => {
         </div>
         <div className="bg-gray-50 dark:bg-secondary-dark-100 p-6 rounded-lg shadow-sm grid gap-4 grid-cols-1 sm:grid-cols-3">
             <div className="space-y-2">
-                <label htmlFor="mode" className="font-semibold">Mode</label>
+                <div className="flex items-center gap-1 space-x-1">
+                    <label htmlFor="mode" className="font-semibold">
+                        <p>Mode</p>
+                    </label>
+                    <div className="dropdown dropdown-hover dropdown-right">
+                        <FaRegCircleQuestion tabIndex={0} />
+                        <div tabIndex={0} className="dropdown-content ml-2 bg-white border p-4 rounded-md">
+                            <p className="text-sm"><Link className="text-primary-light-300 dark:text-primary-dark-300 hover:underline" href="/#mode">Learn more</Link> about exam modes in schoolarlyq.</p>
+                        </div>
+                    </div>
+                </div>
                 <select value={mode} onChange={(e) => setMode(e.target.value)} id="mode" className="form-input">
                     <option value="study">Study mode</option>
                     <option value="exam">Exam mode</option>
@@ -106,7 +118,7 @@ const QuizHomePage = () => {
             </div>
             <div className="space-y-2">
                 <label htmlFor="question-count" className="font-semibold">No. of Questions</label>
-                <select value={questionCount} onChange={(e) => setQuestionCount(Number(e.target.value))} id="question-count" className="form-input">
+                <select value={questionCount} onChange={(e) => setQuestionCount(Number(e.target.value))} id="question-count" className="form-input" disabled={mode == "exam"}>
                     {
                         Array.from({ length: 60 }, (_, i) => (i + 1)).filter(val => val % 10 === 0).map(val => (
                             <option key={val} value={val}>{val}</option>
@@ -116,7 +128,7 @@ const QuizHomePage = () => {
             </div>
             <div className="space-y-2">
                 <label htmlFor="timer" className="font-semibold">Timer</label>
-                <select value={timer} onChange={(e) => setTimer(e.target.value)} id="timer" className="form-input">
+                <select value={timer} onChange={(e) => setTimer(e.target.value)} id="timer" className="form-input" disabled={mode == "exam"}>
                     <option value="none">No Timer</option>
                     <option value="1">1 Minute</option>
                     <option value="2">2 Minutes</option>
