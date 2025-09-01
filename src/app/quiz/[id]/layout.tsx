@@ -1,8 +1,5 @@
 export const metadata = {
-  title: {
-    template: "%s - Quiz | SchoolarlyQ",
-    absolute: "Discover Quizzes | SchoolarlyQ",
-  },
+  title: "CSC211",
 };
 
 export default function QuizzesLayout({

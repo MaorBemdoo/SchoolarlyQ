@@ -4,7 +4,7 @@ import React from 'react'
 
 const ExamCard = ({ title, code, level, semester, session, id }: any) => {
   return (
-    <div className='flex flex-col gap-2 justify-between p-4 rounded-md bg-primary-light-100 shadow-md dark:bg-primary-dark-100'>
+    <div className='flex flex-col gap-2 justify-between h-[150px] p-4 rounded-md bg-primary-light-100 shadow-md dark:bg-primary-dark-100'>
       <div className="mb-4">
         <div className='flex justify-between items-center'>
           <p className="text-xs font-mono">{code.split("").join(" ")}</p>

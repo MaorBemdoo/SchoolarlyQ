@@ -261,7 +261,7 @@ const Quiz = () => {
             ) : (
               Array.from({ length: 30 }).map((_, id) => (
                 <div
-                  className="h-[200px] rounded-md animate-pulse bg-gray-300"
+                  className="h-[150px] rounded-md animate-pulse bg-gray-300"
                   key={id}
                 />
               ))
