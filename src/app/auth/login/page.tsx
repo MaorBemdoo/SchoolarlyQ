@@ -40,7 +40,7 @@ const Login = () => {
         redirect: false,
       });
       if (res?.error) throw new Error("Invalid credentials");
-      router.push("/quiz");
+      router.push("/exams");
     } catch (error: any) {
       toast.error(error.message || "Error logging user");
     } finally {
@@ -51,7 +51,7 @@ const Login = () => {
   const onGoogleSubmit = async () => {
     try {
       setGoogleLoading(true);
-      const res = await signIn("google", { redirectTo: "/quiz" });
+      const res = await signIn("google", { redirectTo: "/exams" });
       if (res?.error) throw new Error("Google login failed");
     } catch (error: any) {
       toast.error(error.message || "Error logging user");

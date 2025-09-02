@@ -10,7 +10,7 @@ const ExamCard = ({ title, code, level, semester, session, id }: any) => {
           <p className="text-xs font-mono">{code.split("").join(" ")}</p>
           <p className="text-xs font-mono">E X A M</p>
         </div>
-        <AppLink href={`/quiz/${id}`} className="font-semibold mt-3 mb-8 hover:underline">{title}</AppLink>
+        <AppLink href={`/exams/${id}`} className="font-semibold mt-3 mb-8 hover:underline">{title}</AppLink>
       </div>
       <div>
         <p className='text-sm'>{level} Level · {semester}{semester == 1 ? 'st' : semester == 2 ? 'nd' : semester === 3 ? 'rd' : 'th'} Semester · {session} Session</p>

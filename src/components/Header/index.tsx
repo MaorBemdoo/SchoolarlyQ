@@ -75,9 +75,9 @@ const Header = () => {
                   />
                 </AppLink>
                 <AppLink
-                  href="/quiz"
+                  href="/exams"
                   className={
-                    pathname == "/quiz"
+                    pathname == "/exams"
                       ? "text-primary-light-300 dark:text-primary-dark-300"
                       : ""
                   }
@@ -187,10 +187,10 @@ const Header = () => {
                       ref={menuRef}
                     >
                       <AppLink
-                        href="/quiz"
+                        href="/exams"
                         onClick={() => setIsVisible(false)}
                         className={
-                          pathname == "/quiz"
+                          pathname == "/exams"
                             ? "text-primary-light-300 dark:text-primary-dark-300"
                             : ""
                         }

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./utils/auth";
 import ResponseHandler from "./utils/ResponseHandler";
 
-const protectedRoutes = ["/quiz/*", "/admin/*"];
+const protectedRoutes = ["/exams/*", "/admin/*"];
 export const middleware = async (req: NextRequest) => {
   const pathname = req.nextUrl.pathname
 

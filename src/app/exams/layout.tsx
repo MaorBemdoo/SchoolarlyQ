@@ -1,7 +1,7 @@
 export const metadata = {
   title: {
-    template: "%s - Quiz | SchoolarlyQ",
-    absolute: "Discover Quizzes | SchoolarlyQ",
+    template: "%s - Past Questions | SchoolarlyQ",
+    absolute: "Discover Past Questions | SchoolarlyQ",
   },
 };
 
