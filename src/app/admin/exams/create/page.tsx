@@ -13,6 +13,7 @@ import useAction from "@/hooks/useAction";
 import { createExamAndQuestions } from "@/actions/exam";
 import toast from "@/utils/toast";
 import { AppSwal } from "@/config/swal";
+import { TbAlertTriangle } from "react-icons/tb";
 
 type Question = {
   question: string;
@@ -185,7 +186,7 @@ useEffect(() => {
                 <input {...field} className={`form-input ${errors.course_title ? "error" : ""}`} placeholder="Introduction to Computer Science" />
               )}
             />
-            {errors.course_title && <p className="text-red-500 text-sm">{errors.course_title.message}</p>}
+            {errors.course_title && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.course_title.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -197,7 +198,7 @@ useEffect(() => {
                 <input {...field} className={`form-input ${errors.course_code ? "error" : ""}`} placeholder="CSC101" />
               )}
             />
-            {errors.course_code && <p className="text-red-500 text-sm">{errors.course_code.message}</p>}
+            {errors.course_code && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.course_code.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -220,7 +221,7 @@ useEffect(() => {
                 </select>
               )}
             />
-            {errors.department && <p className="text-red-500 text-sm">{errors.department.message}</p>}
+            {errors.department && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.department.message}</p>}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -240,7 +241,7 @@ useEffect(() => {
                   </select>
                 )}
               />
-              {errors.level && <p className="text-red-500 text-sm">{errors.level.message}</p>}
+              {errors.level && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.level.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -256,7 +257,7 @@ useEffect(() => {
                   </select>
                 )}
               />
-              {errors.semester && <p className="text-red-500 text-sm">{errors.semester.message}</p>}
+              {errors.semester && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.semester.message}</p>}
             </div>
           </div>
 
@@ -270,7 +271,7 @@ useEffect(() => {
                   <input {...field} type="number" className={`form-input ${errors.credit_units ? "error" : ""}`} placeholder="e.g. 3" />
                 )}
               />
-              {errors.credit_units && <p className="text-red-500 text-sm">{errors.credit_units.message}</p>}
+              {errors.credit_units && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.credit_units.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -282,7 +283,7 @@ useEffect(() => {
                   <input {...field} type="number" className={`form-input ${errors.time_allowed ? "error" : ""}`} placeholder="e.g. 60" />
                 )}
               />
-              {errors.time_allowed && <p className="text-red-500 text-sm">{errors.time_allowed.message}</p>}
+              {errors.time_allowed && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.time_allowed.message}</p>}
             </div>
           </div>
 
@@ -296,7 +297,7 @@ useEffect(() => {
                   <input {...field} className={`form-input ${errors.session ? "error" : ""}`} placeholder="e.g. 2023/2024" />
                 )}
               />
-              {errors.session && <p className="text-red-500 text-sm">{errors.session.message}</p>}
+              {errors.session && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.session.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -365,7 +366,7 @@ useEffect(() => {
                     />
                   )}
                 />
-                {questionErrors.questions?.[qIndex]?.question && <p className="text-red-500 text-sm">{questionErrors.questions[qIndex].question?.message}</p>}
+                {questionErrors.questions?.[qIndex]?.question && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{questionErrors.questions[qIndex].question?.message}</p>}
               </div>
 
               {
@@ -400,7 +401,7 @@ useEffect(() => {
                     <input {...field} className={`form-input ${questionErrors.questions?.[qIndex]?.correct_answer ? "error" : ""}`} placeholder="Correct answer" />
                   )}
                 />
-                {questionErrors.questions?.[qIndex]?.correct_answer && <p className="text-red-500 text-sm">{questionErrors.questions[qIndex].correct_answer?.message}</p>}
+                {questionErrors.questions?.[qIndex]?.correct_answer && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{questionErrors.questions[qIndex].correct_answer?.message}</p>}
               </div>
 
               <div className="space-y-2">

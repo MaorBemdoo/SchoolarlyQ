@@ -17,6 +17,7 @@ import * as yup from "yup";
 import { step1RegisterSchema, step2RegisterSchema } from "@/utils/validators";
 import toast from "@/utils/toast";
 import { analyzeMatricNumber } from "@/utils/analyzeMatricNumber";
+import { TbAlertTriangle } from "react-icons/tb";
 
 type Step1Form = yup.InferType<typeof step1RegisterSchema>;
 type Step2Form = yup.InferType<typeof step2RegisterSchema>;
@@ -131,7 +132,7 @@ const Register = () => {
                 <input {...field} placeholder="Full Name" className={`form-input ${step1Errors.full_name ? "error" : ""}`} />
               )}
             />
-            {step1Errors.full_name && <p className="text-red-500 text-sm">{step1Errors.full_name.message}</p>}
+            {step1Errors.full_name && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.full_name.message}</p>}
           </div>
           
           <div>
@@ -142,7 +143,7 @@ const Register = () => {
                 <input {...field} type="email" placeholder="Email" className={`form-input ${step1Errors.email ? "error" : ""}`} />
               )}
             />
-            {step1Errors.email && <p className="text-red-500 text-sm">{step1Errors.email.message}</p>}
+            {step1Errors.email && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.email.message}</p>}
           </div>
           <div className="relative">
             <Controller
@@ -163,7 +164,7 @@ const Register = () => {
             >
               {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
             </div>
-            {step1Errors.password && <p className="text-red-500 text-sm">{step1Errors.password.message}</p>}
+            {step1Errors.password && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.password.message}</p>}
           </div>
           
           <div>
@@ -174,7 +175,7 @@ const Register = () => {
                 <input {...field} type="password" placeholder="Confirm Password" className={`form-input ${step1Errors.confirmPassword ? "error" : ""}`} />
               )}
             />
-            {step1Errors.confirmPassword && <p className="text-red-500 text-sm">{step1Errors.confirmPassword.message}</p>}
+            {step1Errors.confirmPassword && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.confirmPassword.message}</p>}
           </div>
 
           <Button
@@ -209,7 +210,7 @@ const Register = () => {
                 }} placeholder="Matric Number" className={`form-input ${step2Errors.matric_number ? "error" : ""}`} />
               )}
             />
-            {step2Errors.matric_number && <p className="text-red-500 text-sm">{step2Errors.matric_number.message}</p>}
+            {step2Errors.matric_number && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.matric_number.message}</p>}
           </div>
           
           <div>
@@ -229,7 +230,7 @@ const Register = () => {
                 </select>
               )}
             />
-            {step2Errors.department && <p className="text-red-500 text-sm">{step2Errors.department.message}</p>}
+            {step2Errors.department && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.department.message}</p>}
           </div>
           
           <div>
@@ -245,7 +246,7 @@ const Register = () => {
                 </select>
               )}
             />
-            {step2Errors.level && <p className="text-red-500 text-sm">{step2Errors.level.message}</p>}
+            {step2Errors.level && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.level.message}</p>}
           </div>
 
           <Button

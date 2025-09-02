@@ -1,14 +1,18 @@
 "use client";
 
+import { sendEmail } from "@/actions/sendEmail";
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
+import useAction from "@/hooks/useAction";
+import toast from "@/utils/toast";
 import { motion, useScroll, useVelocity } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { BsMenuButtonWide } from "react-icons/bs";
-import { FaPhone, FaRegFileCode } from "react-icons/fa6";
+import { FaRegFileCode } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { ImStatsDots } from "react-icons/im";
-import { IoMail } from "react-icons/io5";
+import { TbAlertTriangle } from "react-icons/tb";
 
 const features = [
   {
@@ -79,20 +83,8 @@ const faqs = [
   },
 ];
 
-const contacts = [
-  {
-    name: "Email",
-    Icon: IoMail,
-    contacts: ["bemdoo.maor1@gmail.com", "adamujighjigh144k@gmail.com"],
-  },
-  {
-    name: "Phone",
-    Icon: FaPhone,
-    contacts: ["+234-814-308-0977", "+234-901-947-6263"],
-  },
-];
-
 export default function Home() {
+  const { execute, status } = useAction(sendEmail)
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
@@ -103,6 +95,33 @@ export default function Home() {
     });
     return () => unsubscribe();
   }, [velocity]);
+
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    values: {
+      email: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
+    const res = await execute({
+      from: data.email,
+      subject: "New message from SchoolarlyQ Contact form",
+      text: data.message,
+    });
+    if(res.status == "failed"){
+      toast.error(res.message || "Error sending message")
+      return;
+    }
+    setValue("email", "")
+    setValue("message", "")
+    toast.success("Message sent successfully")
+  };
 
   return (
     <main>
@@ -312,28 +331,44 @@ export default function Home() {
           <h2 className="text-4xl font-bold">Contact Us</h2>
           <p className="text-lg mt-4">Get in touch with us today!</p>
         </div>
-        <div className="flex flex-col gap-8 items-center justify-evenly sm:flex-row">
-          {contacts.map(({ name, Icon, contacts }, idx) => (
-            <div
-              className="flex flex-col items-center text-center space-y-6"
-              key={idx}
-            >
-              <Icon className="text-6xl" />
-              <h2 className="text-3xl font-bold">{name}</h2>
-              <div className="space-y-2">
-                {contacts.map((contact, idx) => (
-                  <AppLink
-                    href={`${name == "Email" ? "mailto" : "tel"}:${contact}`}
-                    className="block"
-                    key={idx}
-                  >
-                    {contact}
-                  </AppLink>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <form className="space-y-6 max-w-[800px] mx-auto">
+          <div className="space-y-2">
+            <label className="font-semibold">Email*</label>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  message: "Invalid email address",
+                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
+                }
+              }}
+              render={({ field }) => (
+                <input {...field} className={`form-input ${errors.email ? "error" : ""}`} placeholder="you@example.com" />
+              )}
+            />
+            {errors.email && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.email.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <label className="font-semibold">Message*</label>
+            <Controller
+              name="message"
+              control={control}
+              rules={{
+                required: "Message is required",
+                validate: (value) => value.trim() !== "" || "Message is required"
+              }}
+              render={({ field }) => (
+                <textarea rows={6} {...field} className={`form-input resize-none ${errors.message ? "error" : ""}`} placeholder="Your message here..." />
+              )}
+            />
+            {errors.message && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.message.message}</p>}
+          </div>
+          <div className="text-center">
+            <Button onClick={handleSubmit(onSubmit)} loading={status === "loading"} className="w-[100px]">Submit</Button>
+          </div>
+        </form>
       </section>
     </main>
   );

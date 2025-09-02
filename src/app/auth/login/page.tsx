@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { loginSchema } from "@/utils/validators";
 import toast from "@/utils/toast";
+import { TbAlertTriangle } from "react-icons/tb";
 type LoginForm = yup.InferType<typeof loginSchema>;
 
 const Login = () => {
@@ -82,7 +83,7 @@ const Login = () => {
               <input {...field} placeholder="Email or Matric Number" className={`form-input ${errors.email ? "error" : ""}`} />
             )}
           />
-          {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="text-sm text-red-500 flex gap-1 items-center"><TbAlertTriangle />{errors.email.message}</p>}
         </div>
 
         <div className="relative">
@@ -104,7 +105,7 @@ const Login = () => {
           >
             {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
           </div>
-          {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+          {errors.password && <p className="text-sm text-red-500 flex gap-1 items-center"><TbAlertTriangle />{errors.password.message}</p>}
         </div>
 
         <Button
