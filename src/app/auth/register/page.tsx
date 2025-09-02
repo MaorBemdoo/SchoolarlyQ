@@ -2,7 +2,6 @@
 
 import AppLink from "@/components/AppLink";
 import Button from "@/components/Button";
-import { faculties } from "@/data/faculties";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -18,6 +17,8 @@ import { step1RegisterSchema, step2RegisterSchema } from "@/utils/validators";
 import toast from "@/utils/toast";
 import { analyzeMatricNumber } from "@/utils/analyzeMatricNumber";
 import { TbAlertTriangle } from "react-icons/tb";
+import Link from "next/link";
+import { MdOutlineInfo } from "react-icons/md";
 
 type Step1Form = yup.InferType<typeof step1RegisterSchema>;
 type Step2Form = yup.InferType<typeof step2RegisterSchema>;
@@ -118,7 +119,7 @@ const Register = () => {
       <div className="text-center">
         <h1 className="text-2xl font-bold">Register</h1>
         <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
-          Get started with SchoolaryQ
+          { step === 1 ? "Get started with SchoolaryQ" : "Almost there!" }
         </p>
       </div>
 
@@ -194,19 +195,26 @@ const Register = () => {
 
       {step === 2 && (
         <div className="flex flex-col gap-4">
+          <div className="flex gap-2 items-center rounded-md shadow-md bg-blue-100 text-blue-800 p-4">
+            <div className="text-5xl">
+              <MdOutlineInfo />
+            </div>
+            <p className="text-sm">
+              The department and level field cannot be altered. If you feel they don&apos;t resonate with you <Link href="/#contact" className="text-primary-light-300 dark:text-primary-dark-300 hover:underline">contact us</Link>
+            </p>
+          </div>
           <div>
             <Controller
               name="matric_number"
               control={controlStep2}
               render={({ field }) => (
-                <input {...field} onBlur={() => {
-                  field.onBlur();
-                  if(field.value == "") return;
-                  const analysis = analyzeMatricNumber(field.value);
+                <input {...field} onChange={(e) => {
+                  const analysis = analyzeMatricNumber(e.target.value);
                   if (analysis) {
                     setValue("department", analysis.department);
                     setValue("level", analysis.level);
                   }
+                  field.onChange(e.target.value);
                 }} placeholder="Matric Number" className={`form-input ${step2Errors.matric_number ? "error" : ""}`} />
               )}
             />
@@ -218,16 +226,7 @@ const Register = () => {
               name="department"
               control={controlStep2}
               render={({ field }) => (
-                <select {...field} className={`form-input dark:*:text-black ${step2Errors.department ? "error" : ""}`}>
-                  <option value="" disabled>Select Department</option>
-                  {faculties.map(({ faculty, departments }) => (
-                    <optgroup key={faculty} label={faculty}>
-                      {departments.map(({ id, name }) => (
-                        <option key={id} value={name}>{name}</option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
+                <input {...field} placeholder="Department" className={`form-input ${step2Errors.department ? "error" : ""}`} disabled/>
               )}
             />
             {step2Errors.department && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.department.message}</p>}
@@ -238,12 +237,7 @@ const Register = () => {
               name="level"
               control={controlStep2}
               render={({ field }) => (
-                <select {...field} className={`form-input dark:*:text-black ${step2Errors.level ? "error" : ""}`}>
-                  <option value="" disabled>Select Level</option>
-                  {["IJMB", "100", "200", "300", "400", "500", "600", "700"].map((lvl) => (
-                    <option key={lvl} value={lvl}>{lvl}</option>
-                  ))}
-                </select>
+                <input {...field} placeholder="Level" className={`form-input ${step2Errors.level ? "error" : ""}`} disabled/>
               )}
             />
             {step2Errors.level && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.level.message}</p>}

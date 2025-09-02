@@ -27,7 +27,7 @@ export const faculties = [
     ],
   },
   {
-    id: 4,
+    id: 111,
     faculty: "Basic Medical Sciences",
     departments: [
       { id: 10, name: "Nursing" },
