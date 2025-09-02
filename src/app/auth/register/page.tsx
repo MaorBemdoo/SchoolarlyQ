@@ -28,7 +28,7 @@ const Register = () => {
   const step = Number(searchParams.get("step")) || 1;
   const router = useRouter();
   const { data, update, status } = useSession();
-  const { status: registerStatus, res, execute } = useAction(registerUser);
+  const { status: registerStatus, execute } = useAction(registerUser);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -61,7 +61,7 @@ const Register = () => {
       router.push("/auth/register?step=2");
       return;
     }
-    await execute(
+    const res = await execute(
       {
         full_name: values.full_name,
         email: values.email,
@@ -80,7 +80,7 @@ const Register = () => {
   };
 
   const onStep2Submit = async (values: Step2Form) => {
-    await execute(
+    const  res = await execute(
       {
         email: (data && data.user?.email) || "",
         ...values,
