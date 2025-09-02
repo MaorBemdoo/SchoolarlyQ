@@ -19,7 +19,7 @@ const QuizHomePage = () => {
 
   const [mode, setMode] = useState("study");
   const [questionCount, setQuestionCount] = useState(10);
-  const [timer, setTimer] = useState("2");
+  const [timer, setTimer] = useState("3");
 
   const didMountRef = useRef(false);
   const lastParamsRef = useRef<string>(null);
@@ -132,7 +132,7 @@ const QuizHomePage = () => {
                 <select value={timer} onChange={(e) => setTimer(e.target.value)} id="timer" className="form-input" disabled={mode == "exam"}>
                     <option value="none">No Timer</option>
                     <option value="1">1 Minute</option>
-                    <option value="2">2 Minutes</option>
+                    <option value="3">3 Minutes</option>
                     <option value="5">5 Minutes</option>
                 </select>
             </div>
