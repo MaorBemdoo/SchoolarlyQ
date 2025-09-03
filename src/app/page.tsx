@@ -108,7 +108,8 @@ export default function Home() {
     },
   });
 
-  const onSubmit = async (data) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
     const res = await execute({
       from: data.email,
       subject: "New message from SchoolarlyQ Contact form",
