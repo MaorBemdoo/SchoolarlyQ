@@ -12,8 +12,6 @@ export const AppSwal = withReactContent(Swal).mixin({
 
 export const Toast = AppSwal.mixin({
     toast: true,
-    position: typeof window !== "undefined" && window.innerWidth <= 765 ? 'top' : 'top-end',
-    width: typeof window !== "undefined" && window.innerWidth <= 765 ? '90%' : undefined,
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
