@@ -16,7 +16,7 @@ const QuizPage = () => {
   const decoded = res?.data
   const dangerTime = 60;
 
-  const [storedTime, setStoredTime] = useLocalStorage<number | null>("quiz-time-left");
+  const [storedTime, setStoredTime] = useLocalStorage<number | null>("quiz-time-left", null);
   const [timeLeft, setTimeLeft] = useState(storedTime || 0);
   const [hideTimer, setHideTimer] = useState(false);
   const [openExplanation, setOpenExplanation] = useState(false);
@@ -69,7 +69,7 @@ useEffect(() => {
   if(!decoded) return null;
 
   return (
-    <main className="w-full h-[100dvh] p-4 overflow-hidden bg-[url(/register.jpg)] bg-cover bg-center">
+    <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
       <div className={`flex ${ decoded.mode == "study" ? "justify-between" :  "justify-end"} items-center gap-4 h-[50px] *:z-10`}>
         {
           decoded.mode == "study" && (
