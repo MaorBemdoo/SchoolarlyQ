@@ -7,17 +7,19 @@ import ExamCard from "../components/ExamCard";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import Link from "next/link";
 import useAction from "@/hooks/useAction";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getExam, getExams } from "@/actions/exam";
+import { generateQuizSessionToken } from "@/actions/quizAuth";
 
 const QuizHomePage = () => {
   const { id } = useParams()
+  const router = useRouter()
   const { execute: fetchExam, res: examRes } = useAction(getExam)
   const { execute: fetchExams, res: examsRes } = useAction(getExams)
   const exam = examRes?.data
   const relatedExams = examsRes?.data
 
-  const [mode, setMode] = useState("study");
+  const [mode, setMode] = useState<"exam" | "study">("study");
   const [questionCount, setQuestionCount] = useState(10);
   const [timer, setTimer] = useState("3");
 
@@ -53,6 +55,16 @@ const QuizHomePage = () => {
             sort: "desc",
         });
     }, [id, exam?.level, exam?.department, exam?.semester, exam?.session, fetchExams, fetchExam]);
+
+    const startQuiz = async () => {
+      await generateQuizSessionToken({
+        mode,
+        questionCount: mode == "study" ? questionCount : exam.questions,
+        timer: mode == "study" ? timer : exam.time_allowed,
+        examId: id as string,
+      })
+      router.push(`/exams/${id}/quiz`)
+    }
 
     if(!exam) return null;
 
@@ -108,7 +120,7 @@ const QuizHomePage = () => {
                         </div>
                     </div>
                 </div>
-                <select value={mode} onChange={(e) => setMode(e.target.value)} id="mode" className="form-input">
+                <select value={mode} onChange={(e) => setMode(e.target.value as "exam" | "study")} id="mode" className="form-input">
                     <option value="study">Study mode</option>
                     <option value="exam">Exam mode</option>
                 </select>
@@ -152,7 +164,7 @@ const QuizHomePage = () => {
             )
         }
         <div className="text-center">
-          <Button>Start Quiz</Button>
+          <Button onClick={startQuiz}>Start Quiz</Button>
         </div>
       </section>
       {

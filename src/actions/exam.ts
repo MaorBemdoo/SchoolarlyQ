@@ -7,6 +7,7 @@ import connectDB from "@/utils/db"
 import ResponseHandler from "@/utils/ResponseHandler"
 import { examSchema, questionSchema, validate } from "@/utils/validators"
 import { createQuestion } from "./question"
+import { cookies } from "next/headers"
 
 export async function getExams(filter: Record<string, string> = {}){
     await connectDB()
@@ -92,4 +93,8 @@ export async function getExam(id: string){
         logger.error(error)
         return ResponseHandler("failed", error.message || "Error retrieving exam")
     }
+}
+
+export async function endExam(){
+    (await cookies()).delete("exam-token")
 }

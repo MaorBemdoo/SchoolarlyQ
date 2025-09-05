@@ -49,14 +49,6 @@ export async function createQuestion(
   }
 }
 
-export async function getQuestions() {
-  return ResponseHandler("success", "Questions retrieved successfully", {
-    data: [{
-        question: "What is the capital of France?",
-        options: ["Berlin", "Madrid", "Paris", "Rome"],
-        correct_answer: "Paris",
-        explanation: "Paris is the capital and most populous city of France.",
-        course: "Geography"
-    }],
-  });
-}
+// export async function getQuestions(examId: string, questions?: number) {
+  
+// }
