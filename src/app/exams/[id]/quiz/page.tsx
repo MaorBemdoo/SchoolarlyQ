@@ -101,7 +101,7 @@ useEffect(() => {
           )
         }
       </div>
-      <motion.div initial={{y: 30, opacity: 0}} animate={{y: 0, opacity: 1}} className="grid place-content-center h-full *:z-10">
+      <motion.div initial={{y: 30, opacity: 0}} animate={{y: 0, opacity: 1}} className="grid place-content-center h-[calc(100%-50px)] *:z-10">
         <div className="max-w-[500px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4">
             <div className="text-center font-semibold"><span className="text-lg">1</span><span className="text-2xl">/{decoded?.questionCount}</span></div>
             <div className="p-4 border bg-white rounded-md shadow-inner dark:bg-gray-800">
