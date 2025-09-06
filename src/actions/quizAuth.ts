@@ -1,6 +1,6 @@
-"use server"
+"use server";
 
-import jwt from "jsonwebtoken"; 
+import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import ResponseHandler from "@/utils/ResponseHandler";
 
@@ -10,7 +10,7 @@ export async function generateQuizSessionToken({
   examId,
   mode,
   questionCount,
-  timer
+  timer,
 }: {
   examId: string;
   mode: "exam" | "study";
@@ -23,16 +23,16 @@ export async function generateQuizSessionToken({
         examId,
         mode,
         questionCount,
-        timer
+        timer,
       },
       QUIZ_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "24h" },
     );
     (await cookies()).set("exam-token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
     });
     return ResponseHandler("success", "Token generated successfully", token);
   } catch {
@@ -50,8 +50,11 @@ export async function verifyQuizSessionToken(examId: string, token?: string) {
       throw new Error("TokenInvalidError");
     }
     return ResponseHandler("success", "Token verification successful", decoded);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    return ResponseHandler("failed", err.message || "Token verification failed");
+    return ResponseHandler(
+      "failed",
+      err.message || "Token verification failed",
+    );
   }
 }

@@ -3,7 +3,7 @@
 import { questionRepository } from "@/repository/question.repository";
 
 export const questionService = {
-    async createQuestion(data: any){
-        return questionRepository.create(data);
-    },
-}
+  async createQuestion(data: any) {
+    return questionRepository.create(data);
+  },
+};
