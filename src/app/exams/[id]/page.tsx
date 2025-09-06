@@ -8,14 +8,18 @@ import { FaRegCircleQuestion } from "react-icons/fa6";
 import Link from "next/link";
 import useAction from "@/hooks/useAction";
 import { useParams, useRouter } from "next/navigation";
-import { getExam, getExams } from "@/actions/exam";
-import { generateQuizSessionToken } from "@/actions/quizAuth";
+import { getExam, getExams, startExam } from "@/actions/exam";
+import toast from "@/utils/toast";
+import { useLocalStorage } from "react-use";
 
 const QuizHomePage = () => {
   const { id } = useParams()
   const router = useRouter()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_storedQuiz, setStoredQuiz] = useLocalStorage("quiz");
   const { execute: fetchExam, res: examRes } = useAction(getExam)
   const { execute: fetchExams, res: examsRes } = useAction(getExams)
+  const { execute: startQuiz, status: startQuizStatus } = useAction(startExam)
   const exam = examRes?.data
   const relatedExams = examsRes?.data
 
@@ -56,14 +60,24 @@ const QuizHomePage = () => {
         });
     }, [id, exam?.level, exam?.department, exam?.semester, exam?.session, fetchExams, fetchExam]);
 
-    const startQuiz = async () => {
-      await generateQuizSessionToken({
+    const handleStartQuiz = async () => {
+      const res = await startQuiz({
         mode,
-        questionCount: mode == "study" ? questionCount : exam.questions,
+        type: exam.type,
+        questionCount: mode == "study" ? ( exam.questions <= 10 ? exam.questions : questionCount ) : exam.questions,
         timer: mode == "study" ? timer : exam.time_allowed,
-        examId: id as string,
+        examId: id
+      });
+      if(res.status == "failed"){
+        toast.error(res.message)
+        return
+      }
+      setStoredQuiz({
+        timeLeft: null,
+        currentQuestion: 1,
+        selectedAnswer: null
       })
-      router.push(`/exams/${id}/quiz`)
+      router.push(`/exams/${id}/quiz`);
     }
 
     if(!exam) return null;
@@ -164,7 +178,7 @@ const QuizHomePage = () => {
             )
         }
         <div className="text-center">
-          <Button onClick={startQuiz}>Start Quiz</Button>
+          <Button onClick={handleStartQuiz} loading={startQuizStatus === "loading"} className="w-[120px] whitespace-nowrap">Start Quiz</Button>
         </div>
       </section>
       {

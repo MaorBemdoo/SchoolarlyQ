@@ -95,6 +95,19 @@ export async function getExam(id: string){
     }
 }
 
+export async function startExam(options: { examId: string, type: string, mode: "exam" | "study", questionCount: number, timer: number }){
+    await connectDB()
+    const logger = await initLogger()
+    try {
+        await examService.startExam(options)
+        return ResponseHandler("success", "Exam started successfully")
+        
+    } catch (error: any) {
+        logger.error(error)
+        return ResponseHandler("failed", error.message || "Failed to start exam")
+    }
+}
+
 export async function endExam(){
     (await cookies()).delete("exam-token")
 }

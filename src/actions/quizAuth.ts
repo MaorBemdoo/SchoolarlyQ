@@ -10,34 +10,35 @@ export async function generateQuizSessionToken({
   examId,
   mode,
   questionCount,
-  timer
+  timer,
+  questionIds,
+  type
 }: {
   examId: string;
   mode: "exam" | "study";
+  type: string;
   questionCount?: number;
   timer: number;
+  questionIds: string[];
 }) {
-  try {
-    const token = jwt.sign(
-      {
-        examId,
-        mode,
-        questionCount,
-        timer
-      },
-      QUIZ_SECRET,
-      { expiresIn: "24h" }
-    );
-    (await cookies()).set("exam-token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
-    return ResponseHandler("success", "Token generated successfully", token);
-  } catch {
-    return ResponseHandler("failed", "Failed to generate quiz session token");
-  }
+  const token = jwt.sign(
+    {
+      examId,
+      mode,
+      type,
+      questionCount,
+      timer,
+      questionIds
+    },
+    QUIZ_SECRET,
+    { expiresIn: "24h" }
+  );
+  (await cookies()).set("exam-token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
 }
 
 export async function verifyQuizSessionToken(examId: string, token?: string) {
