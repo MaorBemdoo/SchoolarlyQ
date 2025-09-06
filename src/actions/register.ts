@@ -24,14 +24,18 @@ interface StepTwoData {
 
 export async function registerUser(
   data: StepOneData | StepTwoData,
-  step: 1 | 2 = 1
+  step: 1 | 2 = 1,
 ) {
-  await connectDB()
+  await connectDB();
   const logger = await initLogger();
 
   if (step === 1) {
-    const { full_name, email, password, type = "credentials" } =
-      data as StepOneData;
+    const {
+      full_name,
+      email,
+      password,
+      type = "credentials",
+    } = data as StepOneData;
 
     if (type === "credentials") {
       if (!full_name || !email || !password) {
@@ -55,17 +59,29 @@ export async function registerUser(
           redirect: false,
         });
 
-        logger.info({ id: newUser._id }, "User created and signed in successfully");
+        logger.info(
+          { id: newUser._id },
+          "User created and signed in successfully",
+        );
 
-        return ResponseHandler("success", "User created and signed in successfully");
+        return ResponseHandler(
+          "success",
+          "User created and signed in successfully",
+        );
       } catch (err: any) {
         logger.error(err, "Error Registering User");
-        return ResponseHandler("failed", err.message || "Error registering user");
+        return ResponseHandler(
+          "failed",
+          err.message || "Error registering user",
+        );
       }
     } else {
       await signIn("google");
       logger.info("User created and signed in successfully");
-      return ResponseHandler("success", "User created and signed in successfully");
+      return ResponseHandler(
+        "success",
+        "User created and signed in successfully",
+      );
     }
   }
 
@@ -73,13 +89,15 @@ export async function registerUser(
 
   if (!matric_number || !department || !level || !email) {
     return ResponseHandler("failed", "Missing required fields");
-    };
+  }
 
-  const existingMatricNumber = await userService.getUserByMatricNumber(
-    matric_number
-  );
+  const existingMatricNumber =
+    await userService.getUserByMatricNumber(matric_number);
   if (existingMatricNumber) {
-    return ResponseHandler("failed", "Hmmm... Are you sure that's your matric number");
+    return ResponseHandler(
+      "failed",
+      "Hmmm... Are you sure that's your matric number",
+    );
   }
 
   try {

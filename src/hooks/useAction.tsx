@@ -8,15 +8,18 @@ const useAction = (action: (...args: any) => Promise<ActionResponse>) => {
   const [res, setRes] = useState<ActionResponse | null>(null);
   const [status, setStatus] = useState<Status>("idle");
 
-  const execute = useCallback(async (...args: any) => {
-    setStatus("loading");
-    const res = await action(...args);
-    setStatus(res.status);
-    setRes(res);
-    return res;
-  }, [action]);
+  const execute = useCallback(
+    async (...args: any) => {
+      setStatus("loading");
+      const res = await action(...args);
+      setStatus(res.status);
+      setRes(res);
+      return res;
+    },
+    [action],
+  );
 
   return { status, res, execute };
 };
 
-export default useAction
+export default useAction;

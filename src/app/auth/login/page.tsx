@@ -80,10 +80,19 @@ const Login = () => {
             name="email"
             control={control}
             render={({ field }) => (
-              <input {...field} placeholder="Email or Matric Number" className={`form-input ${errors.email ? "error" : ""}`} />
+              <input
+                {...field}
+                placeholder="Email or Matric Number"
+                className={`form-input ${errors.email ? "error" : ""}`}
+              />
             )}
           />
-          {errors.email && <p className="text-sm text-red-500 flex gap-1 items-center"><TbAlertTriangle />{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-sm text-red-500 flex gap-1 items-center">
+              <TbAlertTriangle />
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className="relative">
@@ -105,7 +114,12 @@ const Login = () => {
           >
             {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
           </div>
-          {errors.password && <p className="text-sm text-red-500 flex gap-1 items-center"><TbAlertTriangle />{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-sm text-red-500 flex gap-1 items-center">
+              <TbAlertTriangle />
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <Button
@@ -117,7 +131,10 @@ const Login = () => {
           Submit
         </Button>
 
-        <AppLink href="/auth/register" className="self-end text-sm hover:underline">
+        <AppLink
+          href="/auth/register"
+          className="self-end text-sm hover:underline"
+        >
           Don&apos;t have an account? Register
         </AppLink>
       </div>

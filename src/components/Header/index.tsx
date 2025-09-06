@@ -84,8 +84,7 @@ const Header = () => {
                 >
                   Discover
                 </AppLink>
-                {
-                  (data?.user as any)?.role == "admin" && (
+                {(data?.user as any)?.role == "admin" && (
                   <AppLink
                     href="/admin"
                     className={
@@ -96,8 +95,7 @@ const Header = () => {
                   >
                     Admin
                   </AppLink>
-                  )
-                }
+                )}
               </div>
               <div className="flex items-center gap-5">
                 {status == "authenticated" && (
@@ -197,21 +195,19 @@ const Header = () => {
                       >
                         Discover
                       </AppLink>
-                      {
-                        (data?.user as any)?.role == "admin" && (
-                          <AppLink
-                            href="/admin"
-                            onClick={() => setIsVisible(false)}
-                            className={
-                              pathname.startsWith("/admin")
-                                ? "text-primary-light-300 dark:text-primary-dark-300"
-                                : ""
-                            }
-                          >
-                            Admin
-                          </AppLink>
-                        )
-                      }
+                      {(data?.user as any)?.role == "admin" && (
+                        <AppLink
+                          href="/admin"
+                          onClick={() => setIsVisible(false)}
+                          className={
+                            pathname.startsWith("/admin")
+                              ? "text-primary-light-300 dark:text-primary-dark-300"
+                              : ""
+                          }
+                        >
+                          Admin
+                        </AppLink>
+                      )}
                       {status == "loading" ? (
                         <span className="loading loading-spinner" />
                       ) : status == "authenticated" ? (

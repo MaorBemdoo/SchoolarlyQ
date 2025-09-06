@@ -20,9 +20,9 @@ interface BulkQuestions {
 
 export async function createQuestion(
   data: SingleQuestion | BulkQuestions,
-  type: "single" | "bulk" = "single"
+  type: "single" | "bulk" = "single",
 ) {
-    await connectDB()
+  await connectDB();
   const logger = await initLogger();
 
   try {
@@ -31,18 +31,23 @@ export async function createQuestion(
     } else if (type === "bulk") {
       const { questions } = data as BulkQuestions;
       if (!Array.isArray(questions) || questions.length === 0) {
-        return ResponseHandler("failed", "Questions array is required for bulk creation");
+        return ResponseHandler(
+          "failed",
+          "Questions array is required for bulk creation",
+        );
       }
       await Promise.all(questions.map((q) => validate(questionSchema, q)));
     } else {
       return ResponseHandler("failed", "Invalid type parameter");
-      };
+    }
 
-    await questionService.createQuestion(type === "bulk" ? (data as BulkQuestions).questions : data);
+    await questionService.createQuestion(
+      type === "bulk" ? (data as BulkQuestions).questions : data,
+    );
     logger.info("Question(s) created successfully");
 
     return ResponseHandler("success", "Question(s) created successfully");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     logger.error(err, "Error creating question");
     return ResponseHandler("failed", err.message || "Error creating question");
@@ -50,5 +55,5 @@ export async function createQuestion(
 }
 
 // export async function getQuestions(examId: string, questions?: number) {
-  
+
 // }

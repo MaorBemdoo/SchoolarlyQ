@@ -84,7 +84,7 @@ const faqs = [
 ];
 
 export default function Home() {
-  const { execute, status } = useAction(sendEmail)
+  const { execute, status } = useAction(sendEmail);
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
@@ -115,13 +115,13 @@ export default function Home() {
       subject: "New message from SchoolarlyQ Contact form",
       text: data.message,
     });
-    if(res.status == "failed"){
-      toast.error(res.message || "Error sending message")
+    if (res.status == "failed") {
+      toast.error(res.message || "Error sending message");
       return;
     }
-    setValue("email", "")
-    setValue("message", "")
-    toast.success("Message sent successfully")
+    setValue("email", "");
+    setValue("message", "");
+    toast.success("Message sent successfully");
   };
 
   return (
@@ -342,14 +342,23 @@ export default function Home() {
                 required: "Email is required",
                 pattern: {
                   message: "Invalid email address",
-                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
-                }
+                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                },
               }}
               render={({ field }) => (
-                <input {...field} className={`form-input ${errors.email ? "error" : ""}`} placeholder="you@example.com" />
+                <input
+                  {...field}
+                  className={`form-input ${errors.email ? "error" : ""}`}
+                  placeholder="you@example.com"
+                />
               )}
             />
-            {errors.email && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
             <label className="font-semibold">Message*</label>
@@ -358,16 +367,33 @@ export default function Home() {
               control={control}
               rules={{
                 required: "Message is required",
-                validate: (value) => value.trim() !== "" || "Message is required"
+                validate: (value) =>
+                  value.trim() !== "" || "Message is required",
               }}
               render={({ field }) => (
-                <textarea rows={6} {...field} className={`form-input resize-none ${errors.message ? "error" : ""}`} placeholder="Your message here..." />
+                <textarea
+                  rows={6}
+                  {...field}
+                  className={`form-input resize-none ${errors.message ? "error" : ""}`}
+                  placeholder="Your message here..."
+                />
               )}
             />
-            {errors.message && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{errors.message.message}</p>}
+            {errors.message && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {errors.message.message}
+              </p>
+            )}
           </div>
           <div className="text-center">
-            <Button onClick={handleSubmit(onSubmit)} loading={status === "loading"} className="w-[100px]">Submit</Button>
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              loading={status === "loading"}
+              className="w-[100px]"
+            >
+              Submit
+            </Button>
           </div>
         </form>
       </section>

@@ -135,9 +135,11 @@ const Quiz = () => {
             />
           </div>
           <Filter
-            data={faculties.flatMap((faculty) =>
-              faculty.departments.map((dept) => dept.name),
-            ).sort()}
+            data={faculties
+              .flatMap((faculty) =>
+                faculty.departments.map((dept) => dept.name),
+              )
+              .sort()}
             checked={params.departments as string[]}
             label="Departments"
             setParams={setParams}
@@ -269,43 +271,43 @@ const Quiz = () => {
           </div>
           {exams?.metadata?.pages > 1 && (
             <div className="flex justify-center items-center gap-4 *:size-10 *:p-0">
-              {
-                params.page && params.page !== "1" && (
+              {params.page && params.page !== "1" && (
+                <Button
+                  variant="outlined"
+                  disabled={status === "loading"}
+                  onClick={() =>
+                    setParams({
+                      ...params,
+                      page: String(Number(params.page || "1") - 1),
+                    })
+                  }
+                >
+                  <FaChevronLeft className="flex m-auto" />
+                </Button>
+              )}
+              {Array.from({ length: exams?.metadata?.pages }).map((_, i) => (
+                <Button
+                  key={i}
+                  variant={`${!params.page || params.page == String(i + 1) ? "standard" : "outlined"}`}
+                >
+                  {i + 1}
+                </Button>
+              ))}
+              {params.page &&
+                params.page !== String(exams?.metadata?.pages) && (
                   <Button
                     variant="outlined"
                     disabled={status === "loading"}
                     onClick={() =>
                       setParams({
                         ...params,
-                        page: String(Number(params.page || "1") - 1),
-                      })
-                    }
-                  >
-                    <FaChevronLeft className="flex m-auto" />
-                  </Button>
-                )
-              }
-              {
-                Array.from({ length: exams?.metadata?.pages }).map((_, i) => (
-                  <Button key={i} variant={`${!params.page || params.page == String(i + 1) ? "standard" : "outlined"}`}>{i + 1}</Button>
-                ))
-              }
-              {
-                params.page && params.page !== String(exams?.metadata?.pages) && (
-                  <Button
-                    variant="outlined"
-                    disabled={status === "loading"}
-                    onClick={() =>
-                      setParams({
-                        ...params,
-                        page: String(Number(params.page || "1") + 1)
+                        page: String(Number(params.page || "1") + 1),
                       })
                     }
                   >
                     <FaChevronRight className="flex m-auto" />
                   </Button>
-                )
-              }
+                )}
             </div>
           )}
         </div>
