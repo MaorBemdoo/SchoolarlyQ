@@ -11,6 +11,7 @@ import useAction from "@/hooks/useAction";
 import { verifyQuizSessionToken } from "@/actions/quizAuth";
 import { useParams, useRouter } from "next/navigation";
 import { getQuestion, verifyAnswer } from "@/actions/question";
+import Confetti from "react-confetti";
 
 const QuizPage = () => {
   const { res: checkAnswerRes, execute: checkAnswer, status: checkAnswerStatus } = useAction(verifyAnswer)
@@ -22,7 +23,6 @@ const QuizPage = () => {
 
   const [storedQuiz, setStoredQuiz] = useLocalStorage<any>("quiz", null);
   const [timeLeft, setTimeLeft] = useState(storedQuiz ? storedQuiz.timeLeft : null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentQuestion, setCurrentQuestion] = useState(storedQuiz ? storedQuiz.currentQuestion : 1)
   const [selectedAnswer, setSelectedAnswer] = useState(storedQuiz ? storedQuiz.selectedAnswer : null)
   const [hideTimer, setHideTimer] = useState(false);
@@ -34,67 +34,97 @@ const QuizPage = () => {
   useEffect(() => {
     verify(id);
   }, [id, verify]);
+
+  useEffect(() => {
+    if(!checkAnswerRes?.data?.isCorrect){
+      setOpenExplanation(true)
+    }
+  }, [checkAnswerRes?.data?.isCorrect])
   
   useEffect(() => {
     if(!decoded) return;
-    executeGetQuestion(decoded.questionIds[0])
+    executeGetQuestion(decoded.questionIds[currentQuestion - 1])
     if(!storedQuiz || storedQuiz.timeLeft !== null){
       setTimeLeft(storedQuiz?.timeLeft ?? 0);
     } else {
       setTimeLeft(Number(decoded.timer) * 60);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decoded, executeGetQuestion])
-
-  // useEffect(() => {
-  //   setStoredQuiz({
-  //     ...storedQuiz,
-  //     currentQuestion
-  //   })
-  // }, [currentQuestion, setStoredQuiz, storedQuiz])
+  }, [decoded, currentQuestion, executeGetQuestion])
 
   useEffect(() => {
     if(!decoded && !question?.options) return;
-    if(selectedAnswer !== null){
+    if(selectedAnswer !== null && decoded?.mode == "study"){
       checkAnswer(decoded?.questionIds[currentQuestion - 1], decoded?.mode, question?.options[selectedAnswer])
     }
     setStoredQuiz({
       ...storedQuiz,
-      selectedAnswer
+      selectedAnswer,
+      currentQuestion
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkAnswer, currentQuestion, decoded, question?.options, selectedAnswer, setStoredQuiz])
 
 useEffect(() => {
-  if(decoded?.timer === "none" || timeLeft == null || selectedAnswer !== null) return;
-    if (timeLeft <= 0){
-      toast.warn("Your time is up!")
-      if(checkAnswerStatus == "idle" && decoded?.questionIds){
-          checkAnswer(decoded.questionIds[currentQuestion - 1], decoded?.mode, "")
-      }
-      return
-    };
-    if (timeLeft === dangerTime){
-        toast.warn(`You have ${dangerTime / 60} minute left`)
-    };
+  if (decoded?.timer === "none" || timeLeft == null || (selectedAnswer !== null && decoded?.mode == "study")) return;
 
-    const interval = setInterval(() => {
+  let interval: NodeJS.Timeout | null = null;
+
+  if (timeLeft > 0) {
+    if (timeLeft === dangerTime) {
+      toast.warn(`You have ${dangerTime / 60} minute left`);
+    }
+    interval = setInterval(() => {
       setTimeLeft((prev: any) => {
         const newTime = prev > 0 ? prev - 1 : 0;
         setStoredQuiz({
-          ...storedQuiz, 
-          timeLeft: newTime
+          ...storedQuiz,
+          timeLeft: newTime,
         });
         return newTime;
       });
     }, 1000);
+  } else if (timeLeft === 0) {
+    toast.warn("Your time is up!");
+    if (checkAnswerStatus == "idle" && decoded?.questionIds) {
+      checkAnswer(decoded.questionIds[currentQuestion - 1], decoded?.mode, "");
+    }
+  }
 
-    return () => clearInterval(interval);
-  }, [checkAnswer, checkAnswerStatus, currentQuestion, dangerTime, decoded?.mode, decoded?.questionIds, decoded?.timer, id, selectedAnswer, setStoredQuiz, storedQuiz, timeLeft]);
+  return () => {
+    if (interval) clearInterval(interval);
+  };
+}, [checkAnswer, checkAnswerStatus, currentQuestion, dangerTime, decoded, selectedAnswer, setStoredQuiz, storedQuiz, timeLeft]);
 
   const h = Math.floor(timeLeft / 3600);
   const m = Math.floor((timeLeft % 3600) / 60);
   const s = timeLeft % 60;
+
+  const handleSubmit = async () => {
+    const newTime = Number(decoded.timer) * 60;
+    if(decoded?.mode == "study") {
+      if(checkAnswerStatus == "loading") return;
+      if(checkAnswerStatus == "idle"){
+        toast.error("Please select an answer")
+        return
+      }
+      setTimeLeft(newTime);
+    }
+    if(storedQuiz?.currentQuestion == decoded.questionCount){
+      toast.success("Exam submitted successfully")
+      // submit function
+      await endExam()
+      return
+    }
+    setSelectedAnswer(null)
+    setStoredQuiz({
+      ...storedQuiz,
+      timeLeft: decoded?.mode == "study" ? newTime : storedQuiz.timeLeft,
+      currentQuestion: currentQuestion + 1,
+      selectedAnswer: null,
+    });
+    setCurrentQuestion((prev: number) => prev + 1);
+  }
 
   const leaveAndEndExam = async () => {
     await endExam()
@@ -107,7 +137,8 @@ useEffect(() => {
 
   return (
     <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
-      <div className={`flex ${ decoded.mode == "study" ? "justify-between" :  "justify-end"} items-center gap-4 h-[50px] *:z-10`}>
+      { decoded.mode == "study" && checkAnswerRes?.data?.isCorrect && <Confetti className="z-10" /> }
+      <div className={`flex ${ decoded.mode == "study" ? "justify-between" :  "justify-end"} items-center gap-4 h-[50px]`}>
         {
           decoded.mode == "study" && (
             <motion.div initial={{x: "-100%", opacity: 0}} animate={{x: 0, opacity: 1}}>
@@ -149,7 +180,7 @@ useEffect(() => {
                ) : (
                   question?.options ? (
                     question?.options.map((opt: any, i: number) => (
-                        <div className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || checkAnswerStatus !== "idle" ? "pointer-events-none" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "bg-green-700" : ""}`} onClick={() => {
+                        <div className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${decoded.mode == "exam" && selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "bg-green-700" : ""}`} onClick={() => {
                           setSelectedAnswer(i)
                         }} key={i}>{opt}</div>
                     ))
@@ -162,7 +193,7 @@ useEffect(() => {
             </div>
             {
               (timeLeft <= 0 || checkAnswerStatus == "success") && (
-                <div className={`collapse collapse-arrow text-white bg-green-700 ring ring-green-800 ${openExplanation || !checkAnswerRes?.data?.isCorrect ? "collapse-open" : ""}`}>
+                <div className={`collapse collapse-arrow text-white bg-green-700 ring ring-green-800 ${openExplanation ? "collapse-open" : ""}`}>
                   <input type="radio" name="accordion" />
                   <div className="px-4 collapse-title font-semibold" onClick={() => setOpenExplanation(!openExplanation)}>Explanation</div>
                   <div className="px-4 collapse-content">{question?.explanation}</div>
@@ -170,7 +201,7 @@ useEffect(() => {
               )
             }
             <div className="text-center">
-                <Button className={`${timeLeft <= 0 || checkAnswerStatus == "success" ? "animate-bounce" : ""}`} onClick={() => {}}>{ storedQuiz?.currentQuestion == decoded.questionCount ? "Submit" : "Next" }</Button>
+                <Button className={`${timeLeft <= 0 || checkAnswerStatus == "success" || (decoded?.mode == "study" && selectedAnswer !== null) ? "animate-bounce" : ""}`} disabled={checkAnswerStatus == "loading"} onClick={handleSubmit}>{ storedQuiz?.currentQuestion == decoded.questionCount ? "Submit" : "Next" }</Button>
             </div>
         </div>
       </motion.div>
