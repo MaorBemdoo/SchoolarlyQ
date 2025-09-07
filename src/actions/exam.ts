@@ -53,10 +53,13 @@ export async function createExamAndQuestions(exam: any, questions: any[]){
 
     questions = questions.map(q => ({
         ...q,
-        options: exam.type == "theory" ? undefined : q.options?.filter((val: string) => val?.trim() !== ""),
+        options: exam.type == "theory" ? undefined : q.options?.filter((val: string) => val?.trim() !== "" && val != null),
         course: "fallback"
     }))
     try {
+        if(exam.type == "objective" && questions.length <= 10){
+            throw new Error("At least 10 questions are required for objective exams")
+        }
         await validate(examSchema, exam)
         const [a, b] = exam.session.split("/")
         if((Number(a) + 1) !== Number(b)){

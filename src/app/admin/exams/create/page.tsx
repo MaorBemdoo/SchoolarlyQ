@@ -60,6 +60,7 @@ const CreateQuestionsPage = () => {
     watch: watchQuestions,
     handleSubmit: handleQuestionsSubmit,
     reset: resetQuestions,
+    getValues: getQuestionsValues,
     formState: { errors: questionErrors, isValid: isQuestionsValid }
   } = useForm<{ questions: Question[]}>({
     defaultValues: {
@@ -82,27 +83,17 @@ const CreateQuestionsPage = () => {
 
 useEffect(() => {
   const subscription = watch((formValues) => {
-    setSavedProgress((prev: any) => ({
+    setSavedProgress({
       exam: formValues,
-      questions: prev.questions.map((q: any) => {
-        if (formValues.type === "objective") {
-          return {
-            ...q,
-            options: q.options || ["", "", "", ""],
-          };
-        } else {
-          return {
-            question: q.question,
-            correct_answer: q.correct_answer,
-            explanation: q.explanation,
-          };
-        }
-      }) || fields
-    }));
+      questions: getQuestionsValues().questions.map((q) => ({
+        ...q,
+        options: formValues.type === "objective" ? q?.options : undefined
+      })),
+    });
   });
 
   return () => subscription.unsubscribe();
-}, [watch, fields, setSavedProgress]);
+}, [watch, getQuestionsValues, setSavedProgress]);
 
 
 useEffect(() => {
@@ -150,6 +141,7 @@ useEffect(() => {
             type:  "objective",
             tags: [],
           });
+          reset();
           resetQuestions({
             questions: [{ question: "", options: ["", "", "", ""], correct_answer: "", explanation: "" }]
           })
