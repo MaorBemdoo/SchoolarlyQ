@@ -27,7 +27,6 @@ const QuizPage = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(storedQuiz ? storedQuiz.selectedAnswer : null)
   const [hideTimer, setHideTimer] = useState(false);
   const [openExplanation, setOpenExplanation] = useState(false);
-  // const [disableOptions, setDisableOptions] = useState(false);
   const { id } = useParams();
   const router = useRouter();
   
