@@ -134,5 +134,5 @@ export const faculties = [
     id: 15,
     faculty: "School of Basic Studies",
     departments: [{ id: 55, name: "IJMB" }],
-  }
+  },
 ];

@@ -10,7 +10,7 @@ export interface AppLinkProps {
   children: React.ReactNode;
   className?: string;
   href: string | URL;
-  onClick?: MouseEventHandler<HTMLAnchorElement>
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
 export interface ButtonProps {
@@ -43,5 +43,5 @@ export interface ActionResponse {
   status: "success" | "failed";
   message: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any
+  data?: any;
 }

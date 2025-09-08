@@ -10,7 +10,11 @@ const questionSchema = new mongoose.Schema(
     options: [{ type: String, trim: true }],
     correct_answer: { type: String, required: true, trim: true },
     explanation: { type: String },
-    course: { type: mongoose.Schema.Types.ObjectId, ref: "Exam", required: true },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Exam",
+      required: true,
+    },
   },
   { timestamps: true },
 );
