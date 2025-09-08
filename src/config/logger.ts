@@ -30,6 +30,6 @@ export default async function initLogger(): Promise<Logger> {
     });
     return pino(stream);
   } catch {
-    return pino({ level: "info" }); 
+    return pino({ level: "info" });
   }
 }

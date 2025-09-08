@@ -7,7 +7,7 @@ const Button = ({
   variant = "standard",
   color = "orange",
   loading,
-  disabled = false
+  disabled = false,
 }: ButtonProps) => {
   const baseClass =
     "transition px-4 py-2 rounded text-secondary-light-200 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:scale-100 focus:scale-[0.98] dark:text-secondary-dark-200";
@@ -47,7 +47,11 @@ const Button = ({
       onClick={onClick}
       disabled={disabled || loading}
     >
-      {loading ? <span className="inline-block size-5 border-2 border-t-2 border-t-white border-white/40 rounded-full animate-spin" /> : children}
+      {loading ? (
+        <span className="inline-block size-5 border-2 border-t-2 border-t-white border-white/40 rounded-full animate-spin" />
+      ) : (
+        children
+      )}
     </button>
   );
 };

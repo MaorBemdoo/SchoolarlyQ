@@ -17,8 +17,8 @@ export const examRepository = {
       query.semester = { $in: filter.semesters };
     }
 
-    if(filter.sessions && filter.sessions.length > 0){
-        query.session = { $in: filter.sessions }
+    if (filter.sessions && filter.sessions.length > 0) {
+      query.session = { $in: filter.sessions };
     }
 
     if (filter.q) {
@@ -33,7 +33,10 @@ export const examRepository = {
     else if (filter?.sort === "asc") sort = { course_code: 1 };
     else if (filter?.sort === "desc") sort = { course_code: -1 };
 
-    return Exam.find(query).limit(Number(filter.limit)).skip((Number(filter.page) - 1) * Number(filter.limit)).sort(sort);
+    return Exam.find(query)
+      .limit(Number(filter.limit))
+      .skip((Number(filter.page) - 1) * Number(filter.limit))
+      .sort(sort);
   },
 
   async findById(id: string) {
@@ -43,7 +46,7 @@ export const examRepository = {
   async create(exam: any) {
     return Exam.create(exam);
   },
-  
+
   async getSessions() {
     return Exam.distinct("session").sort({ session: -1 });
   },

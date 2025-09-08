@@ -3,21 +3,21 @@ import { verifyQuizSessionToken } from "@/actions/quizAuth";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Quiz | SchoolarlyQ"
+  title: "Quiz | SchoolarlyQ",
 };
 
 export default async function QuizLayout({
   children,
-  params
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: any
+  params: any;
 }>) {
-    const { id } = await params
-   const { status } = await verifyQuizSessionToken(id);
-    if (status === "failed") {
-        redirect(`/exams/${id}`)
-    }
+  const { id } = await params;
+  const { status } = await verifyQuizSessionToken(id);
+  if (status === "failed") {
+    redirect(`/exams/${id}`);
+  }
 
   return children;
 }

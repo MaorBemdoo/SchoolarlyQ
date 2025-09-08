@@ -12,13 +12,13 @@ import connectDB from "./db";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   logger: {
     async error(error) {
-      (await initLogger()).error(error)
+      (await initLogger()).error(error);
     },
     async warn(code) {
-      (await initLogger()).warn(code)
+      (await initLogger()).warn(code);
     },
     async debug(message, metadata) {
-      (await initLogger()).debug(metadata, message)
+      (await initLogger()).debug(metadata, message);
     },
   },
   // adapter: MongoDBAdapter(clientPromise),
@@ -64,9 +64,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           status = 400;
         }
 
-        await connectDB()
+        await connectDB();
 
-        const user = await userService.getUserByUsername(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByEmail(credentials.usernameOrEmailOrMatric as string) || await userService.getUserByMatricNumber(credentials.usernameOrEmailOrMatric as string)
+        const user =
+          (await userService.getUserByUsername(
+            credentials.usernameOrEmailOrMatric as string,
+          )) ||
+          (await userService.getUserByEmail(
+            credentials.usernameOrEmailOrMatric as string,
+          )) ||
+          (await userService.getUserByMatricNumber(
+            credentials.usernameOrEmailOrMatric as string,
+          ));
 
         if (!user) {
           throw new UserNotFoundError();

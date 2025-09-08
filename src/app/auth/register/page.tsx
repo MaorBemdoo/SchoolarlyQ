@@ -68,7 +68,7 @@ const Register = () => {
         password: values.password,
         type: "credentials",
       },
-      1
+      1,
     );
 
     if (res?.status === "success") {
@@ -80,12 +80,12 @@ const Register = () => {
   };
 
   const onStep2Submit = async (values: Step2Form) => {
-    const  res = await execute(
+    const res = await execute(
       {
         email: (data && data.user?.email) || "",
         ...values,
       },
-      2
+      2,
     );
 
     if (res?.status === "success") {
@@ -99,9 +99,11 @@ const Register = () => {
   const googleSubmit = async () => {
     try {
       setLoading(true);
-      const res = await signIn("google", { redirectTo: "/auth/register?step=2" });
+      const res = await signIn("google", {
+        redirectTo: "/auth/register?step=2",
+      });
       if (res?.error) throw new Error(res?.error);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message || "Google signup failed");
     } finally {
@@ -119,7 +121,7 @@ const Register = () => {
       <div className="text-center">
         <h1 className="text-2xl font-bold">Register</h1>
         <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
-          { step === 1 ? "Get started with SchoolaryQ" : "Almost there!" }
+          {step === 1 ? "Get started with SchoolaryQ" : "Almost there!"}
         </p>
       </div>
 
@@ -130,21 +132,40 @@ const Register = () => {
               name="full_name"
               control={controlStep1}
               render={({ field }) => (
-                <input {...field} placeholder="Full Name" className={`form-input ${step1Errors.full_name ? "error" : ""}`} />
+                <input
+                  {...field}
+                  placeholder="Full Name"
+                  className={`form-input ${step1Errors.full_name ? "error" : ""}`}
+                />
               )}
             />
-            {step1Errors.full_name && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.full_name.message}</p>}
+            {step1Errors.full_name && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step1Errors.full_name.message}
+              </p>
+            )}
           </div>
-          
+
           <div>
             <Controller
               name="email"
               control={controlStep1}
               render={({ field }) => (
-                <input {...field} type="email" placeholder="Email" className={`form-input ${step1Errors.email ? "error" : ""}`} />
+                <input
+                  {...field}
+                  type="email"
+                  placeholder="Email"
+                  className={`form-input ${step1Errors.email ? "error" : ""}`}
+                />
               )}
             />
-            {step1Errors.email && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.email.message}</p>}
+            {step1Errors.email && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step1Errors.email.message}
+              </p>
+            )}
           </div>
           <div className="relative">
             <Controller
@@ -165,18 +186,33 @@ const Register = () => {
             >
               {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
             </div>
-            {step1Errors.password && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.password.message}</p>}
+            {step1Errors.password && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step1Errors.password.message}
+              </p>
+            )}
           </div>
-          
+
           <div>
             <Controller
               name="confirmPassword"
               control={controlStep1}
               render={({ field }) => (
-                <input {...field} type="password" placeholder="Confirm Password" className={`form-input ${step1Errors.confirmPassword ? "error" : ""}`} />
+                <input
+                  {...field}
+                  type="password"
+                  placeholder="Confirm Password"
+                  className={`form-input ${step1Errors.confirmPassword ? "error" : ""}`}
+                />
               )}
             />
-            {step1Errors.confirmPassword && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step1Errors.confirmPassword.message}</p>}
+            {step1Errors.confirmPassword && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step1Errors.confirmPassword.message}
+              </p>
+            )}
           </div>
 
           <Button
@@ -187,8 +223,12 @@ const Register = () => {
             Continue
           </Button>
 
-          <AppLink href="/auth/login" className="self-end text-sm hover:underline">
-            Already have an account? <span className="font-semibold">Login</span>
+          <AppLink
+            href="/auth/login"
+            className="self-end text-sm hover:underline"
+          >
+            Already have an account?{" "}
+            <span className="font-semibold">Login</span>
           </AppLink>
         </div>
       )}
@@ -200,7 +240,14 @@ const Register = () => {
               <MdOutlineInfo />
             </div>
             <p className="text-sm">
-              The department and level field cannot be altered. If you feel they don&apos;t resonate with you <Link href="/#contact" className="text-primary-light-300 dark:text-primary-dark-300 hover:underline">contact us</Link>
+              The department and level field cannot be altered. If you feel they
+              don&apos;t resonate with you{" "}
+              <Link
+                href="/#contact"
+                className="text-primary-light-300 dark:text-primary-dark-300 hover:underline"
+              >
+                contact us
+              </Link>
             </p>
           </div>
           <div>
@@ -208,39 +255,69 @@ const Register = () => {
               name="matric_number"
               control={controlStep2}
               render={({ field }) => (
-                <input {...field} onChange={(e) => {
-                  const analysis = analyzeMatricNumber(e.target.value);
-                  if (analysis) {
-                    setValue("department", analysis.department);
-                    setValue("level", analysis.level);
-                  }
-                  field.onChange(e.target.value);
-                }} placeholder="Matric Number" className={`form-input ${step2Errors.matric_number ? "error" : ""}`} />
+                <input
+                  {...field}
+                  onChange={(e) => {
+                    const analysis = analyzeMatricNumber(e.target.value);
+                    if (analysis) {
+                      setValue("department", analysis.department);
+                      setValue("level", analysis.level);
+                    }
+                    field.onChange(e.target.value);
+                  }}
+                  placeholder="Matric Number"
+                  className={`form-input ${step2Errors.matric_number ? "error" : ""}`}
+                />
               )}
             />
-            {step2Errors.matric_number && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.matric_number.message}</p>}
+            {step2Errors.matric_number && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step2Errors.matric_number.message}
+              </p>
+            )}
           </div>
-          
+
           <div>
             <Controller
               name="department"
               control={controlStep2}
               render={({ field }) => (
-                <input {...field} placeholder="Department" className={`form-input ${step2Errors.department ? "error" : ""}`} disabled/>
+                <input
+                  {...field}
+                  placeholder="Department"
+                  className={`form-input ${step2Errors.department ? "error" : ""}`}
+                  disabled
+                />
               )}
             />
-            {step2Errors.department && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.department.message}</p>}
+            {step2Errors.department && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step2Errors.department.message}
+              </p>
+            )}
           </div>
-          
+
           <div>
             <Controller
               name="level"
               control={controlStep2}
               render={({ field }) => (
-                <input {...field} placeholder="Level" className={`form-input ${step2Errors.level ? "error" : ""}`} disabled/>
+                <input
+                  {...field}
+                  placeholder="Level"
+                  className={`form-input ${step2Errors.level ? "error" : ""}`}
+                  disabled
+                />
               )}
             />
-            {step2Errors.level && <p className="text-red-500 text-sm flex gap-1 items-center"><TbAlertTriangle />{step2Errors.level.message}</p>}
+            {step2Errors.level && (
+              <p className="text-red-500 text-sm flex gap-1 items-center">
+                <TbAlertTriangle />
+                {step2Errors.level.message}
+              </p>
+            )}
           </div>
 
           <Button
@@ -264,7 +341,12 @@ const Register = () => {
               loading={loading}
               disabled={registerStatus === "loading"}
             >
-              <Image src="/google.png" alt="Google logo" width={20} height={20} />
+              <Image
+                src="/google.png"
+                alt="Google logo"
+                width={20}
+                height={20}
+              />
               Sign up with Google
             </Button>
           </div>
