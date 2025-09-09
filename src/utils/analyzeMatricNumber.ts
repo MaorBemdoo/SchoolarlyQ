@@ -21,8 +21,16 @@ export const analyzeMatricNumber = (matricNumber: string) => {
   }
 
   const [BHU, year, facultyId, departmentId, serial] = matricNumber.split("/");
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const matricYear = parseInt("20" + year, 10);
+
+  const level =
+    ((currentYear - matricYear) + (currentMonth > 7 ? 1 : 0)) + "00";
+
   return {
-    level: new Date().getFullYear() - parseInt("20" + year, 10) + "00",
+    level,
     department:
       faculties
         .find((faculty) => faculty.id == Number(facultyId))
