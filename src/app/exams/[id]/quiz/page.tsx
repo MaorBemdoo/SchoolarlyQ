@@ -269,7 +269,7 @@ const QuizPage = () => {
           )}
           <div className="text-center">
             <Button
-              className={`${timeLeft <= 0 || checkAnswerStatus == "success" || (decoded?.mode == "study" && selectedAnswer !== null) ? "animate-bounce" : ""}`}
+              className={`${timeLeft <= 0 || checkAnswerStatus == "success" || (decoded?.mode == "study" && selectedAnswer !== null) || (decoded?.mode == "exam" && selectedAnswer !== null && storedQuiz?.currentQuestion == decoded.questionCount) ? "animate-bounce" : ""}`}
               disabled={checkAnswerStatus == "loading"}
               onClick={handleSubmit}
             >
