@@ -96,6 +96,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token, user }) {
       // session.user = token.user as UserType & AdapterUser;
       const userFromDB = await userService.getUserByEmail((token?.user as UserType & AdapterUser).email as string);
+      userFromDB.password = undefined;
       session.user = userFromDB;
       return session;
     },
