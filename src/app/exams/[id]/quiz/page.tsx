@@ -178,7 +178,7 @@ const QuizPage = () => {
   return (
     <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
       {decoded.mode == "study" && checkAnswerRes?.data?.isCorrect && (
-        <Confetti className="z-10 w-full h-[100dvh]" />
+        <Confetti className="!z-10 w-full h-[100dvh]" />
       )}
       <div
         className={`flex ${decoded.mode == "study" ? "justify-between" : "justify-end"} items-center gap-4 h-[50px]`}
@@ -220,9 +220,9 @@ const QuizPage = () => {
       <motion.div
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="grid place-content-center h-[calc(100%-50px)] *:z-10"
+        className="grid place-content-center min-h-[calc(100%-50px)]"
       >
-        <div className="w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4">
+        <div className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${question ? "" : "w-[250px]"}`}>
           <div className="text-center font-semibold">
             <span className="text-lg">{currentQuestion}</span>
             <span className="text-2xl">/{decoded?.questionCount}</span>
@@ -239,7 +239,7 @@ const QuizPage = () => {
             ) : question?.options ? (
               question?.options.map((opt: any, i: number) => (
                 <div
-                  className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${decoded.mode == "exam" && selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "bg-green-700" : ""}`}
+                  className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${decoded.mode == "exam" && selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "bg-green-700 hover:bg-green-700" : ""}`}
                   onClick={() => {
                     setSelectedAnswer(i);
                   }}
@@ -257,7 +257,7 @@ const QuizPage = () => {
               ))
             )}
           </div>
-          {(timeLeft <= 0 || checkAnswerStatus == "success") && (
+          {checkAnswerStatus == "success" && (
             <div
               className={`collapse collapse-arrow text-white bg-green-700 ring ring-green-800 ${openExplanation ? "collapse-open" : ""}`}
             >
