@@ -46,10 +46,10 @@ const QuizPage = () => {
   }, [id, verify]);
 
   useEffect(() => {
-    if (!checkAnswerRes?.data?.isCorrect) {
+    if (checkAnswerStatus == "success" && !checkAnswerRes?.data?.isCorrect) {
       setOpenExplanation(true);
     }
-  }, [checkAnswerRes?.data?.isCorrect]);
+  }, [checkAnswerRes, checkAnswerStatus]);
 
   useEffect(() => {
     if (!decoded) return;
@@ -251,9 +251,9 @@ const QuizPage = () => {
               ))
             )}
           </div>
-          {checkAnswerStatus == "success" && (
+          {checkAnswerStatus == "success" && question?.explanation && (
             <div
-              className={`collapse collapse-arrow text-white bg-green-700 ring ring-green-800 ${openExplanation ? "collapse-open" : ""}`}
+              className={`collapse collapse-arrow text-white bg-green-700 ring ring-green-800 ${openExplanation ? "collapse-open" : "collapse-close"}`}
             >
               <input type="radio" name="accordion" />
               <div
