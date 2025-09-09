@@ -178,7 +178,7 @@ const QuizPage = () => {
   return (
     <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
       {decoded.mode == "study" && checkAnswerRes?.data?.isCorrect && (
-        <Confetti className="z-10" />
+        <Confetti className="z-10 w-full h-[100dvh]" />
       )}
       <div
         className={`flex ${decoded.mode == "study" ? "justify-between" : "justify-end"} items-center gap-4 h-[50px]`}
