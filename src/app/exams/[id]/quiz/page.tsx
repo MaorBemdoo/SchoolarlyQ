@@ -87,6 +87,7 @@ const QuizPage = () => {
   ]);
 
   useEffect(() => {
+    if(!decoded && !question) return;
     if (
       decoded?.timer === "none" ||
       timeLeft == null ||
@@ -112,13 +113,7 @@ const QuizPage = () => {
       }, 1000);
     } else if (timeLeft === 0) {
       toast.warn("Your time is up!");
-      if (checkAnswerStatus == "idle" && decoded?.questionIds) {
-        checkAnswer(
-          decoded.questionIds[currentQuestion - 1],
-          decoded?.mode,
-          "",
-        );
-      }
+      setSelectedAnswer(-1);
     }
 
     return () => {
@@ -130,6 +125,7 @@ const QuizPage = () => {
     currentQuestion,
     dangerTime,
     decoded,
+    question,
     selectedAnswer,
     setStoredQuiz,
     storedQuiz,
@@ -141,29 +137,27 @@ const QuizPage = () => {
   const s = timeLeft % 60;
 
   const handleSubmit = async () => {
-    const newTime = Number(decoded.timer) * 60;
-    if (decoded?.mode == "study") {
-      if (checkAnswerStatus == "loading") return;
-      if (checkAnswerStatus == "idle") {
+    if (checkAnswerStatus == "loading") return;
+    if (decoded?.mode == "study" && checkAnswerStatus == "idle") {
         toast.error("Please select an answer");
         return;
-      }
-      setTimeLeft(newTime);
     }
-    if (storedQuiz?.currentQuestion == decoded.questionCount) {
-      toast.success("Exam submitted successfully");
-      // submit function
-      await endExam();
+    if (storedQuiz?.currentQuestion < decoded.questionCount) {
+      const newTime = Number(decoded.timer) * 60;
+      setTimeLeft(newTime);
+      setSelectedAnswer(null);
+      setStoredQuiz({
+        ...storedQuiz,
+        timeLeft: decoded?.mode == "study" ? newTime : storedQuiz.timeLeft,
+        currentQuestion: currentQuestion + 1,
+        selectedAnswer: null,
+      });
+      setCurrentQuestion((prev: number) => prev + 1);
       return;
     }
-    setSelectedAnswer(null);
-    setStoredQuiz({
-      ...storedQuiz,
-      timeLeft: decoded?.mode == "study" ? newTime : storedQuiz.timeLeft,
-      currentQuestion: currentQuestion + 1,
-      selectedAnswer: null,
-    });
-    setCurrentQuestion((prev: number) => prev + 1);
+    toast.success("Exam submitted successfully");
+    // submit function
+    // await endExam();
   };
 
   const leaveAndEndExam = async () => {
