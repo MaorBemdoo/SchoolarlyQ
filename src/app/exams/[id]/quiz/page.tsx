@@ -87,7 +87,7 @@ const QuizPage = () => {
   ]);
 
   useEffect(() => {
-    if(!decoded && !question) return;
+    if (!decoded && !question) return;
     if (
       decoded?.timer === "none" ||
       timeLeft == null ||
@@ -139,8 +139,8 @@ const QuizPage = () => {
   const handleSubmit = async () => {
     if (checkAnswerStatus == "loading") return;
     if (decoded?.mode == "study" && checkAnswerStatus == "idle") {
-        toast.error("Please select an answer");
-        return;
+      toast.error("Please select an answer");
+      return;
     }
     if (storedQuiz?.currentQuestion < decoded.questionCount) {
       const newTime = Number(decoded.timer) * 60;
@@ -216,7 +216,9 @@ const QuizPage = () => {
         animate={{ y: 0, opacity: 1 }}
         className="grid place-content-center min-h-[calc(100%-50px)]"
       >
-        <div className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${question ? "" : "w-[250px]"}`}>
+        <div
+          className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${question ? "" : "w-[250px]"}`}
+        >
           <div className="text-center font-semibold">
             <span className="text-lg">{currentQuestion}</span>
             <span className="text-2xl">/{decoded?.questionCount}</span>
