@@ -64,7 +64,7 @@ const Register = () => {
     const res = await execute(
       {
         full_name: values.full_name,
-        email: values.email,
+        email: values.email.toLowerCase(),
         password: values.password,
         type: "credentials",
       },
