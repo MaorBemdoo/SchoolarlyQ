@@ -27,6 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
       async profile(profile) {
+        await connectDB()
         const logger = await initLogger();
         const user = await userService.getUserByEmail(profile?.email);
 
@@ -95,6 +96,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async session({ session, token, user }) {
       // session.user = token.user as UserType & AdapterUser;
+      await connectDB();
       const userFromDB = await userService.getUserByEmail((token?.user as UserType & AdapterUser).email as string);
       userFromDB.password = undefined;
       session.user = userFromDB;
