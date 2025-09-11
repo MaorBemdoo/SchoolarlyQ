@@ -53,16 +53,12 @@ export const faculties = [
   {
     id: 5,
     faculty: "Law",
-    departments: [
-      { id: 1, name: "Law", duration: 5 },
-    ],
+    departments: [{ id: 1, name: "Law", duration: 5 }],
   },
   {
     id: 6,
     faculty: "Entrepreneurship",
-    departments: [
-      { id: 1, name: "Entrepreneurship", duration: 4 },
-    ],
+    departments: [{ id: 1, name: "Entrepreneurship", duration: 4 }],
   },
   {
     id: 8,
