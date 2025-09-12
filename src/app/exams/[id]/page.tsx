@@ -89,6 +89,7 @@ const QuizHomePage = () => {
       timeLeft: null,
       currentQuestion: 1,
       selectedAnswer: null,
+      isCompleted: false,
     });
     router.push(`/exams/${id}/quiz`);
   };
