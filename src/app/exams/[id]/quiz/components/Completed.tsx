@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Completed = () => {
-  return (
-    <>
-      9/10
-    </>
-  )
-}
+  return <>9/10</>;
+};
 
-export default Completed
+export default Completed;
