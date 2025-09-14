@@ -67,7 +67,7 @@ export async function createExamAndQuestions(exam: any, questions: any[]) {
   }));
   try {
     if (exam.type == "objective" && questions.length <= 10) {
-      throw new Error("At least 10 questions are required for objective exams");
+      throw new Error("Too few questions!");
     }
     await validate(examSchema, exam);
     const [a, b] = exam.session.split("/");
