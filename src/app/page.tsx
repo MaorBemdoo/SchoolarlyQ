@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import useAction from "@/hooks/useAction";
 import toast from "@/utils/toast";
 import { motion, useScroll, useVelocity } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { BsMenuButtonWide } from "react-icons/bs";
@@ -39,32 +40,6 @@ const features = [
   },
 ];
 
-const pricingPlans = [
-  {
-    name: "Basic plan",
-    price: 0,
-    features: ["Aceess past questions", "View correct answer"],
-    button: {
-      text: "Get Started",
-      to: "/register",
-    },
-  },
-  {
-    name: "Pro plan",
-    price: 1000,
-    features: [
-      "Get latest past questions",
-      "View explanation to answers",
-      "unlimited daily attempts",
-      "Download questions",
-    ],
-    button: {
-      text: "Upgrade to Pro",
-      to: "/pricing",
-    },
-  },
-];
-
 const faqs = [
   {
     title: "Lorem Ipsum dolor sit amit",
@@ -88,6 +63,7 @@ export default function Home() {
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
+  const { data } = useSession()
 
   useEffect(() => {
     const unsubscribe = velocity.onChange((latest) => {
@@ -168,8 +144,8 @@ export default function Home() {
               , our quizzes are designed to help students review materials and
               gain a better understanding of the concepts.
             </p>
-            <AppLink href="/auth/register">
-              <Button color="orange">Get Started</Button>
+            <AppLink href={ data ? "/exams" : "/auth/register" }>
+              <Button color="orange">{ data ? "Explore Exams" : "Get Started" }</Button>
             </AppLink>
           </motion.div>
         </div>
@@ -270,34 +246,33 @@ export default function Home() {
           <span>Elevate your learning, Elevate your GPA</span>
         </motion.div>
       </div>
-      <section className="container mt-16" id="pricing">
+      <section className="container mt-16" id="modes">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold">Pricing plan</h2>
-          <p className="text-lg mt-4">Choose the perfect plan for you</p>
+          <h2 className="text-4xl font-bold">Quiz Modes</h2>
+          <p className="text-lg mt-4">
+            Choose from different quiz modes to suit your learning style and
+            preferences.
+          </p>
         </div>
-        <div className="w-full grid justify-center items-center grid-cols-[repeat(auto-fit,_minmax(200px,_400px))] gap-6">
-          {pricingPlans.map(({ name, price, features, button }, idx) => (
-            <div
-              className={`flex flex-col items-center justify-between h-full w-full mx-auto p-8 border border-black ${idx == 0 ? "bg-primary-light-100 dark:bg-primary-dark-100" : "bg-primary-light-200 dark:bg-primary-dark-200"}`}
-              key={idx}
-            >
-              <p className="font-semibold">{name}</p>
-              <h1 className="text-4xl font-bold">
-                ₦{price}
-                {idx == 1 ? "/month" : ""}
-              </h1>
-              <ul className="list-image-[url(/check.png)] p-[inherit] m-[inherit]">
-                {features.map((feat, idx) => (
-                  <li className="w-fit ps-2" key={idx}>
-                    {feat}
-                  </li>
-                ))}
-              </ul>
-              <AppLink href={button.to}>
-                <Button variant="filled">{button.text}</Button>
-              </AppLink>
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="flex flex-col items-center gap-4 z-10 p-6 h-full w-full bg-primary-light-100 mx-auto rounded-lg dark:bg-primary-dark-100">
+            <div className="flex h-min mt-12">
+              <div className="relative size-20 rounded-full bg-primary-light-300 dark:bg-primary-dark-300"></div>
             </div>
-          ))}
+            <h1 className="text-2xl font-semibold">Study Mode</h1>
+            <p className="opacity-80 text-center">
+              Practice at your own pace with instant feedback and explanations for each question.
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-4 z-10 p-6 h-full w-full bg-primary-light-100 mx-auto rounded-lg dark:bg-primary-dark-100">
+            <div className="flex h-min mt-12">
+              <div className="relative size-20 rounded-full bg-primary-light-300 dark:bg-primary-dark-300"></div>
+            </div>
+            <h1 className="text-2xl font-semibold">Exam Mode</h1>
+            <p className="opacity-80 text-center">
+              Simulate real exam conditions with timed quizzes and no interruptions.
+            </p>
+          </div>
         </div>
       </section>
       {/* <section>
