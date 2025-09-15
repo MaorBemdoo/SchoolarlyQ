@@ -250,28 +250,27 @@ export default function Home() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Quiz Modes</h2>
           <p className="text-lg mt-4">
-            Choose from different quiz modes to suit your learning style and
-            preferences.
+        Choose from different quiz modes to suit your learning style and preferences.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="flex flex-col items-center gap-4 z-10 p-6 h-full w-full bg-primary-light-100 mx-auto rounded-lg dark:bg-primary-dark-100">
-            <div className="flex h-min mt-12">
-              <div className="relative size-20 rounded-full bg-primary-light-300 dark:bg-primary-dark-300"></div>
+        <div className="tabs tabs-lift grid-rows-6 [input]:*:!w-20 *:rounded-none w-full max-w-[800px] mx-auto">
+          <input type="radio" name="quiz_modes_tabs" className="tab checked:bg-primary-light-200" aria-label="Study Mode" defaultChecked />
+          <div className="tab-content h-full col-[2] row-span-full bg-primary-light-100 p-6">
+            <div className="flex flex-col items-center gap-4">
+              <h1 className="text-2xl font-semibold">Study Mode</h1>
+              <p className="opacity-80 text-center">
+                Practice at your own pace with instant feedback and explanations for each question.
+              </p>
             </div>
-            <h1 className="text-2xl font-semibold">Study Mode</h1>
-            <p className="opacity-80 text-center">
-              Practice at your own pace with instant feedback and explanations for each question.
-            </p>
           </div>
-          <div className="flex flex-col items-center gap-4 z-10 p-6 h-full w-full bg-primary-light-100 mx-auto rounded-lg dark:bg-primary-dark-100">
-            <div className="flex h-min mt-12">
-              <div className="relative size-20 rounded-full bg-primary-light-300 dark:bg-primary-dark-300"></div>
+          <input type="radio" name="quiz_modes_tabs" className="tab col-[1] row-[2]" aria-label="Exam Mode" />
+          <div className="tab-content  h-full col-[2] row-span-full bg-primary-light-100 p-6">
+            <div className="flex flex-col items-center gap-4">
+              <h1 className="text-2xl font-semibold">Exam Mode</h1>
+              <p className="opacity-80 text-center">
+                Simulate real exam conditions with timed quizzes and no interruptions.
+              </p>
             </div>
-            <h1 className="text-2xl font-semibold">Exam Mode</h1>
-            <p className="opacity-80 text-center">
-              Simulate real exam conditions with timed quizzes and no interruptions.
-            </p>
           </div>
         </div>
       </section>
