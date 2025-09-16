@@ -79,7 +79,7 @@ const QuizPage = () => {
       ...storedQuiz,
       selectedAnswer,
       currentQuestion,
-      isCompleted
+      isCompleted,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -89,7 +89,7 @@ const QuizPage = () => {
     question?.options,
     selectedAnswer,
     setStoredQuiz,
-    isCompleted
+    isCompleted,
   ]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const QuizPage = () => {
     setStoredQuiz,
     storedQuiz,
     timeLeft,
-    isCompleted
+    isCompleted,
   ]);
 
   const h = Math.floor(timeLeft / 3600);
@@ -163,15 +163,15 @@ const QuizPage = () => {
       setCurrentQuestion((prev: number) => prev + 1);
       return;
     }
-    setIsCompleted(true)
+    setIsCompleted(true);
     setTimeLeft(null);
-    setSelectedAnswer(null)
-    setCurrentQuestion(null)
+    setSelectedAnswer(null);
+    setCurrentQuestion(null);
     setStoredQuiz({
       ...storedQuiz,
       timeLeft: null,
-      selectedAnswer: null
-    })
+      selectedAnswer: null,
+    });
   };
 
   const leaveAndEndExam = async () => {
@@ -189,9 +189,10 @@ const QuizPage = () => {
         <Confetti className="!z-10 w-full h-[100dvh]" />
       )}
       <div
-        className={`flex ${ decoded.mode == "exam" && isCompleted !== null && !isCompleted ? "justify-end" : "justify-between" } items-center gap-4 h-[50px]`}
+        className={`flex ${decoded.mode == "exam" && isCompleted !== null && !isCompleted ? "justify-end" : "justify-between"} items-center gap-4 h-[50px]`}
       >
-        {(decoded.mode == "study" || (decoded.mode == "exam" && isCompleted)) && (
+        {(decoded.mode == "study" ||
+          (decoded.mode == "exam" && isCompleted)) && (
           <motion.div
             initial={{ x: "-100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -205,7 +206,7 @@ const QuizPage = () => {
             </Button>
           </motion.div>
         )}
-        {(decoded.timer !== "none" && (isCompleted !== null && !isCompleted)) && (
+        {decoded.timer !== "none" && isCompleted !== null && !isCompleted && (
           <motion.div
             initial={{ x: "100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}

@@ -26,8 +26,7 @@ export const analyzeMatricNumber = (matricNumber: string) => {
   const currentMonth = currentDate.getMonth();
   const matricYear = parseInt("20" + year, 10);
 
-  const level =
-    ((currentYear - matricYear) + (currentMonth > 7 ? 1 : 0)) + "00";
+  const level = currentYear - matricYear + (currentMonth > 7 ? 1 : 0) + "00";
 
   return {
     level,
