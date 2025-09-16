@@ -9,7 +9,7 @@ const client = new OpenAI({
 });
 
 export async function sendChatMessage(message: string) {
-    const logger = await initLogger()
+  const logger = await initLogger();
   try {
     if (!message || message.trim() === "") {
       return ResponseHandler("failed", "Message cannot be empty");
@@ -27,7 +27,7 @@ export async function sendChatMessage(message: string) {
     const reply = res.choices[0]?.message?.content || "No response";
 
     return ResponseHandler("success", "Message sent successfully", reply);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     logger.error(error, "Error in sendChatMessage:");
     return ResponseHandler("failed", error.message || "Error sending message");
