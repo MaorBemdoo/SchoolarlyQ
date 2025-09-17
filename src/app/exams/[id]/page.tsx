@@ -154,7 +154,7 @@ const QuizHomePage = () => {
                   <p className="text-sm">
                     <Link
                       className="text-primary-light-300 dark:text-primary-dark-300 hover:underline"
-                      href="/#mode"
+                      href="/#modes"
                     >
                       Learn more
                     </Link>{" "}

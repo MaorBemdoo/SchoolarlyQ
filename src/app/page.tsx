@@ -253,24 +253,14 @@ export default function Home() {
         Choose from different quiz modes to suit your learning style and preferences.
           </p>
         </div>
-        <div className="tabs tabs-lift grid-rows-6 [input]:*:!w-20 *:rounded-none w-full max-w-[800px] mx-auto">
-          <input type="radio" name="quiz_modes_tabs" className="tab checked:bg-primary-light-200" aria-label="Study Mode" defaultChecked />
-          <div className="tab-content h-full col-[2] row-span-full bg-primary-light-100 p-6">
-            <div className="flex flex-col items-center gap-4">
-              <h1 className="text-2xl font-semibold">Study Mode</h1>
-              <p className="opacity-80 text-center">
+        <div className="tabs tabs-lift items-start grid-rows-6 grid-cols-[max-content] [input]:*:!w-20 *:rounded-none w-full max-w-[800px] mx-auto">
+          <input type="radio" name="quiz_modes_tabs" className="tab !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200" aria-label="Study Mode" defaultChecked />
+          <div className="tab-content col-[2] row-span-full bg-primary-light-100 p-6">
                 Practice at your own pace with instant feedback and explanations for each question.
-              </p>
-            </div>
           </div>
-          <input type="radio" name="quiz_modes_tabs" className="tab col-[1] row-[2]" aria-label="Exam Mode" />
-          <div className="tab-content  h-full col-[2] row-span-full bg-primary-light-100 p-6">
-            <div className="flex flex-col items-center gap-4">
-              <h1 className="text-2xl font-semibold">Exam Mode</h1>
-              <p className="opacity-80 text-center">
+          <input type="radio" name="quiz_modes_tabs" className="tab col-[1] row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200" aria-label="Exam Mode" />
+          <div className="tab-content  col-[2] row-span-full bg-primary-light-100 p-6">
                 Simulate real exam conditions with timed quizzes and no interruptions.
-              </p>
-            </div>
           </div>
         </div>
       </section>
