@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import useAction from "@/hooks/useAction";
 import toast from "@/utils/toast";
 import { motion, useScroll, useVelocity } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { BsMenuButtonWide } from "react-icons/bs";
@@ -39,47 +40,31 @@ const features = [
   },
 ];
 
-const pricingPlans = [
-  {
-    name: "Basic plan",
-    price: 0,
-    features: ["Aceess past questions", "View correct answer"],
-    button: {
-      text: "Get Started",
-      to: "/register",
-    },
-  },
-  {
-    name: "Pro plan",
-    price: 1000,
-    features: [
-      "Get latest past questions",
-      "View explanation to answers",
-      "unlimited daily attempts",
-      "Download questions",
-    ],
-    button: {
-      text: "Upgrade to Pro",
-      to: "/pricing",
-    },
-  },
-];
-
 const faqs = [
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Who can use SchoolarlyQ?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "SchoolarlyQ is available exclusively for Bingham students. You need a valid Bingham email to register and access quizzes.",
   },
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Is SchoolarlyQ free to use?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "Yes! SchoolarlyQ is completely free for all Bingham students. There are no hidden charges or subscription fees.",
   },
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Can I contribute to SchoolarlyQ?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "Absolutely! SchoolarlyQ is open source. Developers and contributors are welcome to check out our documentation and contribute on GitHub.",
+  },
+  {
+    title: "What quiz modes are available?",
+    description:
+      "You can choose between Study Mode for instant feedback and explanations, or Exam Mode for a timed, realistic exam experience.",
+  },
+  {
+    title: "How do I contact support?",
+    description:
+      "Use the contact form at the bottom of this page to send us a message. We’ll get back to you as soon as possible.",
   },
 ];
 
@@ -88,6 +73,8 @@ export default function Home() {
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
+  const { data } = useSession()
+  const [open, setOpen] = useState(0);
 
   useEffect(() => {
     const unsubscribe = velocity.onChange((latest) => {
@@ -160,16 +147,14 @@ export default function Home() {
               <span className="text-secondary-light-400">Q</span>
             </h1>
             <p className="text-lg">
-              We empower learners with engaging quiz experiences that enhance
-              understanding. Available only for{" "}
+              Unlock your academic potential with interactive quizzes tailored for{" "}
               <span className="font-bold text-primary-light-300">
-                Bingham students
+              Bingham students
               </span>
-              , our quizzes are designed to help students review materials and
-              gain a better understanding of the concepts.
+              . SchoolarlyQ helps you master course material, track your progress, and prepare confidently for exams—all in a fun, supportive environment.
             </p>
-            <AppLink href="/auth/register">
-              <Button color="orange">Get Started</Button>
+            <AppLink href={ data ? "/exams" : "/auth/register" }>
+              <Button color="orange">{ data ? "Explore Exams" : "Get Started" }</Button>
             </AppLink>
           </motion.div>
         </div>
@@ -270,34 +255,42 @@ export default function Home() {
           <span>Elevate your learning, Elevate your GPA</span>
         </motion.div>
       </div>
-      <section className="container mt-16" id="pricing">
+      <section className="container mt-16" id="modes">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold">Pricing plan</h2>
-          <p className="text-lg mt-4">Choose the perfect plan for you</p>
+          <h2 className="text-4xl font-bold">Quiz Modes</h2>
+          <p className="text-lg mt-4">
+        Choose from different quiz modes to suit your learning style and preferences.
+          </p>
         </div>
-        <div className="w-full grid justify-center items-center grid-cols-[repeat(auto-fit,_minmax(200px,_400px))] gap-6">
-          {pricingPlans.map(({ name, price, features, button }, idx) => (
-            <div
-              className={`flex flex-col items-center justify-between h-full w-full mx-auto p-8 border border-black ${idx == 0 ? "bg-primary-light-100 dark:bg-primary-dark-100" : "bg-primary-light-200 dark:bg-primary-dark-200"}`}
-              key={idx}
-            >
-              <p className="font-semibold">{name}</p>
-              <h1 className="text-4xl font-bold">
-                ₦{price}
-                {idx == 1 ? "/month" : ""}
-              </h1>
-              <ul className="list-image-[url(/check.png)] p-[inherit] m-[inherit]">
-                {features.map((feat, idx) => (
-                  <li className="w-fit ps-2" key={idx}>
-                    {feat}
-                  </li>
-                ))}
+        <div className="tabs tabs-lift md:items-start md:grid-rows-8 md:grid-cols-[max-content] * [input]-*:whitespace-nowrap *:rounded-none w-full max-w-[800px] mx-auto">
+          <input type="radio" name="quiz_modes_tabs" className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200" aria-label="Study Mode" defaultChecked />
+            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+              <h3 className="text-2xl font-semibold mb-2">Study Mode</h3>
+              <p>
+                Practice at your own pace with instant feedback and detailed explanations for each question.
+                In Study Mode, you can review questions, see correct answers immediately, and learn from your mistakes without any time pressure.
+              </p>
+              <ul className="list-disc ml-6 mt-4 space-y-1">
+                <li>Receive step-by-step explanations for every answer</li>
+                <li>Pause and resume quizzes whenever you want</li>
+                <li>Track your progress and revisit incorrect questions</li>
+                <li>Perfect for revision and concept reinforcement</li>
               </ul>
-              <AppLink href={button.to}>
-                <Button variant="filled">{button.text}</Button>
-              </AppLink>
             </div>
-          ))}
+            <input type="radio" name="quiz_modes_tabs" className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200" aria-label="Exam Mode" />
+            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+              <h3 className="text-2xl font-semibold mb-2">Exam Mode</h3>
+              <p>
+                Simulate real exam conditions with timed quizzes and no interruptions.
+                Exam Mode helps you prepare for actual test scenarios by limiting access to hints and explanations until the quiz is completed.
+              </p>
+              <ul className="list-disc ml-6 mt-4 space-y-1">
+                <li>Timed quizzes to mirror real exam pressure</li>
+                <li>No instant feedback—answers revealed after submission</li>
+                <li>Score breakdown and performance analytics at the end</li>
+                <li>Ideal for self-assessment and exam readiness</li>
+              </ul>
+            </div>
         </div>
       </section>
       {/* <section>
@@ -312,18 +305,18 @@ export default function Home() {
         </div>
         <div className="max-w-[800px] mx-auto space-y-2">
           {faqs.map(({ title, description }, idx) => (
-            <div
-              className="group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100"
-              key={idx}
-            >
-              <input type="radio" name="accordion" className="peer" />
-              <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">
-                {title}
+              <div
+                className={`group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100`}
+                key={idx}
+              >
+                <input type="radio" name="accordion" className="peer" checked={open === idx} />
+                <div className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200" onClick={() => setOpen(idx)}>
+                  {title}
+                </div>
+                <div className="px-4 border-t border-t-black collapse-content">
+                  <p>{description}</p>
+                </div>
               </div>
-              <div className="px-4 border-t border-t-black collapse-content">
-                <p>{description}</p>
-              </div>
-            </div>
           ))}
         </div>
       </section>
