@@ -253,15 +253,35 @@ export default function Home() {
         Choose from different quiz modes to suit your learning style and preferences.
           </p>
         </div>
-        <div className="tabs tabs-lift items-start grid-rows-6 grid-cols-[max-content] [input]:*:!w-20 *:rounded-none w-full max-w-[800px] mx-auto">
-          <input type="radio" name="quiz_modes_tabs" className="tab !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200" aria-label="Study Mode" defaultChecked />
-          <div className="tab-content col-[2] row-span-full bg-primary-light-100 p-6">
-                Practice at your own pace with instant feedback and explanations for each question.
-          </div>
-          <input type="radio" name="quiz_modes_tabs" className="tab col-[1] row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200" aria-label="Exam Mode" />
-          <div className="tab-content  col-[2] row-span-full bg-primary-light-100 p-6">
+        <div className="tabs tabs-lift md:items-start md:grid-rows-8 md:grid-cols-[max-content] * [input]-*:whitespace-nowrap *:rounded-none w-full max-w-[800px] mx-auto">
+          <input type="radio" name="quiz_modes_tabs" className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200" aria-label="Study Mode" defaultChecked />
+            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+              <h3 className="text-2xl font-semibold mb-2">Study Mode</h3>
+              <p>
+                Practice at your own pace with instant feedback and detailed explanations for each question.
+                In Study Mode, you can review questions, see correct answers immediately, and learn from your mistakes without any time pressure.
+              </p>
+              <ul className="list-disc ml-6 mt-4 space-y-1">
+                <li>Receive step-by-step explanations for every answer</li>
+                <li>Pause and resume quizzes whenever you want</li>
+                <li>Track your progress and revisit incorrect questions</li>
+                <li>Perfect for revision and concept reinforcement</li>
+              </ul>
+            </div>
+            <input type="radio" name="quiz_modes_tabs" className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200" aria-label="Exam Mode" />
+            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+              <h3 className="text-2xl font-semibold mb-2">Exam Mode</h3>
+              <p>
                 Simulate real exam conditions with timed quizzes and no interruptions.
-          </div>
+                Exam Mode helps you prepare for actual test scenarios by limiting access to hints and explanations until the quiz is completed.
+              </p>
+              <ul className="list-disc ml-6 mt-4 space-y-1">
+                <li>Timed quizzes to mirror real exam pressure</li>
+                <li>No instant feedback—answers revealed after submission</li>
+                <li>Score breakdown and performance analytics at the end</li>
+                <li>Ideal for self-assessment and exam readiness</li>
+              </ul>
+            </div>
         </div>
       </section>
       {/* <section>
