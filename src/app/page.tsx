@@ -42,19 +42,29 @@ const features = [
 
 const faqs = [
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Who can use SchoolarlyQ?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "SchoolarlyQ is available exclusively for Bingham students. You need a valid Bingham email to register and access quizzes.",
   },
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Is SchoolarlyQ free to use?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "Yes! SchoolarlyQ is completely free for all Bingham students. There are no hidden charges or subscription fees.",
   },
   {
-    title: "Lorem Ipsum dolor sit amit",
+    title: "Can I contribute to SchoolarlyQ?",
     description:
-      "Lorem Ipsum dolr sit amit. Jyst a doikhwueu98i 98ewqsxxw we0iu98ruuij 0re4uw8ufge 8eg 3u",
+      "Absolutely! SchoolarlyQ is open source. Developers and contributors are welcome to check out our documentation and contribute on GitHub.",
+  },
+  {
+    title: "What quiz modes are available?",
+    description:
+      "You can choose between Study Mode for instant feedback and explanations, or Exam Mode for a timed, realistic exam experience.",
+  },
+  {
+    title: "How do I contact support?",
+    description:
+      "Use the contact form at the bottom of this page to send us a message. We’ll get back to you as soon as possible.",
   },
 ];
 
@@ -64,6 +74,7 @@ export default function Home() {
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
   const { data } = useSession()
+  const [open, setOpen] = useState(0);
 
   useEffect(() => {
     const unsubscribe = velocity.onChange((latest) => {
@@ -296,18 +307,18 @@ export default function Home() {
         </div>
         <div className="max-w-[800px] mx-auto space-y-2">
           {faqs.map(({ title, description }, idx) => (
-            <div
-              className="group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100"
-              key={idx}
-            >
-              <input type="radio" name="accordion" className="peer" />
-              <div className="px-4 collapse-title text-xl font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200">
-                {title}
+              <div
+                className={`group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100`}
+                key={idx}
+              >
+                <input type="radio" name="accordion" className="peer" checked={open === idx} />
+                <div className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200" onClick={() => setOpen(idx)}>
+                  {title}
+                </div>
+                <div className="px-4 border-t border-t-black collapse-content">
+                  <p>{description}</p>
+                </div>
               </div>
-              <div className="px-4 border-t border-t-black collapse-content">
-                <p>{description}</p>
-              </div>
-            </div>
           ))}
         </div>
       </section>
