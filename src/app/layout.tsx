@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: "SchoolarlyQ",
     images: [
       {
-        url: "/full_logo.png",
+        url: "/hero-screenshot.png",
       },
     ],
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     creator: "@BemdooMaor",
     title: "SchoolarlyQ - Overview",
     description: "Elevate your learning, Elevate your GPA",
-    images: "/full_logo.png",
+    images: "/hero-screenshot.png",
   },
 };
 
