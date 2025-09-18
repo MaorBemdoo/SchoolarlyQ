@@ -40,7 +40,6 @@ const Footer = () => {
                 <h3 className="text-xl font-semibold">Quick Links</h3>
                 <AppLink href="/about">About Us</AppLink>
                 <AppLink href="/#features">Features</AppLink>
-                <AppLink href="/pricing">Pricing</AppLink>
                 <AppLink href="/docs">Docs</AppLink>
                 <AppLink href="/#faq">FAQ</AppLink>
                 <AppLink href="/#contact">Contact Us</AppLink>
@@ -56,7 +55,7 @@ const Footer = () => {
                     <FaXTwitter size={20} />
                   </AppLink>
                   <AppLink
-                    href="https://intagram.com/bemdoomaor"
+                    href="https://intagram.com/just_call_him_bem"
                     className="hover:text-primary-light-300 dark:hover:text-primary-dark-300"
                   >
                     <FaInstagram size={20} />
@@ -84,7 +83,7 @@ const Footer = () => {
           </div>
           <div className="bg-secondary-light-400">
             <div className="container py-[5px] text-center">
-              Made with 💓 by <b>Bemdoo Maor</b> and <b>Jighjigh Adamu</b>
+              Made with ♥️ by <b>Bemdoo Maor</b> and <b>Jighjigh Adamu</b>
             </div>
           </div>
         </footer>
