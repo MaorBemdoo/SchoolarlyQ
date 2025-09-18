@@ -147,13 +147,11 @@ export default function Home() {
               <span className="text-secondary-light-400">Q</span>
             </h1>
             <p className="text-lg">
-              We empower learners with engaging quiz experiences that enhance
-              understanding. Available only for{" "}
+              Unlock your academic potential with interactive quizzes tailored for{" "}
               <span className="font-bold text-primary-light-300">
-                Bingham students
+              Bingham students
               </span>
-              , our quizzes are designed to help students review materials and
-              gain a better understanding of the concepts.
+              . SchoolarlyQ helps you master course material, track your progress, and prepare confidently for exams—all in a fun, supportive environment.
             </p>
             <AppLink href={ data ? "/exams" : "/auth/register" }>
               <Button color="orange">{ data ? "Explore Exams" : "Get Started" }</Button>
