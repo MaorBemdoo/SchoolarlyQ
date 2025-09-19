@@ -313,7 +313,7 @@ export default function Home() {
                 <div className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200" onClick={() => setOpen(idx)}>
                   {title}
                 </div>
-                <div className="px-4 border-t border-t-black collapse-content">
+                <div className="px-4 border-t border-t-gray-300 collapse-content peer-checked:py-4">
                   <p>{description}</p>
                 </div>
               </div>
