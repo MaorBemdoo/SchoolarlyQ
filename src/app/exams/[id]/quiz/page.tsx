@@ -185,7 +185,7 @@ const QuizPage = () => {
 
   return (
     <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
-      {decoded.mode == "study" && checkAnswerRes?.data?.isCorrect && (
+      {decoded.mode == "study" && checkAnswerRes?.data?.isCorrect && isCompleted !== null && !isCompleted && (
         <Confetti className="!z-10 w-full h-[100dvh]" />
       )}
       <div
