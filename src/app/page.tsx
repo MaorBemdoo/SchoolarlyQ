@@ -272,11 +272,11 @@ export default function Home() {
           <input
             type="radio"
             name="quiz_modes_tabs"
-            className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200"
+            className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-200 dark:hover:!bg-primary-dark-100 dark:focus:!bg-primary-dark-100 dark:checked:!bg-primary-dark-100"
             aria-label="Study Mode"
             defaultChecked
           />
-          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6 dark:bg-primary-dark-100">
             <h3 className="text-2xl font-semibold mb-2">Study Mode</h3>
             <p>
               Practice at your own pace with instant feedback and detailed
@@ -294,10 +294,10 @@ export default function Home() {
           <input
             type="radio"
             name="quiz_modes_tabs"
-            className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200"
+            className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-200 dark:hover:!bg-primary-dark-100 dark:focus:!bg-primary-dark-100 dark:checked:!bg-primary-dark-100"
             aria-label="Exam Mode"
           />
-          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6 dark:bg-primary-dark-100">
             <h3 className="text-2xl font-semibold mb-2">Exam Mode</h3>
             <p>
               Simulate real exam conditions with timed quizzes and no
