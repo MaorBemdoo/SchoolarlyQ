@@ -342,7 +342,7 @@ export default function Home() {
               >
                 {title}
               </div>
-              <div className="px-4 border-t border-t-black collapse-content">
+              <div className="px-4 peer-checked:py-4 border-t border-t-gray-300 collapse-content">
                 <p>{description}</p>
               </div>
             </div>
