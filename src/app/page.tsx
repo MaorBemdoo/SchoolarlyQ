@@ -73,7 +73,7 @@ export default function Home() {
   const { scrollYProgress } = useScroll();
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
-  const { data } = useSession()
+  const { data } = useSession();
   const [open, setOpen] = useState(0);
 
   useEffect(() => {
@@ -147,14 +147,19 @@ export default function Home() {
               <span className="text-secondary-light-400">Q</span>
             </h1>
             <p className="text-lg">
-              Unlock your academic potential with interactive quizzes tailored for{" "}
+              Unlock your academic potential with interactive quizzes tailored
+              for{" "}
               <span className="font-bold text-primary-light-300">
-              Bingham students
+                Bingham students
               </span>
-              . SchoolarlyQ helps you master course material, track your progress, and prepare confidently for exams—all in a fun, supportive environment.
+              . SchoolarlyQ helps you master course material, track your
+              progress, and prepare confidently for exams—all in a fun,
+              supportive environment.
             </p>
-            <AppLink href={ data ? "/exams" : "/auth/register" }>
-              <Button color="orange">{ data ? "Explore Exams" : "Get Started" }</Button>
+            <AppLink href={data ? "/exams" : "/auth/register"}>
+              <Button color="orange">
+                {data ? "Explore Exams" : "Get Started"}
+              </Button>
             </AppLink>
           </motion.div>
         </div>
@@ -259,38 +264,54 @@ export default function Home() {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold">Quiz Modes</h2>
           <p className="text-lg mt-4">
-        Choose from different quiz modes to suit your learning style and preferences.
+            Choose from different quiz modes to suit your learning style and
+            preferences.
           </p>
         </div>
         <div className="tabs tabs-lift md:items-start md:grid-rows-8 md:grid-cols-[max-content] * [input]-*:whitespace-nowrap *:rounded-none w-full max-w-[800px] mx-auto">
-          <input type="radio" name="quiz_modes_tabs" className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-200 dark:hover:!bg-primary-dark-100 dark:focus:!bg-primary-dark-100 dark:checked:!bg-primary-dark-100" aria-label="Study Mode" defaultChecked />
-            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6 dark:bg-primary-dark-100">
-              <h3 className="text-2xl font-semibold mb-2">Study Mode</h3>
-              <p>
-                Practice at your own pace with instant feedback and detailed explanations for each question.
-                In Study Mode, you can review questions, see correct answers immediately, and learn from your mistakes without any time pressure.
-              </p>
-              <ul className="list-disc ml-6 mt-4 space-y-1">
-                <li>Receive step-by-step explanations for every answer</li>
-                <li>Pause and resume quizzes whenever you want</li>
-                <li>Track your progress and revisit incorrect questions</li>
-                <li>Perfect for revision and concept reinforcement</li>
-              </ul>
-            </div>
-            <input type="radio" name="quiz_modes_tabs" className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-200 dark:hover:!bg-primary-dark-100 dark:focus:!bg-primary-dark-100 dark:checked:!bg-primary-dark-100" aria-label="Exam Mode" />
-            <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6 dark:bg-primary-dark-100">
-              <h3 className="text-2xl font-semibold mb-2">Exam Mode</h3>
-              <p>
-                Simulate real exam conditions with timed quizzes and no interruptions.
-                Exam Mode helps you prepare for actual test scenarios by limiting access to hints and explanations until the quiz is completed.
-              </p>
-              <ul className="list-disc ml-6 mt-4 space-y-1">
-                <li>Timed quizzes to mirror real exam pressure</li>
-                <li>No instant feedback—answers revealed after submission</li>
-                <li>Score breakdown and performance analytics at the end</li>
-                <li>Ideal for self-assessment and exam readiness</li>
-              </ul>
-            </div>
+          <input
+            type="radio"
+            name="quiz_modes_tabs"
+            className="tab h-full !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200"
+            aria-label="Study Mode"
+            defaultChecked
+          />
+          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+            <h3 className="text-2xl font-semibold mb-2">Study Mode</h3>
+            <p>
+              Practice at your own pace with instant feedback and detailed
+              explanations for each question. In Study Mode, you can review
+              questions, see correct answers immediately, and learn from your
+              mistakes without any time pressure.
+            </p>
+            <ul className="list-disc ml-6 mt-4 space-y-1">
+              <li>Receive step-by-step explanations for every answer</li>
+              <li>Pause and resume quizzes whenever you want</li>
+              <li>Track your progress and revisit incorrect questions</li>
+              <li>Perfect for revision and concept reinforcement</li>
+            </ul>
+          </div>
+          <input
+            type="radio"
+            name="quiz_modes_tabs"
+            className="tab h-full md:col-[1] md:row-[2] !bg-[image:none] !text-inherit hover:!bg-primary-light-100 focus:!bg-primary-light-200 checked:!bg-primary-light-200 dark:!bg-primary-dark-100 dark:hover:!bg-primary-dark-200 dark:focus:!bg-primary-dark-200 dark:checked:!bg-primary-dark-200"
+            aria-label="Exam Mode"
+          />
+          <div className="tab-content md:col-[2] md:row-span-full bg-primary-light-100 p-6">
+            <h3 className="text-2xl font-semibold mb-2">Exam Mode</h3>
+            <p>
+              Simulate real exam conditions with timed quizzes and no
+              interruptions. Exam Mode helps you prepare for actual test
+              scenarios by limiting access to hints and explanations until the
+              quiz is completed.
+            </p>
+            <ul className="list-disc ml-6 mt-4 space-y-1">
+              <li>Timed quizzes to mirror real exam pressure</li>
+              <li>No instant feedback—answers revealed after submission</li>
+              <li>Score breakdown and performance analytics at the end</li>
+              <li>Ideal for self-assessment and exam readiness</li>
+            </ul>
+          </div>
         </div>
       </section>
       {/* <section>
@@ -305,18 +326,26 @@ export default function Home() {
         </div>
         <div className="max-w-[800px] mx-auto space-y-2">
           {faqs.map(({ title, description }, idx) => (
+            <div
+              className={`group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100`}
+              key={idx}
+            >
+              <input
+                type="radio"
+                name="accordion"
+                className="peer"
+                checked={open === idx}
+              />
               <div
-                className={`group collapse collapse-arrow bg-primary-light-100 dark:bg-primary-dark-100`}
-                key={idx}
+                className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200"
+                onClick={() => setOpen(idx)}
               >
-                <input type="radio" name="accordion" className="peer" checked={open === idx} />
-                <div className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200" onClick={() => setOpen(idx)}>
-                  {title}
-                </div>
-                <div className="px-4 border-t border-t-gray-300 collapse-content peer-checked:py-4">
-                  <p>{description}</p>
-                </div>
+                {title}
               </div>
+              <div className="px-4 border-t border-t-black collapse-content">
+                <p>{description}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
