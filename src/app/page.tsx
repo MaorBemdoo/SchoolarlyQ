@@ -74,7 +74,7 @@ export default function Home() {
   const velocity = useVelocity(scrollYProgress);
   const [speed, setSpeed] = useState(100);
   const { data } = useSession();
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(-1);
 
   useEffect(() => {
     const unsubscribe = velocity.onChange((latest) => {
@@ -338,7 +338,7 @@ export default function Home() {
               />
               <div
                 className="px-4 collapse-title text-lg font-medium group-hover:bg-primary-light-200 peer-checked:bg-primary-light-200 dark:group-hover:bg-primary-dark-200 dark:peer-checked:bg-primary-dark-200"
-                onClick={() => setOpen(idx)}
+                onClick={() => setOpen(idx == open ? -1 : idx)}
               >
                 {title}
               </div>
