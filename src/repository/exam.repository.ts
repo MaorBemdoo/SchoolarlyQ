@@ -6,11 +6,11 @@ export const examRepository = {
     const query: any = {};
 
     if (filter.levels && filter.levels.length > 0) {
-      query.level = { $in: filter.levels };
+      query.level = { $in: new RegExp(filter.levels, "i") };
     }
 
     if (filter.departments && filter.departments.length > 0) {
-      query.department = { $in: filter.departments };
+      query.department = { $in: new RegExp(filter.departments, "i") };
     }
 
     if (filter.semesters && filter.semesters.length > 0) {
