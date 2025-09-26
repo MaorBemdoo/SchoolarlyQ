@@ -35,13 +35,16 @@ const Quiz = () => {
   const router = useRouter();
   const didMountRef = useRef(false);
 
-  const { execute: execUpdateUser, status: updateUserStatus } = useAction(updateUser);
+  const { execute: execUpdateUser, status: updateUserStatus } =
+    useAction(updateUser);
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<completeProfileForm>({ resolver: yupResolver(completeProfileSchema) });
+  } = useForm<completeProfileForm>({
+    resolver: yupResolver(completeProfileSchema),
+  });
 
   const parsedParams: any = {};
   for (const [key, value] of Object.entries(
@@ -109,14 +112,15 @@ const Quiz = () => {
           setParams({
             levels: [formdata.level.toLowerCase()],
             departments: [formdata.department.toLowerCase()],
-            semesters: [((m) =>
-              [9, 10, 11, 12, 1, 2].includes(m)
-                ? "1"
-                : [4, 5, 6, 7, 8].includes(m)
-                  ? "2"
-                  : "")(new Date().getMonth() + 1),
-            ]
-          })
+            semesters: [
+              ((m) =>
+                [9, 10, 11, 12, 1, 2].includes(m)
+                  ? "1"
+                  : [4, 5, 6, 7, 8].includes(m)
+                    ? "2"
+                    : "")(new Date().getMonth() + 1),
+            ],
+          });
         }
       } else {
         toast.error(res?.message || "An error occurred while updating profile");
@@ -127,7 +131,9 @@ const Quiz = () => {
       if (searchParams.size < 1) {
         setParams({
           levels: data?.user.level ? [data.user.level.toLowerCase()] : [],
-          departments: data?.user.department ? [data.user.department.toLowerCase()] : [],
+          departments: data?.user.department
+            ? [data.user.department.toLowerCase()]
+            : [],
           semesters: [
             ((m) =>
               [9, 10, 11, 12, 1, 2].includes(m)
@@ -138,15 +144,16 @@ const Quiz = () => {
           ],
         });
       }
-      if(!data?.user?.level || !data?.user?.department){
+      if (!data?.user?.level || !data?.user?.department) {
         AppSwal.fire({
           showConfirmButton: false,
           html: (
-           <form className="flex flex-col gap-4 text-start">
-               <div className="text-center">
+            <form className="flex flex-col gap-4 text-start">
+              <div className="text-center">
                 <h1 className="text-2xl font-bold">Complete your profile</h1>
                 <p className="text-gray-600 text-sm font-semibold dark:text-gray-300">
-                  Please provide the following information to get the best experience
+                  Please provide the following information to get the best
+                  experience
                 </p>
               </div>
               <div className="flex gap-2 items-center rounded-md shadow-md bg-blue-100 text-blue-800 p-4">
@@ -154,8 +161,8 @@ const Quiz = () => {
                   <MdOutlineInfo />
                 </div>
                 <p className="text-sm">
-                  The department and level field cannot be altered. If you feel they
-                  don&apos;t resonate with you{" "}
+                  The department and level field cannot be altered. If you feel
+                  they don&apos;t resonate with you{" "}
                   <Link
                     href="/#contact"
                     className="text-primary-light-300 dark:text-primary-dark-300 hover:underline"
@@ -191,7 +198,7 @@ const Quiz = () => {
                   </p>
                 )}
               </div>
-    
+
               <div>
                 <Controller
                   name="department"
@@ -212,7 +219,7 @@ const Quiz = () => {
                   </p>
                 )}
               </div>
-    
+
               <div>
                 <Controller
                   name="level"
@@ -233,24 +240,34 @@ const Quiz = () => {
                   </p>
                 )}
               </div>
-    
-                <div className="text-center">
-                  <Button
-                    className="w-full md:w-[150px]"
-                    onClick={handleSubmit(completeProfileSubmit)}
-                    loading={updateUserStatus === "loading"}
-                  >
-                    Submit
-                  </Button>
-                </div>
+
+              <div className="text-center">
+                <Button
+                  className="w-full md:w-[150px]"
+                  onClick={handleSubmit(completeProfileSubmit)}
+                  loading={updateUserStatus === "loading"}
+                >
+                  Submit
+                </Button>
+              </div>
             </form>
-          )
-        })
+          ),
+        });
       }
       didMountRef.current = true;
       return;
     }
-  }, [router, data, searchParams, control, errors, handleSubmit, updateUserStatus, setValue, execUpdateUser]);
+  }, [
+    router,
+    data,
+    searchParams,
+    control,
+    errors,
+    handleSubmit,
+    updateUserStatus,
+    setValue,
+    execUpdateUser,
+  ]);
 
   return (
     <main className="mt-8">
