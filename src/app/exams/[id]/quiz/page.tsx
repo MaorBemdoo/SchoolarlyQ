@@ -267,7 +267,7 @@ const QuizPage = () => {
                     rows={6}
                     value={theoryAnswer}
                     onChange={(e) => setTheoryAnswer(e.target.value)}
-                    className="resize-none rounded-md shadow-inner form-input"
+                    className={`resize-none rounded-md shadow-inner form-input ${checkAnswerStatus == "success" && (checkAnswerRes?.data?.isCorrect ? "border-green-700" : "border-red-700")}`}
                     disabled={timeLeft <= 0 || selectedAnswer !== null}
                   />
                 ) : question?.options ? (
