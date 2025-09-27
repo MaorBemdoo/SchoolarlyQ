@@ -19,6 +19,7 @@ const QuizPage = () => {
     res: checkAnswerRes,
     execute: checkAnswer,
     status: checkAnswerStatus,
+    reset: resetAnswerStatus
   } = useAction(verifyAnswer);
   const { res: questionRes, execute: executeGetQuestion } =
     useAction(getQuestion);
@@ -42,6 +43,7 @@ const QuizPage = () => {
   );
   const [hideTimer, setHideTimer] = useState(false);
   const [openExplanation, setOpenExplanation] = useState(false);
+  const [theoryAnswer, setTheoryAnswer] = useState(storedQuiz ? (storedQuiz.selectedAnswer || "") : "")
   const { id } = useParams();
   const router = useRouter();
 
@@ -67,12 +69,12 @@ const QuizPage = () => {
   }, [decoded, currentQuestion, executeGetQuestion]);
 
   useEffect(() => {
-    if (!decoded && !question?.options) return;
+    if (!decoded && !question) return;
     if (selectedAnswer !== null && decoded?.mode == "study") {
       checkAnswer(
         decoded?.questionIds[currentQuestion - 1],
         decoded?.mode,
-        question?.options[selectedAnswer],
+        decoded?.type == "objective" ? question?.options[selectedAnswer] : selectedAnswer,
       );
     }
     setStoredQuiz({
@@ -84,9 +86,10 @@ const QuizPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     checkAnswer,
+    // checkAnswerStatus,
     currentQuestion,
     decoded,
-    question?.options,
+    question,
     selectedAnswer,
     setStoredQuiz,
     isCompleted,
@@ -98,7 +101,7 @@ const QuizPage = () => {
       decoded?.timer === "none" ||
       timeLeft == null ||
       isCompleted ||
-      (selectedAnswer !== null && decoded?.mode == "study")
+      checkAnswerStatus !== "idle"
     )
       return;
 
@@ -119,17 +122,15 @@ const QuizPage = () => {
         });
       }, 1000);
     } else if (timeLeft === 0) {
+      setSelectedAnswer(decoded?.type == "objective" ? -1 : "");
       toast.warn("Your time is up!");
-      setSelectedAnswer(-1);
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [
-    checkAnswer,
     checkAnswerStatus,
-    currentQuestion,
     dangerTime,
     decoded,
     question,
@@ -146,14 +147,25 @@ const QuizPage = () => {
 
   const handleSubmit = async () => {
     if (checkAnswerStatus == "loading") return;
-    if (decoded?.mode == "study" && checkAnswerStatus == "idle") {
-      toast.error("Please select an answer");
-      return;
+    if (decoded?.mode == "study") {
+      if(decoded?.type == "objective" && selectedAnswer == null){
+        toast.error("Please select an answer");
+        return;
+      }
+      if(decoded?.type == "theory" && !theoryAnswer && checkAnswerStatus == "idle"){
+        toast.error("Please answer the question");
+        return;
+      }
+    }
+    if(decoded?.type == "theory" && checkAnswerStatus == "idle"){
+      setSelectedAnswer(theoryAnswer)
+      if(decoded?.mode == "study") return;
     }
     if (storedQuiz?.currentQuestion < decoded.questionCount) {
       const newTime = Number(decoded.timer) * 60;
       setTimeLeft(newTime);
       setSelectedAnswer(null);
+      setTheoryAnswer("")
       setStoredQuiz({
         ...storedQuiz,
         timeLeft: decoded?.mode == "study" ? newTime : storedQuiz.timeLeft,
@@ -161,12 +173,15 @@ const QuizPage = () => {
         selectedAnswer: null,
       });
       setCurrentQuestion((prev: number) => prev + 1);
+      resetAnswerStatus()
       return;
     }
     setIsCompleted(true);
     setTimeLeft(null);
     setSelectedAnswer(null);
+    setTheoryAnswer("")
     setCurrentQuestion(null);
+    resetAnswerStatus()
     setStoredQuiz({
       ...storedQuiz,
       timeLeft: null,
@@ -233,7 +248,7 @@ const QuizPage = () => {
         className="grid place-content-center min-h-[calc(100%-50px)]"
       >
         <div
-          className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${isCompleted ? "grid place-content-center" : ""} ${question ? "" : "w-[250px]"}`}
+          className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${isCompleted ? "flex flex-col items-center justify-center" : ""} ${question ? "" : "w-[250px]"}`}
         >
           {isCompleted ? (
             <Completed />
@@ -250,12 +265,15 @@ const QuizPage = () => {
                 {decoded.type == "theory" ? (
                   <textarea
                     rows={6}
+                    value={theoryAnswer}
+                    onChange={(e) => setTheoryAnswer(e.target.value)}
                     className="resize-none rounded-md shadow-inner form-input"
+                    disabled={timeLeft <= 0 || selectedAnswer !== null}
                   />
                 ) : question?.options ? (
                   question?.options.map((opt: any, i: number) => (
                     <div
-                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${decoded.mode == "exam" && selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "bg-green-700 hover:bg-green-700" : ""}`}
+                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "!bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "!bg-green-700 hover:!bg-green-700" : ""}`}
                       onClick={() => {
                         setSelectedAnswer(i);
                       }}
@@ -291,7 +309,7 @@ const QuizPage = () => {
               )}
               <div className="text-center">
                 <Button
-                  className={`${timeLeft <= 0 || checkAnswerStatus == "success" || (decoded?.mode == "study" && selectedAnswer !== null) || (decoded?.mode == "exam" && selectedAnswer !== null && storedQuiz?.currentQuestion == decoded.questionCount) ? "animate-bounce" : ""}`}
+                  className={`${timeLeft <= 0 || checkAnswerStatus == "success" || (decoded?.mode == "study" && checkAnswerStatus !== "idle") || (decoded?.mode == "exam" && selectedAnswer !== null && storedQuiz?.currentQuestion == decoded.questionCount) ? "animate-bounce" : ""}`}
                   disabled={checkAnswerStatus == "loading"}
                   onClick={handleSubmit}
                 >

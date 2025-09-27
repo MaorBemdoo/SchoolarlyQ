@@ -2,7 +2,6 @@
   "name": "schoolarlyq",
   "version": "0.1.0",
   "description": "A past question and answer quiz app",
-  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -78,5 +77,6 @@
     "schoolarlyq"
   ],
   "author": "Bemdoo Maor",
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@4.10.2"
 }

@@ -19,7 +19,12 @@ const useAction = (action: (...args: any) => Promise<ActionResponse>) => {
     [action],
   );
 
-  return { status, res, execute };
+  const reset = () => {
+    setRes(null)
+    setStatus("idle")
+  }
+
+  return { status, res, execute, reset };
 };
 
 export default useAction;
