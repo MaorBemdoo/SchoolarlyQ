@@ -102,7 +102,7 @@ const Register = () => {
       const res = await signIn("google", {
         redirectTo: "/auth/register?step=2",
       });
-      if (res?.error) throw new Error(res?.error);
+      // if (res?.error) throw new Error(res?.error);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message || "Google signup failed");
