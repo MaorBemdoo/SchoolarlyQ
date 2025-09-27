@@ -99,7 +99,7 @@ const Register = () => {
   const googleSubmit = async () => {
     try {
       setLoading(true);
-      const res = await signIn("google", {
+      await signIn("google", {
         redirectTo: "/auth/register?step=2",
       });
       // if (res?.error) throw new Error(res?.error);
