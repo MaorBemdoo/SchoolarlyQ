@@ -105,19 +105,17 @@ const Quiz = () => {
       if (res?.status === "success") {
         AppSwal.close();
         toast.success("Profile updated successfully");
-        if (searchParams.size < 1) {
-          setParams({
-            levels: [formdata.level.toLowerCase()],
-            departments: [formdata.department.toLowerCase()],
-            semesters: [((m) =>
-              [9, 10, 11, 12, 1, 2].includes(m)
-                ? "1"
-                : [4, 5, 6, 7, 8].includes(m)
-                  ? "2"
-                  : "")(new Date().getMonth() + 1),
-            ]
-          })
-        }
+        setParams({
+          levels: [formdata.level.toLowerCase()],
+          departments: [formdata.department.toLowerCase()],
+          semesters: [((m) =>
+            [9, 10, 11, 12, 1, 2].includes(m)
+              ? "1"
+              : [4, 5, 6, 7, 8].includes(m)
+                ? "2"
+                : "")(new Date().getMonth() + 1),
+          ]
+        })
       } else {
         toast.error(res?.message || "An error occurred while updating profile");
       }
