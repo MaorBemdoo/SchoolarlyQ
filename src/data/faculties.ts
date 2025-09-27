@@ -79,4 +79,11 @@ export const faculties = [
       // Add Landscape Architecture as needed
     ],
   },
+  {
+    id: "SBS",
+    faculty: "School of Basic Sciences",
+    departments: [
+      { id: 1, name: "IJMB" }
+    ]
+  }
 ];
