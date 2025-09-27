@@ -51,8 +51,8 @@ const Login = () => {
   const onGoogleSubmit = async () => {
     try {
       setGoogleLoading(true);
-      const res = await signIn("google", { redirectTo: "/exams" });
-      if (res?.error) throw new Error("Google login failed");
+      await signIn("google", { redirectTo: "/exams" });
+      // if (res?.error) throw new Error("Google login failed");
     } catch (error: any) {
       toast.error(error.message || "Error logging user");
     } finally {
