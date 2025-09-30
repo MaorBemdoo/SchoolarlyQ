@@ -555,37 +555,39 @@ const CreateQuestionsPage = () => {
                               className="w-[--input-width] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg p-1 mt-2 empty:invisible transition duration-100 ease-in data-leave:data-closed:opacity-0"
                             >
                               {
-                                fetchExamsStatus === "loading" || fetchExamsStatus === "idle" ? Array.from({ length: 3 }).map((_, i) => (
-                                  <div
-                                    key={i}
-                                    className="animate-pulse h-8 bg-gray-200 dark:bg-gray-700 rounded-md mb-1 last:mb-0"
-                                  />
-                                )) : 
-                                exams.data.map((exam: any) => (
-                                  <ComboboxOption
-                                    key={exam._id}
-                                    value={exam}
-                                    className={`group flex items-center gap-2 rounded-md px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors data-selected:bg-blue-100 dark:data-selected:bg-blue-900 ${field.value === exam._id ? 'bg-blue-100 dark:bg-blue-900' : ''}`}
-                                  >
-                                    <FaCheck className={`text-blue-600 transition-opacity ${field.value === exam._id ? 'opacity-100' : 'opacity-0'}`} />
-                                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
-                                      <p>{exam.course_title}</p>
-                                      <div className="flex items-center gap-1">
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.course_code}</span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.level}</span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.semester === 1 ? 'First' : 'Second'} Semester</span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.session}</span>
-                                      </div>
-                                    </span>
-                                  </ComboboxOption>
-                                ))
+                                fetchExamsStatus === "loading" || fetchExamsStatus === "idle" ? (
+                                  Array.from({ length: 3 }).map((_, i) => (
+                                    <div
+                                      key={i}
+                                      className="animate-pulse h-8 bg-gray-200 dark:bg-gray-700 rounded-md mb-1 last:mb-0"
+                                    />
+                                  ))
+                                ) : exams.data.length === 0 ? (
+                                  <div className="px-4 py-2 text-gray-500 dark:text-gray-400 text-sm">No exams found.</div>
+                                ) : (
+                                  exams.data.map((exam: any) => (
+                                    <ComboboxOption
+                                      key={exam._id}
+                                      value={exam}
+                                      className={`group flex items-center gap-2 rounded-md px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors data-selected:bg-blue-100 dark:data-selected:bg-blue-900 ${field.value === exam._id ? 'bg-blue-100 dark:bg-blue-900' : ''}`}
+                                    >
+                                      <FaCheck className={`text-blue-600 transition-opacity ${field.value === exam._id ? 'opacity-100' : 'opacity-0'}`} />
+                                      <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                                        <p>{exam.course_title}</p>
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-xs text-gray-500 dark:text-gray-400">{exam.course_code}</span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400">{exam.level}</span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400">{exam.semester === 1 ? 'First' : 'Second'} Semester</span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400">{exam.session}</span>
+                                        </div>
+                                      </span>
+                                    </ComboboxOption>
+                                  ))
+                                )
                               }
-                              {exams && exams.length === 0 && (
-                                <div className="px-4 py-2 text-gray-500 dark:text-gray-400 text-sm">No exams found.</div>
-                              )}
                             </ComboboxOptions>
                           </Combobox>
                         )}
