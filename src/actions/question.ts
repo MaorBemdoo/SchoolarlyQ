@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import initLogger from "@/config/logger";
@@ -41,12 +42,12 @@ export async function createQuestion(
       return ResponseHandler("failed", "Invalid type parameter");
     }
 
-    await questionService.createQuestion(
+    const createdQuestions = await questionService.createQuestion(
       type === "bulk" ? (data as BulkQuestions).questions : data,
     );
     logger.info("Question(s) created successfully");
 
-    return ResponseHandler("success", "Question(s) created successfully");
+    return ResponseHandler("success", "Question(s) created successfully", type === "bulk" ? createdQuestions.map((q: any) => q._id) : createdQuestions._id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     logger.error(err, "Error creating question");

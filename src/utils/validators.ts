@@ -40,6 +40,7 @@ export const questionSchema = yup.object().shape({
 });
 
 export const examSchema = yup.object().shape({
+  id: yup.string().default(""),
   course_title: yup.string().required("Course title is required"),
   course_code: yup
     .string()

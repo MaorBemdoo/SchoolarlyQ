@@ -66,16 +66,13 @@ export async function createExamAndQuestions(exam: any, questions: any[]) {
     course: "fallback",
   }));
   try {
-    if (exam.type == "objective" && questions.length <= 10) {
-      throw new Error("Too few questions!");
-    }
     await validate(examSchema, exam);
     const [a, b] = exam.session.split("/");
     if (Number(a) + 1 !== Number(b)) {
       throw new Error("Invalid session format");
     }
     await Promise.all(questions.map((q) => validate(questionSchema, q)));
-    const res = await examService.createExam(exam);
+    const res = exam.id ? { _id: exam.id } : await examService.createExam(exam);
     const questionRes = await createQuestion(
       {
         questions: questions.map((q) => ({
@@ -86,7 +83,7 @@ export async function createExamAndQuestions(exam: any, questions: any[]) {
       "bulk",
     );
     if (questionRes?.status == "success") {
-      logger.info({ id: res._id }, "Exam and questions created successfully");
+      logger.info({ examId: res._id, questionsIds: questionRes.data, questionCount: questions.length }, exam._id ? "Exam and questions updated successfully" : "Questions added successfully");
       return ResponseHandler(
         "success",
         "Exam and questions created successfully",

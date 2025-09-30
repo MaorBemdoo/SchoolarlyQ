@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@hookform/resolvers": "^5.2.1",
     "@logtail/pino": "^0.5.5",
     "@next-auth/mongodb-adapter": "^1.1.3",
