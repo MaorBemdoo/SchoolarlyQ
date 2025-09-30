@@ -141,7 +141,7 @@ const CreateQuestionsPage = () => {
   };
 
   const onSubmit = async (data: any) => {
-    await handleQuestionsSubmit(() => true);
+    handleQuestionsSubmit(() => true);
     if (!isQuestionsValid) {
       return;
     }
