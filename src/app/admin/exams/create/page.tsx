@@ -541,7 +541,7 @@ const CreateQuestionsPage = () => {
                               <ComboboxInput
                                 className="form-input"
                                 displayValue={() => getValues("course_title")}
-                                placeholder="Search..."
+                                placeholder="Search exams by title or code..."
                                 onChange={(e) => setExistingExamsInput(e.target.value)}
                               />
                               <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
@@ -565,10 +565,21 @@ const CreateQuestionsPage = () => {
                                   <ComboboxOption
                                     key={exam._id}
                                     value={exam}
-                                    className="group flex items-center gap-2 rounded-md px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors data-selected:bg-blue-100 dark:data-selected:bg-blue-900"
+                                    className={`group flex items-center gap-2 rounded-md px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors data-selected:bg-blue-100 dark:data-selected:bg-blue-900 ${field.value === exam._id ? 'bg-blue-100 dark:bg-blue-900' : ''}`}
                                   >
-                                    <FaCheck className="text-blue-600 opacity-0 group-data-selected:opacity-100 transition-opacity" />
-                                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{exam.course_title}</span>
+                                    <FaCheck className={`text-blue-600 transition-opacity ${field.value === exam._id ? 'opacity-100' : 'opacity-0'}`} />
+                                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                                      <p>{exam.course_title}</p>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.course_code}</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.level}</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.semester === 1 ? 'First' : 'Second'} Semester</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400"> &middot; </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{exam.session}</span>
+                                      </div>
+                                    </span>
                                   </ComboboxOption>
                                 ))
                               }
