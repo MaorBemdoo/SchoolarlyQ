@@ -181,7 +181,7 @@ const Header = () => {
                         opacity: 0,
                       }}
                       animate={{ y: 20, opacity: 1 }}
-                      className="absolute w-max flex flex-col justify-between gap-2 p-2 *:w-full *:px-3 *:py-1 hover:*:bg-primary-light-100 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400 dark:hover:*:bg-primary-dark-100"
+                      className="absolute w-max z-10 flex flex-col justify-between gap-2 p-2 *:w-full *:px-3 *:py-1 hover:*:bg-primary-light-100 shadow-md rounded border border-secondary-light-400 text-secondary-light-400 bg-white dark:text-white dark:bg-secondary-dark-100 dark:border-secondary-dark-400 dark:hover:*:bg-primary-dark-100"
                       ref={menuRef}
                     >
                       <AppLink
