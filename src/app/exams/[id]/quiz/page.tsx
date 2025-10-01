@@ -19,7 +19,7 @@ const QuizPage = () => {
     res: checkAnswerRes,
     execute: checkAnswer,
     status: checkAnswerStatus,
-    reset: resetAnswerStatus
+    reset: resetAnswerStatus,
   } = useAction(verifyAnswer);
   const { res: questionRes, execute: executeGetQuestion } =
     useAction(getQuestion);
@@ -43,7 +43,9 @@ const QuizPage = () => {
   );
   const [hideTimer, setHideTimer] = useState(false);
   const [openExplanation, setOpenExplanation] = useState(false);
-  const [theoryAnswer, setTheoryAnswer] = useState(storedQuiz ? (storedQuiz.selectedAnswer || "") : "")
+  const [theoryAnswer, setTheoryAnswer] = useState(
+    storedQuiz ? storedQuiz.selectedAnswer || "" : "",
+  );
   const { id } = useParams();
   const router = useRouter();
 
@@ -74,7 +76,9 @@ const QuizPage = () => {
       checkAnswer(
         decoded?.questionIds[currentQuestion - 1],
         decoded?.mode,
-        decoded?.type == "objective" ? question?.options[selectedAnswer] : selectedAnswer,
+        decoded?.type == "objective"
+          ? question?.options[selectedAnswer]
+          : selectedAnswer,
       );
     }
     setStoredQuiz({
@@ -148,24 +152,28 @@ const QuizPage = () => {
   const handleSubmit = async () => {
     if (checkAnswerStatus == "loading") return;
     if (decoded?.mode == "study") {
-      if(decoded?.type == "objective" && selectedAnswer == null){
+      if (decoded?.type == "objective" && selectedAnswer == null) {
         toast.error("Please select an answer");
         return;
       }
-      if(decoded?.type == "theory" && !theoryAnswer && checkAnswerStatus == "idle"){
+      if (
+        decoded?.type == "theory" &&
+        !theoryAnswer &&
+        checkAnswerStatus == "idle"
+      ) {
         toast.error("Please answer the question");
         return;
       }
     }
-    if(decoded?.type == "theory" && checkAnswerStatus == "idle"){
-      setSelectedAnswer(theoryAnswer)
-      if(decoded?.mode == "study") return;
+    if (decoded?.type == "theory" && checkAnswerStatus == "idle") {
+      setSelectedAnswer(theoryAnswer);
+      if (decoded?.mode == "study") return;
     }
     if (storedQuiz?.currentQuestion < decoded.questionCount) {
       const newTime = Number(decoded.timer) * 60;
       setTimeLeft(newTime);
       setSelectedAnswer(null);
-      setTheoryAnswer("")
+      setTheoryAnswer("");
       setStoredQuiz({
         ...storedQuiz,
         timeLeft: decoded?.mode == "study" ? newTime : storedQuiz.timeLeft,
@@ -173,15 +181,15 @@ const QuizPage = () => {
         selectedAnswer: null,
       });
       setCurrentQuestion((prev: number) => prev + 1);
-      resetAnswerStatus()
+      resetAnswerStatus();
       return;
     }
     setIsCompleted(true);
     setTimeLeft(null);
     setSelectedAnswer(null);
-    setTheoryAnswer("")
+    setTheoryAnswer("");
     setCurrentQuestion(null);
-    resetAnswerStatus()
+    resetAnswerStatus();
     setStoredQuiz({
       ...storedQuiz,
       timeLeft: null,

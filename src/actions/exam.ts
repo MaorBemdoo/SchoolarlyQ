@@ -83,7 +83,16 @@ export async function createExamAndQuestions(exam: any, questions: any[]) {
       "bulk",
     );
     if (questionRes?.status == "success") {
-      logger.info({ examId: res._id, questionsIds: questionRes.data, questionCount: questions.length }, exam._id ? "Exam and questions updated successfully" : "Questions added successfully");
+      logger.info(
+        {
+          examId: res._id,
+          questionsIds: questionRes.data,
+          questionCount: questions.length,
+        },
+        exam._id
+          ? "Exam and questions updated successfully"
+          : "Questions added successfully",
+      );
       return ResponseHandler(
         "success",
         "Exam and questions created successfully",

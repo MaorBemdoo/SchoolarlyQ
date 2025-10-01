@@ -20,9 +20,9 @@ const useAction = (action: (...args: any) => Promise<ActionResponse>) => {
   );
 
   const reset = () => {
-    setRes(null)
-    setStatus("idle")
-  }
+    setRes(null);
+    setStatus("idle");
+  };
 
   return { status, res, execute, reset };
 };
