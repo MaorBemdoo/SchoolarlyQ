@@ -1,7 +1,6 @@
 import React from "react";
 
 const Completed = () => {
-  
   return (
     <>
       {/* <FaCheckCircle size={52} color="#4caf50" /> */}

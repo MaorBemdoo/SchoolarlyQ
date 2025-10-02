@@ -82,8 +82,6 @@ export const faculties = [
   {
     id: "SBS",
     faculty: "School of Basic Sciences",
-    departments: [
-      { id: 1, name: "IJMB" }
-    ]
-  }
+    departments: [{ id: 1, name: "IJMB" }],
+  },
 ];
