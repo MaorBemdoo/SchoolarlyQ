@@ -47,7 +47,13 @@ export async function createQuestion(
     );
     logger.info("Question(s) created successfully");
 
-    return ResponseHandler("success", "Question(s) created successfully", type === "bulk" ? createdQuestions.map((q: any) => q._id) : createdQuestions._id);
+    return ResponseHandler(
+      "success",
+      "Question(s) created successfully",
+      type === "bulk"
+        ? createdQuestions.map((q: any) => q._id)
+        : createdQuestions._id,
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     logger.error(err, "Error creating question");
