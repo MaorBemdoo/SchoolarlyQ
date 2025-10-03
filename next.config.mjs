@@ -3,6 +3,9 @@ const nextConfig = {
   serverExternalPackages: ["pino"],
   experimental: {
     nodeMiddleware: true,
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
   },
 };
 

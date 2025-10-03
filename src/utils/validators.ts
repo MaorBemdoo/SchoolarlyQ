@@ -60,6 +60,7 @@ export const examSchema = yup.object().shape({
     .oneOf(["objective", "theory"])
     .required("Type is required"),
   tags: yup.array().of(yup.string().defined()).default([]).required(),
+  image_url: yup.string().url().default(""),
 });
 
 export const validate = async <T>(schema: yup.ObjectSchema<any>, data: T) => {

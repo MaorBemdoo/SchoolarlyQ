@@ -22,7 +22,9 @@ import {
   ComboboxOption,
   ComboboxButton,
 } from "@headlessui/react";
-import { FaCheck, FaChevronDown } from "react-icons/fa6";
+import { FaCheck, FaChevronDown, FaFile } from "react-icons/fa6";
+import { translateExamImage } from "@/actions/chat";
+import { uploadImage } from "@/actions/cloudinary";
 
 type Question = {
   question: string;
@@ -42,6 +44,7 @@ const CreateQuestionsPage = () => {
     savedProgress && savedProgress.exam.id ? "update" : "new",
   );
   const [existingExamsInput, setExistingExamsInput] = useState("");
+  const [image, setImage] = useState("");
   const {
     execute: fetchExams,
     status: fetchExamsStatus,
@@ -91,6 +94,7 @@ const CreateQuestionsPage = () => {
     handleSubmit: handleQuestionsSubmit,
     reset: resetQuestions,
     getValues: getQuestionsValues,
+    setValue: setQuestionsValue,
     formState: { errors: questionErrors, isValid: isQuestionsValid },
   } = useForm<{ questions: Question[] }>({
     defaultValues: {
@@ -105,7 +109,7 @@ const CreateQuestionsPage = () => {
     name: "questions",
   });
 
-  const [tagsInput, setTagsInput] = useState("");
+  const [tagsInput, setTagsInput] = useState(watch("tags").join(", "));
   useEffect(() => {
     const currentTags = getValues("tags");
     setTagsInput(Array.isArray(currentTags) ? currentTags.join(", ") : "");
@@ -142,6 +146,7 @@ const CreateQuestionsPage = () => {
 
   useEffect(() => {
     if (mode === "new") return;
+    if (existingExamsInput.trim() === "") return;
     fetchExams({
       q: existingExamsInput,
       limit: "10",
@@ -150,6 +155,40 @@ const CreateQuestionsPage = () => {
 
   const addQuestion = () => {
     append(newQuestion);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("File size exceeds 20MB limit.");
+        return;
+      }
+
+      try {
+        const image = await uploadImage(file)
+        if (image?.status == "failed") throw new Error(image?.message)
+        const examRes = await translateExamImage(image?.data?.secure_url)
+        if (examRes?.status == "failed") throw new Error(examRes?.message)
+        const examData = JSON.parse(examRes.data)
+        // console.log(examData)
+        setValue("course_title", examData?.exam?.course_title || "");
+        setValue("course_code", examData?.exam?.course_code || "");
+        setValue("department", examData?.exam?.department || "");
+        setValue("level", examData?.exam?.level || "");
+        setValue("semester", examData?.exam?.semester || "1");
+        setValue("credit_units", examData?.exam?.credit_units || "0");
+        setValue("time_allowed", examData?.exam?.time_allowed || "0");
+        setValue("session", examData?.exam?.session || "");
+        setValue("type", examData?.exam?.type || "objective");
+        setValue("tags", examData?.exam?.tags || []);
+        setValue("image_url", image?.data?.secure_url || "");
+        setQuestionsValue("questions", examData?.questions || []);
+        setImage(file.name)
+      } catch (error: any) {
+        toast.error(error.message || "An error occurred.");
+      }
   };
 
   const onSubmit = async (data: any) => {
@@ -241,33 +280,39 @@ const CreateQuestionsPage = () => {
               Existing Exam
             </span>
           </div>
-          <div className="relative col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 pointer-events-none opacity-70">
-            <div className="absolute top-2 right-2 text-xs bg-blue-700 text-white px-2 py-1 rounded-full">
-              Coming soon
-            </div>
-            <label
-              htmlFor="exam-upload"
-              className="flex flex-col items-center cursor-pointer"
-            >
-              <IoCloudUploadOutline className="w-10 h-10 mb-2 text-blue-500" />
-              <span className="font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                Upload Exam File
-              </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                PDF, DOCX, or image files (max 10MB)
-              </span>
-              <input
-                id="exam-upload"
-                type="file"
-                accept=".pdf,.doc,.docx,image/*"
-                className="hidden"
-                // onChange={handleFileChange} // Implement this handler as needed
-              />
-              <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded text-xs mt-2 group-hover:bg-blue-200 transition">
-                Click to select file
-              </span>
+          <>
+            <input
+              id="exam-upload"
+              type="file"
+              accept=".pdf,image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="exam-upload" className="col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700">
+              <div
+                className="flex flex-col items-center cursor-pointer"
+              >
+                <IoCloudUploadOutline className="w-10 h-10 mb-2 text-blue-500" />
+                <span className="font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                  Upload Exam File
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  PDF or image files (max 20MB)
+                </span>
+                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded text-xs mt-2 group-hover:bg-blue-200 transition">
+                  Click to select file
+                </span>
+              </div>
             </label>
-          </div>
+          </>
+          {image && (
+            <div className="col-span-full flex justify-between items-center bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-green-500">
+              <FaFile className="size-8 mb-2 text-green-500" />
+              <span className="text-gray-500 mt-2 break-all">
+                {image}
+              </span>
+            </div>
+          )}
         </section>
         <section className="space-y-6 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm">
           {mode === "new" ? (
