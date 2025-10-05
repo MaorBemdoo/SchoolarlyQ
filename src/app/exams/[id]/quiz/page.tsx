@@ -308,10 +308,10 @@ const QuizPage = () => {
                     className="px-4 collapse-title font-semibold"
                     onClick={() => setOpenExplanation(!openExplanation)}
                   >
-                    Explanation
+                    {decoded?.type == "theory" ? "Correct Answer" : "Explanation"}
                   </div>
                   <div className="px-4 collapse-content">
-                    {question?.explanation}
+                    {decoded?.type == "theory" ? question?.correct_answer : question?.explanation}
                   </div>
                 </div>
               )}
