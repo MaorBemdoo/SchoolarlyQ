@@ -88,7 +88,7 @@ export async function verifyAnswer(id: string, mode: string, ans: string) {
 
   try {
     const question = await questionService.getQuestionById(id);
-    if(question.type == "objective") {
+    if (question.type == "objective") {
       if (question.correct_answer) {
         return ResponseHandler("success", "Answer verified successfully", {
           correct_answer: ans,
@@ -105,7 +105,7 @@ export async function verifyAnswer(id: string, mode: string, ans: string) {
     const res = await sendChatMessage(
       `Given the question: ${question.question}, the user's answer: ${ans} and the correct answer: ${question.correct_answer}, determine if the user's answer is correct(just do an approx scoring). If it is correct, respond with {"isCorrect": true}. If it is incorrect respond with {"isCorrect": false}. Provide your response in valid json format only.`,
     );
-    console.log(res)
+    console.log(res);
 
     if (res.status === "success") {
       const content = res.data;

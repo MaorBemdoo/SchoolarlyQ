@@ -19,7 +19,7 @@ const examSchema = new mongoose.Schema(
       required: true,
     },
     tags: [{ type: String }],
-    image_url: { type: String, default: "" }
+    image_url: { type: String, default: "" },
   },
   { timestamps: true },
 );

@@ -45,7 +45,7 @@ export default async function RootLayout({
   const session = await auth();
   cloudinary.config({
     secure: true,
-  })
+  });
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen text-secondary-light-400 bg-white dark:bg-[#121212] dark:text-white transition">

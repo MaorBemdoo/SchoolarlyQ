@@ -158,37 +158,37 @@ const CreateQuestionsPage = () => {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error("File size exceeds 20MB limit.");
-        return;
-      }
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("File size exceeds 20MB limit.");
+      return;
+    }
 
-      try {
-        const image = await uploadImage(file)
-        if (image?.status == "failed") throw new Error(image?.message)
-        const examRes = await translateExamImage(image?.data?.secure_url)
-        if (examRes?.status == "failed") throw new Error(examRes?.message)
-        const examData = JSON.parse(examRes.data)
-        // console.log(examData)
-        setValue("course_title", examData?.exam?.course_title || "");
-        setValue("course_code", examData?.exam?.course_code || "");
-        setValue("department", examData?.exam?.department || "");
-        setValue("level", examData?.exam?.level || "");
-        setValue("semester", examData?.exam?.semester || "1");
-        setValue("credit_units", examData?.exam?.credit_units || "0");
-        setValue("time_allowed", examData?.exam?.time_allowed || "0");
-        setValue("session", examData?.exam?.session || "");
-        setValue("type", examData?.exam?.type || "objective");
-        setValue("tags", examData?.exam?.tags || []);
-        setValue("image_url", image?.data?.secure_url || "");
-        setQuestionsValue("questions", examData?.questions || []);
-        setImage(file.name)
-      } catch (error: any) {
-        toast.error(error.message || "An error occurred.");
-      }
+    try {
+      const image = await uploadImage(file);
+      if (image?.status == "failed") throw new Error(image?.message);
+      const examRes = await translateExamImage(image?.data?.secure_url);
+      if (examRes?.status == "failed") throw new Error(examRes?.message);
+      const examData = JSON.parse(examRes.data);
+      // console.log(examData)
+      setValue("course_title", examData?.exam?.course_title || "");
+      setValue("course_code", examData?.exam?.course_code || "");
+      setValue("department", examData?.exam?.department || "");
+      setValue("level", examData?.exam?.level || "");
+      setValue("semester", examData?.exam?.semester || "1");
+      setValue("credit_units", examData?.exam?.credit_units || "0");
+      setValue("time_allowed", examData?.exam?.time_allowed || "0");
+      setValue("session", examData?.exam?.session || "");
+      setValue("type", examData?.exam?.type || "objective");
+      setValue("tags", examData?.exam?.tags || []);
+      setValue("image_url", image?.data?.secure_url || "");
+      setQuestionsValue("questions", examData?.questions || []);
+      setImage(file.name);
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred.");
+    }
   };
 
   const onSubmit = async (data: any) => {
@@ -288,10 +288,11 @@ const CreateQuestionsPage = () => {
               className="hidden"
               onChange={handleFileChange}
             />
-            <label htmlFor="exam-upload" className="col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700">
-              <div
-                className="flex flex-col items-center cursor-pointer"
-              >
+            <label
+              htmlFor="exam-upload"
+              className="col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700"
+            >
+              <div className="flex flex-col items-center cursor-pointer">
                 <IoCloudUploadOutline className="w-10 h-10 mb-2 text-blue-500" />
                 <span className="font-semibold text-gray-800 dark:text-gray-100 mb-1">
                   Upload Exam File
@@ -308,9 +309,7 @@ const CreateQuestionsPage = () => {
           {image && (
             <div className="col-span-full flex justify-between items-center bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-green-500">
               <FaFile className="size-8 mb-2 text-green-500" />
-              <span className="text-gray-500 mt-2 break-all">
-                {image}
-              </span>
+              <span className="text-gray-500 mt-2 break-all">{image}</span>
             </div>
           )}
         </section>
