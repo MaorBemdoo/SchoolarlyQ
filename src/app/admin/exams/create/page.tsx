@@ -172,7 +172,6 @@ const CreateQuestionsPage = () => {
       const examRes = await translateExamImage(image?.data?.secure_url);
       if (examRes?.status == "failed") throw new Error(examRes?.message);
       const examData = JSON.parse(examRes.data);
-      // console.log(examData)
       setValue("course_title", examData?.exam?.course_title || "");
       setValue("course_code", examData?.exam?.course_code || "");
       setValue("department", examData?.exam?.department || "");
