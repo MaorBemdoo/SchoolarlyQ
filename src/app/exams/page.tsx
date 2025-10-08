@@ -275,8 +275,11 @@ const Quiz = () => {
             <p className="text-4xl font-semibold">Browse Past Questions</p>
             <p>
               Search our curated list of past questions from{" "}
-              {sessionsRes?.data[sessionsRes.data.length - 1]?.split("/")[0] ||
-                "2015"}{" "}
+                {sessionsRes?.data?.reduce(
+                (min: string, curr: string) =>
+                  curr.split("/")[0] < min ? curr.split("/")[0] : min,
+                sessionsRes?.data?.[0]?.split("/")[0] || "2015"
+                )}{" "}
               to date. Take any exam and see instant score with feedbacks as a
               way to ace your next paper.
             </p>
