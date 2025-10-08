@@ -112,7 +112,7 @@ const QuizPage = () => {
     let interval: NodeJS.Timeout | null = null;
 
     if (timeLeft > 0) {
-      if (timeLeft === dangerTime) {
+      if (timeLeft === dangerTime && decoded?.timer !== "1") {
         toast.warn(`You have ${dangerTime / 60} minute left`);
       }
       interval = setInterval(() => {

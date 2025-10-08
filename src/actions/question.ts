@@ -69,7 +69,9 @@ export async function getQuestion(id: string) {
   try {
     let question = await questionService.getQuestionById(id);
     question = question.toObject();
-    question.correct_answer = undefined;
+    if (question.options.length > 0) {
+      question.correct_answer = undefined;
+    }
     return ResponseHandler(
       "success",
       "Question retrieved successfully",
@@ -105,7 +107,6 @@ export async function verifyAnswer(id: string, mode: string, ans: string) {
     const res = await sendChatMessage(
       `Given the question: ${question.question}, the user's answer: ${ans} and the correct answer: ${question.correct_answer}, determine if the user's answer is correct(just do an approx scoring). If it is correct, respond with {"isCorrect": true}. If it is incorrect respond with {"isCorrect": false}. Provide your response in valid json format only.`,
     );
-    console.log(res);
 
     if (res.status === "success") {
       const content = res.data;
