@@ -90,7 +90,6 @@ const QuizPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     checkAnswer,
-    // checkAnswerStatus,
     currentQuestion,
     decoded,
     question,
