@@ -54,7 +54,7 @@ const QuizPage = () => {
   }, [id, verify]);
 
   useEffect(() => {
-    if (checkAnswerStatus == "success" && !checkAnswerRes?.data?.isCorrect) {
+    if (checkAnswerStatus == "success" && !checkAnswerRes?.data?.is_correct) {
       setOpenExplanation(true);
     }
   }, [checkAnswerRes, checkAnswerStatus]);
@@ -208,7 +208,7 @@ const QuizPage = () => {
   return (
     <main className="w-full h-[100dvh] p-4 bg-[url(/register.jpg)] bg-cover bg-center">
       {decoded.mode == "study" &&
-        checkAnswerRes?.data?.isCorrect &&
+        checkAnswerRes?.data?.is_correct &&
         isCompleted !== null &&
         !isCompleted && <Confetti className="!z-10 w-full h-[100dvh]" />}
       <div
@@ -274,13 +274,13 @@ const QuizPage = () => {
                     rows={6}
                     value={theoryAnswer}
                     onChange={(e) => setTheoryAnswer(e.target.value)}
-                    className={`resize-none rounded-md shadow-inner form-input ${checkAnswerStatus == "success" && (checkAnswerRes?.data?.isCorrect ? "border-green-700" : "border-red-700")}`}
+                    className={`resize-none rounded-md shadow-inner form-input ${checkAnswerStatus == "success" && (checkAnswerRes?.data?.is_correct ? "border-green-700" : "border-red-700")}`}
                     disabled={timeLeft <= 0 || selectedAnswer !== null}
                   />
                 ) : question?.options ? (
                   question?.options.map((opt: any, i: number) => (
                     <div
-                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "!bg-red-700 text-white" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "!bg-green-700 text-white hover:!bg-green-700" : ""}`}
+                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.is_correct && checkAnswerRes?.data?.ans == opt ? "!bg-red-700 text-white" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "!bg-green-700 text-white hover:!bg-green-700" : ""}`}
                       onClick={() => {
                         setSelectedAnswer(i);
                       }}
