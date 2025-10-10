@@ -280,7 +280,7 @@ const QuizPage = () => {
                 ) : question?.options ? (
                   question?.options.map((opt: any, i: number) => (
                     <div
-                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "!bg-red-700" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "!bg-green-700 hover:!bg-green-700" : ""}`}
+                      className={`border p-2 rounded-md cursor-pointer shadow-inner bg-gray-200 hover:bg-primary-light-100 hover:border-secondary-light-400 dark:bg-inherit dark:hover:bg-primary-dark-100 ${timeLeft <= 0 || selectedAnswer !== null ? "pointer-events-none" : ""} ${selectedAnswer == i ? "bg-primary-light-200 dark:bg-primary-dark-200" : ""} ${!checkAnswerRes?.data?.isCorrect && checkAnswerRes?.data?.ans == opt ? "!bg-red-700 text-white" : ""} ${checkAnswerRes?.data?.correct_answer == opt ? "!bg-green-700 text-white hover:!bg-green-700" : ""}`}
                       onClick={() => {
                         setSelectedAnswer(i);
                       }}
