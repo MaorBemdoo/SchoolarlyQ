@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useLocalStorage } from "react-use";
 import useAction from "@/hooks/useAction";
-import { createExamAndQuestions, getExams } from "@/actions/exam";
+import { createExamAndQuestions, getExams, uploadExamFile } from "@/actions/exam";
 import toast from "@/utils/toast";
 import { AppSwal } from "@/config/swal";
 import { TbAlertTriangle } from "react-icons/tb";
@@ -23,8 +23,6 @@ import {
   ComboboxButton,
 } from "@headlessui/react";
 import { FaCheck, FaChevronDown, FaFile } from "react-icons/fa6";
-import { translateExamImage } from "@/actions/chat";
-import { uploadImage } from "@/actions/cloudinary";
 
 type Question = {
   question: string;
@@ -45,6 +43,10 @@ const CreateQuestionsPage = () => {
   );
   const [existingExamsInput, setExistingExamsInput] = useState("");
   const [image, setImage] = useState("");
+  const {
+    execute: uploadFile,
+    status: uploadFileStatus,
+  } = useAction(uploadExamFile);
   const {
     execute: fetchExams,
     status: fetchExamsStatus,
@@ -167,26 +169,23 @@ const CreateQuestionsPage = () => {
     }
 
     try {
-      const image = await uploadImage(file);
-      if (image?.status == "failed") throw new Error(image?.message);
-      const examRes = await translateExamImage(image?.data?.secure_url);
-      if (examRes?.status == "failed") throw new Error(examRes?.message);
-      const examData = JSON.parse(examRes.data);
-      setValue("course_title", examData?.exam?.course_title || "");
-      setValue("course_code", examData?.exam?.course_code || "");
-      setValue("department", examData?.exam?.department || "");
-      setValue("level", examData?.exam?.level || "");
-      setValue("semester", examData?.exam?.semester || "1");
-      setValue("credit_units", examData?.exam?.credit_units || "0");
-      setValue("time_allowed", examData?.exam?.time_allowed || "0");
-      setValue("session", examData?.exam?.session || "");
-      setValue("type", examData?.exam?.type || "objective");
-      setValue("tags", examData?.exam?.tags || []);
-      setValue("image_url", image?.data?.secure_url || "");
-      setQuestionsValue("questions", examData?.questions || []);
+      const res = await uploadFile(file);
+      if(res.status === "failed") throw new Error(res.message);
+      setValue("course_title", res.data?.exam?.course_title || "");
+      setValue("course_code", res.data?.exam?.course_code || "");
+      setValue("department", res.data?.exam?.department || "");
+      setValue("level", res.data?.exam?.level || "");
+      setValue("semester", res.data?.exam?.semester || "1");
+      setValue("credit_units", res.data?.exam?.credit_units || "0");
+      setValue("time_allowed", res.data?.exam?.time_allowed || "0");
+      setValue("session", res.data?.exam?.session || "");
+      setValue("type", res.data?.exam?.type || "objective");
+      setValue("tags", res.data?.exam?.tags || []);
+      setValue("image_url", res.data?.exam?.image_url || "");
+      setQuestionsValue("questions", res.data?.questions || []);
       setImage(file.name);
     } catch (error: any) {
-      toast.error(error.message || "An error occurred.");
+      toast.error(error.message || "Failed to upload file.");
     }
   };
 
@@ -289,7 +288,9 @@ const CreateQuestionsPage = () => {
             />
             <label
               htmlFor="exam-upload"
-              className="col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700"
+              className={`col-span-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-sm transition-colors cursor-pointer group hover:bg-blue-50 dark:hover:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 ${
+                uploadFileStatus === "loading" ? "opacity-50 pointer-events-none" : ""
+              }`}
             >
               <div className="flex flex-col items-center cursor-pointer">
                 <IoCloudUploadOutline className="w-10 h-10 mb-2 text-blue-500" />

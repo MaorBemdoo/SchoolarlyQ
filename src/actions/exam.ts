@@ -143,3 +143,23 @@ export async function startExam(options: {
 export async function endExam() {
   (await cookies()).delete("exam-token");
 }
+
+export async function uploadExamFile(file: File) {
+  await connectDB();
+  const logger = await initLogger();
+
+  if (!file) {
+    return ResponseHandler("failed", "No file provided");
+  }
+
+  try {
+    const res = await examService.uploadExamFile(file);
+    return ResponseHandler("success", "Exam file processed successfully", res);
+  } catch (error: any) {
+    logger.error(error, "Error uploading and processing exam file");
+    return ResponseHandler(
+      "failed",
+      error.message || "Error uploading and processing exam file",
+    );
+  }
+}

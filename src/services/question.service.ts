@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { questionRepository } from "@/repository/question.repository";
-import { chatService } from "./chat.service";
+import { askGPT } from "@/utils/chat";
 
 export const questionService = {
   async createQuestion(data: any) {
@@ -26,7 +26,7 @@ export const questionService = {
         correct_answer: question.correct_answer,
       };
     } else {
-      const res = await chatService.sendMessage(`Given the question: ${question.question}, the user's answer: ${ans} and the correct answer: ${question.correct_answer}, determine if the user's answer is correct(just do an approx scoring). If it is correct, respond with {"is_correct": true}. If it is incorrect respond with {"is_correct": false}. Provide your response in valid json format only.`)
+      const res = await askGPT(`Given the question: ${question.question}, the user's answer: ${ans} and the correct answer: ${question.correct_answer}, determine if the user's answer is correct(just do an approx scoring). If it is correct, respond with {"is_correct": true}. If it is incorrect respond with {"is_correct": false}. Provide your response in valid json format only.`);
       const parsed = JSON.parse(res);
       return {
         is_correct: parsed.is_correct,
