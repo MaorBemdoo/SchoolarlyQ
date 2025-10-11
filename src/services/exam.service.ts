@@ -49,32 +49,32 @@ export const examService = {
 
   async uploadExamFile(file: File) {
     const options = {
-        use_filename: true,
-        unique_filename: false,
-        overwrite: true,
-        folder: "schoolarlyq/past-questions",
-      };
-    
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = new Uint8Array(arrayBuffer);
-        const res: any = await new Promise((resolve, reject) => {
-          cloudinary.uploader
-            .upload_stream(options, function (error, result) {
-              if (error) {
-                reject(error);
-                throw error;
-              }
-              resolve(result);
-            })
-            .end(buffer);
-        });
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
+      folder: "schoolarlyq/past-questions",
+    };
 
-        const translateRes = await translateExamFile(res.secure_url as string);
-        JSON.parse(translateRes).exam.imageUrl = res.secure_url;
-        return translateRes;
-      } catch (error) {
-        throw error;
-      }
-  }
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = new Uint8Array(arrayBuffer);
+      const res: any = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(options, function (error, result) {
+            if (error) {
+              reject(error);
+              throw error;
+            }
+            resolve(result);
+          })
+          .end(buffer);
+      });
+
+      const translateRes = await translateExamFile(res.secure_url as string);
+      JSON.parse(translateRes).exam.imageUrl = res.secure_url;
+      return translateRes;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
