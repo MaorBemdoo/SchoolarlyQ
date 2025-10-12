@@ -149,7 +149,10 @@ const Header = () => {
             style={
               pathname === "/"
                 ? { backgroundColor, color: textColor, boxShadow }
-                : { boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)", color: "inherit" }
+                : {
+                    boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+                    color: "inherit",
+                  }
             }
             className={`mobile-header ${pathname == "/" ? "fixed w-screen" : ""} block z-20 sm:none`}
           >

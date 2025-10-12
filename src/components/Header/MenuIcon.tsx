@@ -40,7 +40,11 @@ const MenuIcon = ({
             transformOrigin: "center",
           },
         }}
-        style={pathname === "/" ? { backgroundColor: textColor } : { backgroundColor: 'currentColor' }}
+        style={
+          pathname === "/"
+            ? { backgroundColor: textColor }
+            : { backgroundColor: "currentColor" }
+        }
         animate={controls}
         className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
@@ -50,7 +54,11 @@ const MenuIcon = ({
           initial2: { width: `${(2 / 3) * 100}%`, opacity: 1 },
           animate2: { opacity: 0 },
         }}
-        style={pathname === "/" ? { backgroundColor: textColor } : { backgroundColor: 'currentColor' }}
+        style={
+          pathname === "/"
+            ? { backgroundColor: textColor }
+            : { backgroundColor: "currentColor" }
+        }
         animate={controls}
         className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
@@ -67,7 +75,11 @@ const MenuIcon = ({
             transformOrigin: "center",
           },
         }}
-        style={pathname === "/" ? { backgroundColor: textColor } : { backgroundColor: 'currentColor' }}
+        style={
+          pathname === "/"
+            ? { backgroundColor: textColor }
+            : { backgroundColor: "currentColor" }
+        }
         animate={controls}
         className="bg-secondary-light-400 dark:bg-white"
       ></motion.div>
