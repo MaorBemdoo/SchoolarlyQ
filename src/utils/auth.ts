@@ -1,10 +1,9 @@
-import NextAuth, { CredentialsSignin, User as UserType } from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 // import clientPromise from "@/config/mongo";
 // import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { AdapterUser } from "next-auth/adapters";
 import initLogger from "@/config/logger";
 import { userService } from "@/services/user.service";
 import connectDB from "./db";
@@ -85,7 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (bcrypt.compareSync(credentials.password as string, user.password)) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           user.password = undefined;
-          return user;
+          return user.toObject();
         } else {
           throw new PasswordIncorrectError();
         }
@@ -98,7 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // session.user = token.user as UserType & AdapterUser;
       await connectDB();
       const userFromDB = await userService.getUserByEmail(
-        (token?.user as UserType & AdapterUser).email as string,
+        token.email as string,
       );
       userFromDB.password = undefined;
       session.user = userFromDB;
