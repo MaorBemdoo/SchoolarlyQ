@@ -83,6 +83,7 @@ const QuizPage = () => {
               : selectedAnswer,
           );
           if(res.status == "failed"){
+            if(timeLeft == 0) return;
             setSelectedAnswer(null)
             resetAnswerStatus()
             toast.error("An error occured while verifing answer. Try Again!")
