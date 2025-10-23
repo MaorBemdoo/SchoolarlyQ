@@ -73,7 +73,7 @@ const QuizHomePage = () => {
       mode,
       type: exam.type,
       questionCount:
-        mode == "study"
+        mode == "study" && exam.type == "objective"
           ? exam.questions <= 10
             ? exam.questions
             : questionCount
@@ -179,7 +179,7 @@ const QuizHomePage = () => {
                 No. of Questions
               </label>
               <select
-                value={questionCount}
+                value={mode == "exam" ? exam?.questions : questionCount}
                 onChange={(e) => setQuestionCount(Number(e.target.value))}
                 id="question-count"
                 className="form-input"
@@ -192,6 +192,7 @@ const QuizHomePage = () => {
                       {val}
                     </option>
                   ))}
+                  { mode == "exam" && <option key={exam.questions}>{exam.questions}</option> }
               </select>
             </div>
           )}
@@ -200,7 +201,7 @@ const QuizHomePage = () => {
               Timer
             </label>
             <select
-              value={timer}
+              value={mode == "exam" ? exam.time_allowed : timer}
               onChange={(e) => setTimer(e.target.value)}
               id="timer"
               className="form-input"
@@ -210,6 +211,7 @@ const QuizHomePage = () => {
               <option value="1">1 Minute</option>
               <option value="3">3 Minutes</option>
               <option value="5">5 Minutes</option>
+              { mode == "exam" && <option value={exam?.time_allowed}>{exam?.time_allowed} Minutes</option> }
             </select>
           </div>
         </div>
