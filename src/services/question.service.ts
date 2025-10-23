@@ -20,7 +20,7 @@ export const questionService = {
   },
   async verifyAnswer(id: string, mode: string, ans: string) {
     const question = await questionRepository.findById(id);
-    if (question.type == "objective") {
+    if (question.options && question.options.length !== 0) {
       return {
         is_correct: question.correct_answer === ans,
         correct_answer: question.correct_answer,
