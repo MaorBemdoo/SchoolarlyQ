@@ -86,7 +86,7 @@ const QuizPage = () => {
             if(timeLeft == 0) return;
             setSelectedAnswer(null)
             resetAnswerStatus()
-            toast.error("Oops, seems we can't verifing your answer at the moment. Try Again!")
+            toast.error("Oops, seems we can't verify your answer at the moment. Try Again!")
           }
         }
       )
