@@ -68,7 +68,7 @@ const QuizPage = () => {
       setTimeLeft(Number(decoded.timer) * 60);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decoded, currentQuestion, executeGetQuestion]);
+  }, [decoded, currentQuestion, isCompleted, executeGetQuestion]);
 
   useEffect(() => {
     if (!decoded && !question) return;
@@ -122,7 +122,7 @@ const QuizPage = () => {
     let interval: NodeJS.Timeout | null = null;
 
     if (timeLeft > 0) {
-      if (timeLeft === dangerTime && decoded?.timer !== "1") {
+      if (timeLeft === dangerTime && decoded?.timer != "1") {
         toast.warn(`You have ${dangerTime / 60} minute left`);
       }
       interval = setInterval(() => {
@@ -136,7 +136,11 @@ const QuizPage = () => {
         });
       }, 1000);
     } else if (timeLeft === 0) {
-      setSelectedAnswer(decoded?.type == "objective" ? -1 : "");
+      if(decoded?.mode == "study"){
+        setSelectedAnswer(decoded?.type == "objective" ? -1 : "");
+      }else{
+        setIsCompleted(true)
+      }
       toast.warn("Your time is up!");
     }
 
