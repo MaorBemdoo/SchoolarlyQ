@@ -30,8 +30,8 @@ export const examRepository = {
 
     let sort: Record<string, 1 | -1> = { createdAt: -1 };
     if (filter?.sort === "oldest") sort = { createdAt: 1 };
-    else if (filter?.sort === "asc") sort = { course_code: 1 };
-    else if (filter?.sort === "desc") sort = { course_code: -1 };
+    else if (filter?.sort === "asc") sort = { course_title: 1 };
+    else if (filter?.sort === "desc") sort = { course_title: -1 };
 
     return Exam.find(query)
       .limit(Number(filter.limit))
