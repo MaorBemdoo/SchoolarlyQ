@@ -135,10 +135,10 @@ const CreateQuestionsPage = () => {
 
   useEffect(() => {
     const subscription = watchQuestions((formValues) => {
-      setSavedProgress((prev: any) => ({
-        exam: prev?.exam || getValues(),
+      setSavedProgress({
+        exam: getValues(),
         questions: formValues.questions,
-      }));
+      });
     });
 
     return () => subscription.unsubscribe();
