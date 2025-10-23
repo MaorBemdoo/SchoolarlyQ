@@ -73,24 +73,21 @@ const QuizPage = () => {
   useEffect(() => {
     if (!decoded && !question) return;
     if (selectedAnswer !== null && decoded?.mode == "study") {
-      (
-        async() => {
-          const res = await checkAnswer(
-            decoded?.questionIds[currentQuestion - 1],
-            decoded?.mode,
-            decoded?.type == "objective"
-              ? question?.options[selectedAnswer]
-              : selectedAnswer,
-          );
-          if(res.status == "failed"){
-            if(timeLeft == 0) return;
-            setSelectedAnswer(null)
-            resetAnswerStatus()
-            toast.error("An error occured while verifing answer. Try Again!")
-          }
+      (async () => {
+        const res = await checkAnswer(
+          decoded?.questionIds[currentQuestion - 1],
+          decoded?.mode,
+          decoded?.type == "objective"
+            ? question?.options[selectedAnswer]
+            : selectedAnswer,
+        );
+        if (res.status == "failed") {
+          if (timeLeft == 0) return;
+          setSelectedAnswer(null);
+          resetAnswerStatus();
+          toast.error("An error occured while verifing answer. Try Again!");
         }
-      )
-      ()
+      })();
     }
     setStoredQuiz({
       ...storedQuiz,
