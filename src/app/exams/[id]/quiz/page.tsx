@@ -73,24 +73,23 @@ const QuizPage = () => {
   useEffect(() => {
     if (!decoded && !question) return;
     if (selectedAnswer !== null && decoded?.mode == "study") {
-      (
-        async() => {
-          const res = await checkAnswer(
-            decoded?.questionIds[currentQuestion - 1],
-            decoded?.mode,
-            decoded?.type == "objective"
-              ? question?.options[selectedAnswer]
-              : selectedAnswer,
+      (async () => {
+        const res = await checkAnswer(
+          decoded?.questionIds[currentQuestion - 1],
+          decoded?.mode,
+          decoded?.type == "objective"
+            ? question?.options[selectedAnswer]
+            : selectedAnswer,
+        );
+        if (res.status == "failed") {
+          if (timeLeft == 0) return;
+          setSelectedAnswer(null);
+          resetAnswerStatus();
+          toast.error(
+            "Oops, seems we can't verify your answer at the moment. Try Again!",
           );
-          if(res.status == "failed"){
-            if(timeLeft == 0) return;
-            setSelectedAnswer(null)
-            resetAnswerStatus()
-            toast.error("Oops, seems we can't verify your answer at the moment. Try Again!")
-          }
         }
-      )
-      ()
+      })();
     }
     setStoredQuiz({
       ...storedQuiz,
@@ -136,10 +135,10 @@ const QuizPage = () => {
         });
       }, 1000);
     } else if (timeLeft === 0) {
-      if(decoded?.mode == "study"){
+      if (decoded?.mode == "study") {
         setSelectedAnswer(decoded?.type == "objective" ? -1 : "");
-      }else{
-        setIsCompleted(true)
+      } else {
+        setIsCompleted(true);
       }
       toast.warn("Your time is up!");
     }
