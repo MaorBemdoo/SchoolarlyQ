@@ -94,7 +94,7 @@ const Quiz = () => {
     });
 
     const queryString = query.toString();
-    router.push(`?${queryString}`);
+    router.replace(`?${queryString}`);
   }, [params, router]);
 
   useEffect(() => {
