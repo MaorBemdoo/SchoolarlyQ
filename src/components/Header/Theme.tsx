@@ -87,7 +87,7 @@ const Theme = ({
             className="flex items-center gap-2 p-2 rounded-full border border-secondary-light-400 cursor-pointer last:*:hover:animate-bounce dark:border-white"
             ref={buttonRef}
             onClick={() => setIsVisible(!isVisible)}
-            style={pathname === "/" ? { borderColor } : {}}
+            style={pathname === "/" ? { borderColor } : { borderColor: "inherit" }}
           >
             <Icon className="text-2xl" />
             <FaChevronDown className="text-xs" />
