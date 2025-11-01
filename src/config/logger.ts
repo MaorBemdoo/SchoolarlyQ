@@ -1,7 +1,6 @@
 import pino, { Logger, transport } from "pino";
 import logtailPino from "@logtail/pino";
 
-// const isEdge = process.env.NEXT_RUNTIME === "edge";
 const isDev = process.env.NODE_ENV === "development";
 
 export default async function initLogger(): Promise<Logger> {
