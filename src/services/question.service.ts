@@ -15,7 +15,6 @@ export const questionService = {
     if (question.options.length > 0) {
       question.correct_answer = undefined;
     }
-    // question.options.sort(() => Math.random() - 0.5);
     return question;
   },
   async verifyAnswer(id: string, mode: string, ans: string) {
