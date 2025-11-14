@@ -8,6 +8,7 @@ import ResponseHandler from "@/utils/ResponseHandler";
 import { examSchema, questionSchema, validate } from "@/utils/validators";
 import { createQuestion } from "./question";
 import { cookies } from "next/headers";
+import { scoreService } from "@/services/score.service";
 
 export async function getExams(filter: Record<string, string> = {}) {
   await connectDB();
@@ -140,7 +141,10 @@ export async function startExam(options: {
   }
 }
 
-export async function endExam() {
+export async function endExam(scoreId: string, completed: boolean) {
+  if(!completed){
+    await scoreService.deleteScore(scoreId)
+  }
   (await cookies()).delete("exam-token");
 }
 

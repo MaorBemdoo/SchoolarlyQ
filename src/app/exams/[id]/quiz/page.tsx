@@ -211,7 +211,7 @@ const QuizPage = () => {
   };
 
   const leaveAndEndExam = async () => {
-    await endExam();
+    await endExam(decoded?.scoreId, isCompleted);
     setTimeLeft(null);
     setStoredQuiz(null);
     router.push(`/exams/${id}`);
