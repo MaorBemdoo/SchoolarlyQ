@@ -3,6 +3,8 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import ResponseHandler from "@/utils/ResponseHandler";
+import { scoreService } from "@/services/score.service";
+import { auth } from "@/utils/auth";
 
 const QUIZ_SECRET = process.env.QUIZ_SECRET!;
 
@@ -21,6 +23,15 @@ export async function generateQuizSessionToken({
   timer: number;
   questionIds: string[];
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const session = await auth() as any
+  const newScore = await scoreService.createScore({
+        userId: session?.user?._id,
+        courseId: examId,
+        mode,
+        time: timer,
+        questions: questionIds,
+  })
   const token = jwt.sign(
     {
       examId,
@@ -29,6 +40,7 @@ export async function generateQuizSessionToken({
       questionCount,
       timer,
       questionIds,
+      scoreId: newScore._id
     },
     QUIZ_SECRET,
     { expiresIn: "24h" },
