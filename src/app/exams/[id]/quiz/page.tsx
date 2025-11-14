@@ -106,6 +106,7 @@ const QuizPage = () => {
     selectedAnswer,
     setStoredQuiz,
     isCompleted,
+    verifyAnswer
   ]);
 
   useEffect(() => {
@@ -163,6 +164,15 @@ const QuizPage = () => {
   const s = timeLeft % 60;
 
   const handleSubmit = async () => {
+    if(decoded?.mode == "exam"){
+      await verifyAnswer(
+          decoded?.questionIds[currentQuestion - 1],
+          decoded?.scoreId,
+          decoded?.type == "objective"
+            ? question?.options[selectedAnswer]
+            : selectedAnswer,
+      );
+    }
     if (checkAnswerStatus == "loading") return;
     if (decoded?.mode == "study") {
       if (decoded?.type == "objective" && selectedAnswer == null) {
@@ -272,7 +282,7 @@ const QuizPage = () => {
           className={`w-full sm:w-[400px] p-4 border bg-gray-50/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md shadow-md space-y-4 ${isCompleted ? "flex flex-col items-center justify-center" : ""} ${question ? "" : "w-[250px]"}`}
         >
           {isCompleted ? (
-            <Completed />
+            <Completed decoded={decoded} />
           ) : (
             <>
               <div className="text-center font-semibold">
