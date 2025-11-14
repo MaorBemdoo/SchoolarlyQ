@@ -3,6 +3,7 @@
 
 import initLogger from "@/config/logger";
 import { questionService } from "@/services/question.service";
+import { scoreService } from "@/services/score.service";
 import connectDB from "@/utils/db";
 import ResponseHandler from "@/utils/ResponseHandler";
 import { questionSchema, validate } from "@/utils/validators";
@@ -80,12 +81,20 @@ export async function getQuestion(id: string) {
   }
 }
 
-export async function verifyAnswer(id: string, mode: string, ans: string) {
+export async function verifyAnswer(id: string, scoreId: string, ans: string) {
   await connectDB();
   const logger = await initLogger();
 
   try {
-    const res = await questionService.verifyAnswer(id, mode, ans);
+    const res = await questionService.verifyAnswer(id, ans);
+    const score = await scoreService.getScoreById(scoreId)
+    if(!score.answers.find((a: any) => a.questionId._id === (id as any)._id)) {
+      await scoreService.updateScore(scoreId, {
+        score: res.is_correct ? score.score + 1 : score.score,
+        answers: [...(score.answers || []), { questionId: id, answer: ans, is_correct: res.is_correct }],
+        // time_used: 
+      })
+    }
     return ResponseHandler("success", "Answer verified successfully", {
       is_correct: res.is_correct,
       correct_answer: res.correct_answer,

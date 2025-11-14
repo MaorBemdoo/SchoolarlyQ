@@ -9,4 +9,7 @@ export const scoreService = {
   async getScoreById(id: string) {
     return scoreRepository.findById(id);
   },
+  async updateScore(id: string, data: any) {
+    return scoreRepository.update(id, data);
+  }
 };

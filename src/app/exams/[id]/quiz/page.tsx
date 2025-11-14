@@ -76,7 +76,7 @@ const QuizPage = () => {
       (async () => {
         const res = await checkAnswer(
           decoded?.questionIds[currentQuestion - 1],
-          decoded?.mode,
+          decoded?.scoreId,
           decoded?.type == "objective"
             ? question?.options[selectedAnswer]
             : selectedAnswer,

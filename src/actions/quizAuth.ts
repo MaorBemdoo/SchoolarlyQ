@@ -28,6 +28,7 @@ export async function generateQuizSessionToken({
   const newScore = await scoreService.createScore({
         userId: session?.user?._id,
         courseId: examId,
+        score: 0,
         mode,
         time: timer,
         questions: questionIds,

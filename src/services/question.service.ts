@@ -17,7 +17,7 @@ export const questionService = {
     }
     return question;
   },
-  async verifyAnswer(id: string, mode: string, ans: string) {
+  async verifyAnswer(id: string, ans: string) {
     const question = await questionRepository.findById(id);
     if (question.options && question.options.length !== 0) {
       return {

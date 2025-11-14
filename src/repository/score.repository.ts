@@ -11,7 +11,7 @@ export const scoreRepository = {
     },
 
     async update(id: string, data: any){
-        Score.updateOne({
+        return Score.findOneAndUpdate({
             _id: id
         }, data)
     }
