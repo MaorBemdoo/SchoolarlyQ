@@ -6,7 +6,7 @@ const scoreSchema = new mongoose.Schema(
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Exam", required: true },
     score: { type: Number, default: 0 },
     mode: { type: String, enum: ["study", "exam"], required: true },
-    time: { type: Number, required: true },
+    time: { type: String, required: true },
     time_used: {type: Number },
     questions: { type: Array },
     answers: { type: Array },
