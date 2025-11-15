@@ -123,6 +123,19 @@ export async function getExam(id: string) {
   }
 }
 
+export async function getExamScore(scoreId: string) {
+  await connectDB();
+  const logger = await initLogger()
+
+  try {
+    const score = await scoreService.getScoreById(scoreId)
+    return ResponseHandler("success", "Score retrieved successfully", score)
+  } catch (error) {
+    logger.error(error)
+    return ResponseHandler("failed", "Error retrieving score")
+  }
+}
+
 export async function startExam(options: {
   examId: string;
   type: string;
