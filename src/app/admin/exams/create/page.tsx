@@ -146,7 +146,18 @@ const CreateQuestionsPage = () => {
   }, [setSavedProgress, getValues, watchQuestions]);
 
   useEffect(() => {
-    reset();
+    reset({
+      course_title: "",
+      course_code: "",
+      department: "",
+      level: "",
+      semester: 1,
+      credit_units: 0,
+      time_allowed: 0,
+      session: "",
+      type: "objective",
+      tags: [],
+    });
   }, [mode, reset]);
 
   useEffect(() => {
