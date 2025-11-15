@@ -99,6 +99,7 @@ const CreateQuestionsPage = () => {
     reset: resetQuestions,
     getValues: getQuestionsValues,
     setValue: setQuestionsValue,
+    // setError: setQuestionsError,
     formState: { errors: questionErrors, isValid: isQuestionsValid },
   } = useForm<{ questions: Question[] }>({
     defaultValues: {
@@ -196,6 +197,17 @@ const CreateQuestionsPage = () => {
     if (!isQuestionsValid) {
       return;
     }
+
+    // if(type == "objective"){
+    //   questions.map((q, idx) => {
+    //     if(!q.options?.includes(q.correct_answer)){
+    //       setQuestionsError(`questions.${idx}.correct_answer`, {
+    //         message: "Answer is not a valid option"
+    //       });
+    //       return;
+    //     }
+    //   })
+    // }
 
     AppSwal.fire({
       text: getValues("id")
@@ -746,6 +758,13 @@ const CreateQuestionsPage = () => {
                   name={`questions.${qIndex}.correct_answer`}
                   rules={{
                     required: "Correct answer is required",
+                    validate: (val) => {
+                      if(watch("type") === "objective"){
+                          if(!q.options?.includes(val)){
+                              return "Answer is not a valid option"
+                          }
+                      }
+                    }
                   }}
                   control={controlQuestions}
                   render={({ field }) => (
