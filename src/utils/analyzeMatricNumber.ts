@@ -26,14 +26,21 @@ export const analyzeMatricNumber = (matricNumber: string) => {
   const currentMonth = currentDate.getMonth();
   const matricYear = parseInt("20" + year, 10);
 
-  const level = currentYear - matricYear + (currentMonth > 7 ? 1 : 0) + "00";
+  let level = currentYear - matricYear + (currentMonth > 7 ? 1 : 0) + "00";
+  const department = faculties
+        .find((faculty) => faculty.id == Number(facultyId))
+        ?.departments.find((dept) => dept.id === Number(departmentId))
+
+  if(Number(level) < 100){
+    level = ''
+  }
+
+  if(department && department.duration < Number(level.replace("00", ''))){
+    level = 'Alumni'
+  }
 
   return {
     level,
-    department:
-      faculties
-        .find((faculty) => faculty.id == Number(facultyId))
-        ?.departments.find((dept) => dept.id === Number(departmentId))?.name ||
-      "",
+    department: department?.name || "",
   };
 };
