@@ -12,7 +12,7 @@ export const scoreService = {
   async updateScore(id: string, data: any) {
     return scoreRepository.update(id, data);
   },
-  async deleteScore(id: string){
-    return scoreRepository.delete(id)
-  }
+  async deleteScore(id: string) {
+    return scoreRepository.delete(id);
+  },
 };

@@ -24,15 +24,15 @@ export async function generateQuizSessionToken({
   questionIds: string[];
 }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const session = await auth() as any
+  const session = (await auth()) as any;
   const newScore = await scoreService.createScore({
-        userId: session?.user?._id,
-        courseId: examId,
-        score: 0,
-        mode,
-        time: timer,
-        questions: questionIds,
-  })
+    userId: session?.user?._id,
+    courseId: examId,
+    score: 0,
+    mode,
+    time: timer,
+    questions: questionIds,
+  });
   const token = jwt.sign(
     {
       examId,
@@ -41,7 +41,7 @@ export async function generateQuizSessionToken({
       questionCount,
       timer,
       questionIds,
-      scoreId: newScore._id
+      scoreId: newScore._id,
     },
     QUIZ_SECRET,
     { expiresIn: "24h" },
