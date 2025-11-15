@@ -36,7 +36,7 @@ export const analyzeMatricNumber = (matricNumber: string) => {
   }
 
   if(department && department.duration < Number(level.replace("00", ''))){
-    level = 'Alumni'
+    level = ''
   }
 
   return {
