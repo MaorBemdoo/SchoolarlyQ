@@ -106,7 +106,7 @@ const QuizPage = () => {
     selectedAnswer,
     setStoredQuiz,
     isCompleted,
-    verifyAnswer
+    verifyAnswer,
   ]);
 
   useEffect(() => {
@@ -164,13 +164,13 @@ const QuizPage = () => {
   const s = timeLeft % 60;
 
   const handleSubmit = async () => {
-    if(decoded?.mode == "exam"){
+    if (decoded?.mode == "exam") {
       await verifyAnswer(
-          decoded?.questionIds[currentQuestion - 1],
-          decoded?.scoreId,
-          decoded?.type == "objective"
-            ? question?.options[selectedAnswer]
-            : selectedAnswer,
+        decoded?.questionIds[currentQuestion - 1],
+        decoded?.scoreId,
+        decoded?.type == "objective"
+          ? question?.options[selectedAnswer]
+          : selectedAnswer,
       );
     }
     if (checkAnswerStatus == "loading") return;
