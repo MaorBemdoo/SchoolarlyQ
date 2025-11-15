@@ -125,14 +125,14 @@ export async function getExam(id: string) {
 
 export async function getExamScore(scoreId: string) {
   await connectDB();
-  const logger = await initLogger()
+  const logger = await initLogger();
 
   try {
-    const score = await scoreService.getScoreById(scoreId)
-    return ResponseHandler("success", "Score retrieved successfully", score)
+    const score = await scoreService.getScoreById(scoreId);
+    return ResponseHandler("success", "Score retrieved successfully", score);
   } catch (error) {
-    logger.error(error)
-    return ResponseHandler("failed", "Error retrieving score")
+    logger.error(error);
+    return ResponseHandler("failed", "Error retrieving score");
   }
 }
 
@@ -155,8 +155,8 @@ export async function startExam(options: {
 }
 
 export async function endExam(scoreId: string, completed: boolean) {
-  if(!completed){
-    await scoreService.deleteScore(scoreId)
+  if (!completed) {
+    await scoreService.deleteScore(scoreId);
   }
   (await cookies()).delete("exam-token");
 }

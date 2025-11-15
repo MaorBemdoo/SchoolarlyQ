@@ -87,13 +87,16 @@ export async function verifyAnswer(id: string, scoreId: string, ans: string) {
 
   try {
     const res = await questionService.verifyAnswer(id, ans);
-    const score = await scoreService.getScoreById(scoreId)
-    if(!score.answers.find((a: any) => a.questionId._id === (id as any)._id)) {
+    const score = await scoreService.getScoreById(scoreId);
+    if (!score.answers.find((a: any) => a.questionId._id === (id as any)._id)) {
       await scoreService.updateScore(scoreId, {
         score: res.is_correct ? score.score + 1 : score.score,
-        answers: [...(score.answers || []), { questionId: id, answer: ans, is_correct: res.is_correct }],
-        // time_used: 
-      })
+        answers: [
+          ...(score.answers || []),
+          { questionId: id, answer: ans, is_correct: res.is_correct },
+        ],
+        // time_used:
+      });
     }
     return ResponseHandler("success", "Answer verified successfully", {
       is_correct: res.is_correct,
