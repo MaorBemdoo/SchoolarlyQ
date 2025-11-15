@@ -4,7 +4,7 @@ import useAction from "@/hooks/useAction";
 import React, { useEffect } from "react";
 
 const Completed = ({ decoded }: any) => {
-  const { execute, res, status } = useAction(getExamScore)
+  const { execute, res } = useAction(getExamScore)
   const score = res?.data
 
   useEffect(() => {
