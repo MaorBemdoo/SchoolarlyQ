@@ -28,15 +28,15 @@ export const analyzeMatricNumber = (matricNumber: string) => {
 
   let level = currentYear - matricYear + (currentMonth > 7 ? 1 : 0) + "00";
   const department = faculties
-        .find((faculty) => faculty.id == Number(facultyId))
-        ?.departments.find((dept) => dept.id === Number(departmentId))
+    .find((faculty) => faculty.id == Number(facultyId))
+    ?.departments.find((dept) => dept.id === Number(departmentId));
 
-  if(Number(level) < 100){
-    level = ''
+  if (Number(level) < 100) {
+    level = "";
   }
 
-  if(department && department.duration < Number(level.replace("00", ''))){
-    level = ''
+  if (department && department.duration < Number(level.replace("00", ""))) {
+    level = "";
   }
 
   return {
