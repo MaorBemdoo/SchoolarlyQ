@@ -209,17 +209,6 @@ const CreateQuestionsPage = () => {
       return;
     }
 
-    // if(type == "objective"){
-    //   questions.map((q, idx) => {
-    //     if(!q.options?.includes(q.correct_answer)){
-    //       setQuestionsError(`questions.${idx}.correct_answer`, {
-    //         message: "Answer is not a valid option"
-    //       });
-    //       return;
-    //     }
-    //   })
-    // }
-
     AppSwal.fire({
       text: getValues("id")
         ? "Are you sure you want to add this questions?"
