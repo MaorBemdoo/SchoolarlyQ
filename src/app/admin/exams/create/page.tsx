@@ -758,13 +758,13 @@ const CreateQuestionsPage = () => {
                   name={`questions.${qIndex}.correct_answer`}
                   rules={{
                     required: "Correct answer is required",
-                    validate: (val) => {
-                      if (watch("type") === "objective") {
-                        if (!q.options?.includes(val)) {
-                          return "Answer is not a valid option";
-                        }
-                      }
-                    },
+                    // validate: (val) => {
+                    //   if (watch("type") === "objective") {
+                    //     if (!q.options.includes(val)) {
+                    //       return "Answer is not a valid option";
+                    //     }
+                    //   }
+                    // },
                   }}
                   control={controlQuestions}
                   render={({ field }) => (
